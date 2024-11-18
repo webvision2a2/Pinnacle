@@ -1,3 +1,7 @@
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,16 +27,17 @@
     
         <div class="card p-5 shadow-lg border-0" style="max-width: 400px; width: 100%;">
             <h3 class="text-center mb-4">Connexion à Pinnacle</h3>
-            <form id="loginForm" action="#" method="post">
+
+            <form id="loginForm" action="" method="post">
                 <div class="form-group mb-3">
                     <label for="email">Email</label>
-                    <input type="text" class="form-control" id="email" placeholder="Entrez votre email">
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Entrez votre email">
                     <p id="p_email"></p>
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="password">Mot de passe</label>
-                    <input type="password" class="form-control" id="password" placeholder="Entrez votre mot de passe">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Entrez votre mot de passe">
                     <p id="p_password"></p>
                 </div>
 
@@ -42,10 +47,11 @@
                     <p class="mb-0">Vous n'avez pas de compte ? <a href="signup.php">S'inscrire</a></p>
                 </div>
             </form>
+
         </div>
     </div>
 
-    <script src="../../Controller/js/login.js"></script>
+    <script src="js/login.js"></script>
 
 
      <!-- JavaScript Libraries -->

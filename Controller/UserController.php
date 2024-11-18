@@ -1,5 +1,5 @@
 <?php
-include(__DIR__ . '/../Model/config.php');
+include(__DIR__ . '/../config.php');
 include(__DIR__ . '/../Model/User.php');
 
 class UserController
@@ -34,7 +34,7 @@ class UserController
                 'prenom' => $user->getPrenom(),
                 'email' => $user->getEmail(),
                 'password' => $user->getPassword(),
-                'role' => $role, // Use the determined role
+                'role' => $role, 
                 'date_creation' => $user->getCreationDate()->format('Y-m-d H:i:s')
             ]);
         } catch (Exception $e) {
@@ -58,7 +58,7 @@ class UserController
     }
 
     function updateUser($user, $id)
-    {
+    {   
     try {
         $db = config::getConnexion();
 
