@@ -453,9 +453,6 @@
     </form>
                     <!-- Page Heading -->
                     <?php
-                    // Inclure le fichier pour ajouter une société
-                   
-
                     // Inclure le fichier pour lister les sociétés
                     require_once 'societeList.php';
                     ?>
@@ -495,7 +492,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
+                        <span aria-hidden="true">x</span>
                     </button>
                 </div>
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
@@ -516,6 +513,8 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- <script src="condition1.js"></script> -->
 
 </body>
 
