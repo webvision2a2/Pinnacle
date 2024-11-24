@@ -1,7 +1,12 @@
 <?php
+require_once '../../controller/StageController.php';
 require_once '../../controller/SocieteController.php';
+
+$stageController = new StageController();
+$stages = $stageController->listStage();
+
 $societeController = new SocieteController();
-$list = $societeController->listSociete();
+$societes = $societeController->listSociete();
 ?>
 
 <!DOCTYPE html>
@@ -74,12 +79,12 @@ $list = $societeController->listSociete();
                 <div class="container my-5 py-5 px-lg-5">
                     <div class="row g-5 py-5">
                         <div class="col-12 text-center">
-                            <h1 class="text-white animated slideInDown">Our Companies</h1>
+                            <h1 class="text-white animated slideInDown">Our Stages</h1>
                             <hr class="bg-white mx-auto mt-0" style="width: 90px;">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-content-center">
                                     <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
-                                    <li class="breadcrumb-item text-white active" aria-current="page">Companies</li>
+                                    <li class="breadcrumb-item text-white active" aria-current="page">Stages</li>
                                 </ol>
                             </nav>
                         </div>
@@ -92,20 +97,33 @@ $list = $societeController->listSociete();
         <!-- Service Start -->
         <div class="container-xxl py-5">
             <div class="container py-5 px-lg-5">
-                <h1 class="text-center mb-5">List of Our Companies</h1>
+                <h1 class="text-center mb-5">List of Our Stages</h1>
                 <div class="row g-4">
-                    <?php foreach ($list as $societe) : ?>
+                    <?php foreach ($stages as $stage) : ?>
                         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="service-item d-flex flex-column text-center rounded">
                                 <div class="service-icon flex-shrink-0">
-                                    <i class="fas fa-building fa-2x"></i>
+                                    <i class="fas fa-briefcase fa-2x"></i>
                                 </div>
-                                <h5 class="mb-3"><?= htmlspecialchars($societe['nom_soc']); ?></h5>
-                                <p class="m-0"><?= htmlspecialchars($societe['speciality']); ?></p>
-                                <p class="m-0"><?= htmlspecialchars($societe['adresse']); ?></p>
-                                <p class="m-0"><?= htmlspecialchars($societe['numero']); ?></p>
-                                <p class="m-0"><?= htmlspecialchars($societe['email']); ?></p>
-                                <a class="btn btn-square" href="companyDetails.php?id=<?= $societe['id']; ?>"><i class="fa fa-arrow-right"></i></a>
+                                <!-- Affichage du nom de la société en fonction de l'ID de la société -->
+                                <?php 
+                                    $societeName = 'Unknown';
+                                    foreach ($societes as $societe) {
+                                        if ($societe['id'] == $stage['id_societe']) {
+                                            $societeName = htmlspecialchars($societe['nom_soc']);
+                                            break;
+                                        }
+                                    }
+                                ?>
+                                <h5 class="mb-3"><?= $societeName; ?></h5>
+                                <!-- Affichage des spécialités -->
+                                <p class="m-0"><?= htmlspecialchars($stage['speciality']); ?></p>
+                                <!-- Affichage de la durée -->
+                                <p class="m-0"><?= htmlspecialchars($stage['duration']); ?></p>
+                                <!-- Affichage de l'email -->
+                                <p class="m-0"><?= htmlspecialchars($stage['email']); ?></p>
+                                <!-- Lien vers la page de détails du stage -->
+                                <a class="btn btn-square" href="stageDetails.php?id=<?= $stage['id_stage']; ?>"><i class="fa fa-arrow-right"></i></a>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -141,6 +159,7 @@ $list = $societeController->listSociete();
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>

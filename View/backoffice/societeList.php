@@ -27,20 +27,7 @@ $list = $societeController->listSociete();
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="main2.php">
-                    <i class="fas fa-fw fa-plus-circle"></i>
-                    <span>Add Company</span>
-                </a>
-            </li>
-        </ul>
+        
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -99,18 +86,21 @@ $list = $societeController->listSociete();
                                                     <td><?= $societe['speciality']; ?></td>
                                                     <td align="center">
                                                         <form method="POST" action="updateSociete.php">
-                                                            <input type="submit" name="update" value="Update">
+                                                            <input class="btn btn-primary" type="submit" name="update" value="Update">
                                                             <input type="hidden" value=<?= $societe['id']; ?> name="id">
                                                         </form>
                                                     </td>
                                                     <td>
-                                                        <a href="deleteSociete.php?id=<?= $societe['id']; ?>">Delete</a>
+                                                        <a class="btn btn-danger" href="deleteSociete.php?id=<?= $societe['id']; ?>" role="button">Delete</a>
                                                     </td>
                                                 </tr>
+                                                
+                                                
                                                 <?php
                                                     }
                                                 ?>
                                             </table>
+                                            <a class="btn btn-primary" href="main2.php" role="button">Add Company</a>
                                         </div>
                                     </div>
                                 </div>
@@ -142,7 +132,6 @@ $list = $societeController->listSociete();
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
-        <script src="js/addSociete.js"></script>
 
         <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>
@@ -160,6 +149,7 @@ $list = $societeController->listSociete();
         <!-- Page level custom scripts -->
         <script src="js/demo/chart-area-demo.js"></script>
         <script src="js/demo/chart-pie-demo.js"></script>
+        <script src="index.js"></script>
 
     </body>
 </html>

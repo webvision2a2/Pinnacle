@@ -1,7 +1,24 @@
 <?php
+require_once '../../controller/StageController.php';
 require_once '../../controller/SocieteController.php';
-$societeController = new SocieteController();
-$list = $societeController->listSociete();
+
+// Vérifiez si l'ID du stage est passé en paramètre
+if (isset($_GET['id'])) {
+    $id_stage = $_GET['id'];
+    $stageController = new StageController();
+    $stage = $stageController->showStage($id_stage);
+
+    if ($stage) {
+        $societeController = new SocieteController();
+        $societe = $societeController->showSociete($stage['id_societe']);
+    } else {
+        echo "Stage non trouvé.";
+        exit();
+    }
+} else {
+    echo "ID de stage manquant.";
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -74,12 +91,12 @@ $list = $societeController->listSociete();
                 <div class="container my-5 py-5 px-lg-5">
                     <div class="row g-5 py-5">
                         <div class="col-12 text-center">
-                            <h1 class="text-white animated slideInDown">Our Companies</h1>
+                            <h1 class="text-white animated slideInDown">Our Stages</h1>
                             <hr class="bg-white mx-auto mt-0" style="width: 90px;">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-content-center">
                                     <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
-                                    <li class="breadcrumb-item text-white active" aria-current="page">Companies</li>
+                                    <li class="breadcrumb-item text-white active" aria-current="page">Stages</li>
                                 </ol>
                             </nav>
                         </div>
@@ -90,28 +107,23 @@ $list = $societeController->listSociete();
         <!-- Navbar & Hero End -->
 
         <!-- Service Start -->
-        <div class="container-xxl py-5">
-            <div class="container py-5 px-lg-5">
-                <h1 class="text-center mb-5">List of Our Companies</h1>
-                <div class="row g-4">
-                    <?php foreach ($list as $societe) : ?>
-                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                            <div class="service-item d-flex flex-column text-center rounded">
-                                <div class="service-icon flex-shrink-0">
-                                    <i class="fas fa-building fa-2x"></i>
-                                </div>
-                                <h5 class="mb-3"><?= htmlspecialchars($societe['nom_soc']); ?></h5>
-                                <p class="m-0"><?= htmlspecialchars($societe['speciality']); ?></p>
-                                <p class="m-0"><?= htmlspecialchars($societe['adresse']); ?></p>
-                                <p class="m-0"><?= htmlspecialchars($societe['numero']); ?></p>
-                                <p class="m-0"><?= htmlspecialchars($societe['email']); ?></p>
-                                <a class="btn btn-square" href="companyDetails.php?id=<?= $societe['id']; ?>"><i class="fa fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </div>
+        <h1 class="text-center">Détails du Stage</h1>
+    <div class="stage-details">
+        <h2>Informations sur le Stage</h2>
+        <p><strong>Type :</strong> <?= htmlspecialchars($stage['type']); ?></p>
+        <p><strong>Durée :</strong> <?= htmlspecialchars($stage['duration']); ?></p>
+        <p><strong>Email :</strong> <?= htmlspecialchars($stage['email']); ?></p>
+        <p><strong>Spécialité :</strong> <?= htmlspecialchars($stage['speciality']); ?></p>
+        <p><strong>Documents :</strong> <?= htmlspecialchars($stage['documents']); ?></p>
+    </div>
+    <div class="societe-details">
+        <h2>Informations sur la Société</h2>
+        <p><strong>Nom :</strong> <?= htmlspecialchars($societe['nom_soc']); ?></p>
+        <p><strong>Adresse :</strong> <?= htmlspecialchars($societe['adresse']); ?></p>
+        <p><strong>Numéro :</strong> <?= htmlspecialchars($societe['numero']); ?></p>
+        <p><strong>Email :</strong> <?= htmlspecialchars($societe['email']); ?></p>
+    </div>
+    <a href="main2.php" class="btn btn-primary">Retour à la liste des stages</a>
         <!-- Service End -->
 
         <!-- Footer Start -->
@@ -141,6 +153,7 @@ $list = $societeController->listSociete();
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>
@@ -155,3 +168,5 @@ $list = $societeController->listSociete();
 </body>
 
 </html>
+
+

@@ -112,14 +112,9 @@
                 <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item active" href="blank.html">Blank Page</a>
+                        <h6 class="collapse-header">Reseaux:</h6>
+                        <a class="collapse-item" href="main.php">Stages</a>
+                        <a class="collapse-item" href="main2.php">Societes</a>
                     </div>
                 </div>
             </li>
@@ -396,67 +391,10 @@
     }
     ?>
     
-    <h1 class="text-center">Coordonnées de la société</h1>
-    <form align="center" action="" method="POST">
-        <div class="mb-3">
-            <label for="nom_soc" class="form-label">Nom de la Société :</label>
-            <input type="text" class="form-control" id="nom_soc" name="nom_soc">
-        </div>
-        <h6 id="1" class="text-danger"></h6>
-        <h6 id="2" class="text-success"></h6>
-        <div class="mb-3">
-        <label for="adresse" class="form-label">Adresse Physique de la Société :</label>
-        <input type="text" class="form-control" id="adresse" name="adresse">
-        </div>
-        <h6 id="3" class="text-danger"></h6>
-        <h6 id="4" class="text-success"></h6>
-        <div class="mb-3">
-            <label for="numero" class="form-label">Numéro de Téléphone de la Société :</label>
-            <input type="text" class="form-control" id="numero" name="numero">
-        </div>
-        <h6 id="5" class="text-danger"></h6>
-        <h6 id="6" class="text-success"></h6>
-        <div class="mb-3">
-            <label for="email" class="form-label">Adresse Email de la Société :</label>
-            <input type="text" class="form-control" id="email" name="email">
-        </div>
-        <h6 id="7" class="text-danger"></h6>
-        <h6 id="8" class="text-success"></h6>
-        <div class="form-group" id="checkbox">
-            <label for="speciality" class="form-label">Le domaine de la Société :</label>
-            <div class="form-floating">
-                <select class="form-select" id="speciality" name="speciality[]" multiple aria-label="Floating label select example">
-                    <option value="web">Développement Web</option>
-                    <option value="design">Design</option>
-                    <option value="dev_log">Développement de Logiciels</option>
-                    <option value="sec">Sécurité Informatique</option>
-                    <option value="reseau">Réseaux et Télécommunications</option>
-                    <option value="ai">Intelligence Artificielle (IA)</option>
-                    <option value="data_science">Data Science</option>
-                    <option value="cloud">Informatique en Nuage (Cloud Computing)</option>
-                    <option value="vr_ar">Réalité Virtuelle (VR) et Réalité Augmentée (AR)</option>
-                    <option value="ad_sys">Administration des Systèmes</option>
-                    <option value="bigdata">Big Data</option>
-                    <option value="dev_mobile">Développement Mobile</option>
-                    <option value="robotics">Robotics</option>
-                    <option value="iot">Internet des Objets (IoT)</option>
-                </select>
-                
-            </div>
-
-        </div>
-        <h6 id="9" class="text-danger"></h6>
-        <h6 id="10" class="text-success"></h6>
-        <button type="submit" class="btn btn-primary" id="button" name="submit">Ajouter</button>
-
-    
-    </form>
                     <!-- Page Heading -->
                     <?php
-                    // Inclure le fichier pour ajouter une société
-                   
-
-                    // Inclure le fichier pour lister les sociétés
+                    
+                    require_once 'addsociete.php';
                     require_once 'societeList.php';
                     ?>
 
@@ -467,13 +405,13 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+            <!-- <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Copyright &copy; Your Website 2020</span>
                     </div>
                 </div>
-            </footer>
+            </footer> -->
             <!-- End of Footer -->
 
         </div>
@@ -495,7 +433,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
+                        <span aria-hidden="true">x</span>
                     </button>
                 </div>
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
@@ -516,7 +454,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
+    
 </body>
 
 </html>
