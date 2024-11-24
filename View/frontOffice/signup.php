@@ -1,18 +1,22 @@
 <?php
 
-include '../../controller/UserController.php';
+require_once '../../controller/UserController.php';
+require_once '../../controller/ProfileController.php';
+
 
 $error = "";
 
 $user= null;
-// create an instance of the controller
+$newUserId = null;
+
 $userController = new UserController();
+$profileController = new ProfileController();
 
 
 if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm_password"])) {
     if (!empty($_POST["nom"]) && !empty($_POST["prenom"]) && !empty($_POST["email"]) && !empty($_POST["password"]) && !empty($_POST["confirm_password"])) {
         
-            $hashed_password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+            $hashed_password = $_POST["password"]; /* password_hash($_POST["password"], PASSWORD_DEFAULT); */
             $date_creation = date('Y-m-d H:i:s');
             $user = new User(
                 null,
@@ -24,7 +28,10 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) &&
                 new DateTime($date_creation)
             );
 
-            $userController->addUser($user, 'front');
+            $newUserId = $userController->addUser($user, 'front');
+            if ($newUserId) {
+                $profileController->createProfile($newUserId);
+            }
 
             header('Location: Template/index.php');
 
@@ -63,6 +70,7 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) &&
 
             
             <form id="signupForm" action="" method="post">
+                <input type="hidden" name="role" value="2">
                 <div class="form-group mb-3">
                     <label for="nom">Nom</label>
                     <input type="text" class="form-control" id="nom" name="nom" placeholder="Entrez votre nom">

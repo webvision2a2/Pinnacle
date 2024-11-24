@@ -20,7 +20,6 @@ class User {
         $this->date_creation = $date_creation;
     }
 
-    // Getters and Setters
 
     public function getId(): ?int {
         return $this->id;

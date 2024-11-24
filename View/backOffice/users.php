@@ -1,8 +1,22 @@
 <?php
-include '../../controller/UserController.php';
+
+require_once '../../controller/UserController.php';
+require_once '../../controller/ProfileController.php';
+
 $user_controller = new UserController();
 $list = $user_controller->listUser();
+
+$profile_controller = new ProfileController();
+$list2 = $profile_controller->listProfile();
+
+session_start();
+ 
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 1){
+    header("location: ../frontOffice/login.php");
+    exit;
+}
 ?>
+
 
 
 <!DOCTYPE html>
@@ -134,25 +148,37 @@ $list = $user_controller->listUser();
 
         <!-- Se Déconnecter Button -->
         <li class="nav-item">
-            <a class="nav-link" href="login.html">
+            <a class="nav-link" href="../frontOffice/logout.php">
                 <i class="fas fa-sign-out-alt"></i>
-                <span>Se Déconnecter</span>
+                    <span>Se Déconnecter</span>
             </a>
         </li>
 
     </ul>
     <!-- End of Sidebar -->
 
+    
+
+
 
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
+        <header style="background-color: #f8f9fa;  border-bottom: 2px solid #dee2e6; text-align: center;">
+            <h5 class="my-5" style="margin: 0; font-size: 1.5rem; color: #343a40;">
+                Bienvenue 
+                <b style="color: #007bff;">
+                    <?php echo htmlspecialchars($_SESSION['nom']) . ' ' . htmlspecialchars($_SESSION['prenom']); ?>
+                </b> 
+                dans le back office.
+            </h5>
+        </header>
 
         <!-- Main Content -->
         <main class="container mt-5" ">
             <!-- Header Section -->
             <div class="header-section d-flex justify-content-between align-items-center">
-                <h2 class="mb-4">Tableau de Bord des Clients</h2>
+                <h2 class="mb-4">Tableau de Bord des Utilisateurs</h2>
                 <a href="addUser.php">
                     <button class="btn btn-primary">Ajouter un utilisateur</button>
                 </a>
@@ -164,7 +190,7 @@ $list = $user_controller->listUser();
                     <table class="table table-hover table-bordered">
                         <thead class="thead-light">
                             <tr>
-                                <th scope="col">ID du Client</th>
+                                <th scope="col">ID de l'Utilisateur</th>
                                 <th scope="col">Nom</th>
                                 <th scope="col">Prénom</th>
                                 <th scope="col">Email</th>
@@ -195,6 +221,56 @@ $list = $user_controller->listUser();
                                         <input type="hidden" value=<?php echo $user['id']; ?> name="id">
                                     </form>
                                 </td>
+                            </tr> 
+                            <?php
+                                }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="header-section d-flex justify-content-between align-items-center">
+                <h2 class="mb-4">Tableau de Bord des Profils des Utilisateurs</h2>
+            </div>
+
+            <!-- Clients Table -->
+            <div class="card mb-4" >
+                <div class="card-body">
+                    <table class="table table-hover table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">ID du Profil </th>
+                                <th scope="col">Id de l'Utilisateur</th>
+                                <th scope="col">Domaine</th>
+                                <th scope="col">Occupation</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Telephone</th>
+                                <th scope="col">Photo de Profil</th>
+                                <!-- <th colspan="2">Actions</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($list2 as $profile) {
+                            ?> 
+                            <tr>
+                                <td><?= $profile['id']; ?></td>
+                                <td><?= $profile['user_id']; ?></td>
+                                <td><?= $profile['domaine']; ?></td>
+                                <td><?= $profile['occupation']; ?></td>
+                                <td><?= $profile['age']; ?></td>
+                                <td><?= $profile['telephone']; ?></td>
+                                <td><?= $profile['photo_profil']; ?></td>
+                                <!-- <td>
+                                    <a href="deleteUser.php?id=<?php /* echo $user['id'] */; ?>">Delete</a>
+                                </td>
+                                <td align="center">
+                                    <form method="POST" action="updateUser.php">
+                                        <input type="submit" name="update" value="Update">
+                                        <input type="hidden" value=<?php /* echo $user['id'] */; ?> name="id">
+                                    </form>
+                                </td> -->
                             </tr> 
                             <?php
                                 }

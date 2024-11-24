@@ -1,14 +1,12 @@
-<!-- <?php
-// Initialize the session
-/* session_start();
+<?php
+session_start();
  
-// Check if the user is logged in, if not then redirect him to login page
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 2){
+    header("location: ../login.php");
     exit;
-} */
-?> -->
+}
 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -26,7 +24,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500&family=Jost:wght@500;600;700&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500&family=Jost:wght@500;600;700&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -57,34 +55,47 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 
         <!-- Navbar & Hero Start -->
         <div class="container-xxl position-relative p-0">
-            <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
+            <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0" >
                 <a href="" class="navbar-brand p-0">
-                    <img class ='logo' src="img/LOGO 1 blue.png">
-                    <h1 class="m-0">Pinnacle</h1>
-                    <!-- <img src="img/logo.png" alt="Logo"> -->
+                    <img class ='logo' src="img/LOGO 1 blue.png" style="max-width: 45px;">
+                    <h1 class="m-0 " style="margin-right: 20px;" >Pinnacle</h1>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                    <span class="fa fa-bars"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <div class="navbar-nav mx-auto py-0">
-                        <a href="index.html" class="nav-item nav-link active">Acceuil</a>
-                        <a href="about.html" class="nav-item nav-link">à Propos</a>
-                        <a href="service.html" class="nav-item nav-link">Services</a>
-                        <a href="project.html" class="nav-item nav-link">Projects</a>
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                            <div class="dropdown-menu m-0">
-                                <a href="team.html" class="dropdown-item">Notre Equipe</a>
-                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                <a href="404.html" class="dropdown-item">404 Page</a>
-                            </div>
-                        </div>
-                        <a href="contact.html" class="nav-item nav-link">Contact</a>
+                
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="fa fa-bars text-white"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav mx-auto py-0">
+                <a href="index.php" class="nav-item nav-link text-white active">Acceuil</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown">Catalogue</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="team.php" class="dropdown-item">Notre Equipe</a>
+                        <a href="testimonial.php" class="dropdown-item">Testimonial</a>
+                        <a href="404.php" class="dropdown-item">404 Page</a>
                     </div>
-                    <a href="../login.php" class="btn rounded-pill py-2 px-4 ms-3 d-none d-lg-block">Se Deconnecter</a>
                 </div>
-            </nav>
+                <a href="service.php" class="nav-item nav-link text-white">Entretients</a>
+                <a href="project.php" class="nav-item nav-link text-white">Stages</a>
+                <a href="project.php" class="nav-item nav-link text-white">Psychologie</a>
+                <a href="project.php" class="nav-item nav-link text-white">Evenements</a>
+                <a href="profile.php" class="nav-item nav-link text-white">Profil</a>
+            </div>
+            <div class="d-flex align-items-center ms-auto">
+                <div class="text-end me-3">
+                    <h6 class="mb-0 text-white">Bienvenue, 
+                        <span class="fw-bold text-warning">
+                            <?php echo htmlspecialchars($_SESSION['nom']) . ' ' . htmlspecialchars($_SESSION['prenom']); ?>
+                        </span>
+                    </h6>
+                    <small class="text-light">Content de vous voir ici !</small>
+                </div>
+                <a href="../logout.php" class="btn btn-warning rounded-pill py-2 px-4">Se Déconnecter</a>
+            </div>
+        </div>
+    </nav>
+</div>
+
 
             <div class="container-xxl bg-primary hero-header">
                 <div class="container px-lg-5">

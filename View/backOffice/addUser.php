@@ -1,39 +1,50 @@
 <?php
 
-include '../../controller/UserController.php';
-
+require_once '../../controller/UserController.php';
+require_once '../../controller/ProfileController.php';
 
 $error = "";
 
-$user= null;
-// create an instance of the controller
+$user = null;
+
 $userController = new UserController();
+$profileController = new ProfileController();
 
+if (
+    isset($_POST["nom"]) && isset($_POST["prenom"]) &&
+    isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm_password"])
+) {
+    if (
+        !empty($_POST["nom"]) && !empty($_POST["prenom"]) &&
+        !empty($_POST["email"]) && !empty($_POST["password"]) && !empty($_POST["confirm_password"])
+    ) {
+        $hashed_password = $_POST["password"];
+        $date_creation = date('Y-m-d H:i:s');
+        $user = new User(
+            null,
+            $_POST['nom'],
+            $_POST['prenom'],
+            $_POST['email'],
+            $hashed_password,
+            $_POST['role'],
+            new DateTime($date_creation)
+        );
 
-if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm_password"])) {
-    if (!empty($_POST["nom"]) && !empty($_POST["prenom"]) && !empty($_POST["email"]) && !empty($_POST["password"]) && !empty($_POST["confirm_password"])) {
-        
-            $hashed_password = password_hash($_POST["password"], PASSWORD_DEFAULT);
-            $date_creation = date('Y-m-d H:i:s');
-            $user = new User(
-                null,
-                $_POST['nom'],
-                $_POST['prenom'],
-                $_POST['email'],
-                $hashed_password,
-                $_POST['role'],
-                new DateTime($date_creation)
-            );
+        $newUserId = $userController->addUser($user, 'back'); 
+        var_dump($newUserId); 
 
-            $userController->addUser($user, 'back');
+        if ($newUserId && $_POST['role'] == 2) {
+            $profileController->createProfile($newUserId);
+        }
 
-            header('Location: users.php');
+        header('Location: users.php');
     } else {
         $error = "Informations manquantes.";
     }
 }
 
 ?>
+
 
 
 

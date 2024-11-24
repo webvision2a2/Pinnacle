@@ -6,18 +6,17 @@ include '../../Controller/UserController.php';
 $error = "";
 
 $user= null;
-// create an instance of the controller
+
 $userController = new UserController();
 
 
 if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"])) {
     if (!empty($_POST["nom"]) && !empty($_POST["prenom"]) && !empty($_POST["email"])) {
         
-        // Check if a new password is provided
         if (!empty($_POST["password"])) {
-            $hashed_password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+            /* $hashed_password = password_hash($_POST["password"], PASSWORD_DEFAULT); */
+            $hashed_password = $_POST["password"];
         } else {
-            // Retrieve the current password if no new password is provided
             $hashed_password = $userController->getUserPassword($_POST['id']);
         }
         
@@ -28,7 +27,7 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"])) {
             $_POST['nom'],
             $_POST['prenom'],
             $_POST['email'],
-            $hashed_password, // Use the hashed password
+            $hashed_password, 
             $_POST['role'],
             new DateTime($date_creation)
         );
@@ -39,8 +38,6 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"])) {
         $error = "Missing information";
     }
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -154,7 +151,7 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"])) {
 
 
             <!-- Spacer to push items to top -->
-            <div class="flex-grow-1"></=div>
+            <div class="flex-grow-1"></div>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

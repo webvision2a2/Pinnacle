@@ -1,6 +1,7 @@
 <?php
-include(__DIR__ . '/../config.php');
+require_once __DIR__ . '/../config.php';
 include(__DIR__ . '/../Model/User.php');
+include(__DIR__ . '/ProfileController.php');
 
 class UserController
 {
@@ -37,14 +38,19 @@ class UserController
                 'role' => $role, 
                 'date_creation' => $user->getCreationDate()->format('Y-m-d H:i:s')
             ]);
+            return $db->lastInsertId();
         } catch (Exception $e) {
             echo 'Error: ' . $e->getMessage();
         }
+
     }
     
 
     function deleteUser($id)
     {
+        $profileController = new ProfileController();
+        $profileController->deleteProfile($id); 
+
         $sql = "DELETE FROM users WHERE id = :id";
         $db = config::getConnexion();
         $req = $db->prepare($sql);
@@ -104,23 +110,21 @@ class UserController
     }
 
     public function getUserPassword($userId) {
-        // Your database query to get the password for a given user
         $query = "SELECT password FROM users WHERE id = :userId";
         $db = config::getConnexion();
         
-        // Prepare and execute the query
         $stmt = $db->prepare($query);
         $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
         $stmt->execute();
         
-        // Fetch the result and return the password
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Return the password if found, otherwise return null or an empty string
         return $result ? $result['password'] : '';
     }
     
 
 
 }
+
+?>
     
