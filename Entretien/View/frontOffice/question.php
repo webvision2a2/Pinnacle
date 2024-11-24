@@ -1,8 +1,28 @@
 <?php
-include '../../Controller/quizController.php' ; // Include quiz controller
+include '../../Controller/questionController.php';
 
-$controller = new QuizController();
-$quizzes = $controller->listQuizzes(); // Fetching all quizzes from the db
+// Fetch the quiz ID from the URL
+if (isset($_GET['id']) && !empty($_GET['id'])) {
+    $id_quiz = $_GET['id'];
+
+    // Instantiate the QuestionController to get questions for the quiz
+    $quizController = new QuestionController();
+    $questions = $quizController->listQuestions($id_quiz);  // Fetch questions for the specific quiz
+
+    // Ensure that there are questions available
+    if (empty($questions)) {
+        die("Error: Aucune Question Valable Pour Ce Quiz.");
+    }
+
+    // Setting the first question as the default question to show
+    $currentQuestionId = isset($_GET['question_id']) ? $_GET['question_id'] : $questions[0]['id']; // Show first question by default
+
+    // Find the index of the current question
+    $currentQuestionIndex = array_search($currentQuestionId, array_column($questions, 'id'));
+
+} else {
+    die("Error: Quiz ID Non Trouvé.");
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -88,34 +108,43 @@ $quizzes = $controller->listQuizzes(); // Fetching all quizzes from the db
 
    
     <div class="container my-5">
-    <h1 class="text-center text-primary fw-bold mb-4">Les Quizzes Disponibles</h1>
-    
-        <div class="row">
-            <?php foreach ($quizzes as $quiz): ?>
-                <div class="col-md-6 mb-4">
-                    <div class="service-item border rounded shadow-sm p-4 bg-white">
-                        <!-- Title -->
-                        <h3 class="fw-semi-bold text-secondary"><?= htmlspecialchars($quiz['title']) ?></h3>
-                        <!-- Description -->
-                        <p class="text-muted"><?= htmlspecialchars($quiz['description']) ?></p>
-                        <!-- Author and Date -->
-                        <small class="d-block mb-3">
-                            Fait par <span class="text-primary"><?= htmlspecialchars($quiz['author']) ?></span> 
-                            le <span class="text-secondary"><?= htmlspecialchars($quiz['creation_date']) ?></span>
-                        </small>
-                        <!-- Quiz Details -->
-                        <ul class="list-unstyled">
-                            <li><strong class="text-primary">Durée:</strong> <span class="text-dark"><?= htmlspecialchars($quiz['time_limit']) ?> minutes</span></li>
-                            <li><strong class="text-primary">Difficulté:</strong> <span class="text-dark"><?= htmlspecialchars($quiz['difficulty']) ?></span></li>
-                            <li><strong class="text-primary">Catégorie:</strong> <span class="text-dark"><?= htmlspecialchars($quiz['category']) ?></span></li>
-                            <li><strong class="text-primary">Nombre de Questions:</strong> <span class="text-dark"><?= htmlspecialchars($quiz['total_questions']) ?></span></li>
-                        </ul>
+        <h1 class="text-center text-primary fw-bold mb-4">Questions pour le Quiz #<?= htmlspecialchars($id_quiz) ?></h1>
 
-                        <!-- Button -->
-                        <a class="btn" href="question.php?id=<?= $quiz['id'] ?>">Voir Questions</a>
+        <div class="row justify-content-center">
+            <?php if (!empty($questions)) : ?>
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm rounded p-4">
+                        <h5 class="card-title text-secondary"><?= htmlspecialchars($questions[$currentQuestionIndex]['content']) ?></h5>
+                        <p class="card-text">
+                            <strong>Points:</strong> <?= htmlspecialchars($questions[$currentQuestionIndex]['points']) ?><br>
+                            <strong>Type:</strong> <?= htmlspecialchars($questions[$currentQuestionIndex]['type']) ?>
+                        </p>
+                        <div class="d-flex justify-content-between">
+                            <a href="updateQuestion.php?id=<?= htmlspecialchars($questions[$currentQuestionIndex]['id']) ?>&id_quiz=<?= htmlspecialchars($id_quiz) ?>" class="btn btn-warning btn-sm">Modifier</a>
+                            <a href="deleteQuestion.php?id=<?= htmlspecialchars($questions[$currentQuestionIndex]['id']) ?>&id_quiz=<?= htmlspecialchars($id_quiz) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette question ?');">Supprimer</a>
+                        </div>
                     </div>
                 </div>
-            <?php endforeach; ?>
+
+                <!-- Button to Go to Next Question -->
+                <div class="col-12 text-center mt-4">
+                    <?php
+                    // Get the next question ID if it exists
+                    if (isset($questions[$currentQuestionIndex + 1])) {
+                        $nextQuestionId = $questions[$currentQuestionIndex + 1]['id'];
+                    ?>
+                        <a href="question.php?id=<?= htmlspecialchars($id_quiz) ?>&question_id=<?= htmlspecialchars($nextQuestionId) ?>" class="btn btn-primary">Suivant</a>
+                    <?php
+                    } else {
+                        echo "<button class='btn btn-secondary' disabled>Fin du Quiz</button>";
+                    }
+                    ?>
+                </div>
+            <?php else : ?>
+                <div class="col-12">
+                    <div class="alert alert-warning text-center">Aucune question disponible pour ce quiz.</div>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
  

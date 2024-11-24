@@ -1,8 +1,16 @@
 <?php
-include '../../Controller/quizController.php';
+include '../../Controller/questionController.php';
 
-$quizController = new QuizController();
-$quizzes = $quizController->listQuizzes(); // Fetch all quizzes from the database
+// Check if `id_quiz` is passed in the URL and is not empty
+if (isset($_GET['id_quiz']) && !empty($_GET['id_quiz'])) {
+    $id_quiz = $_GET['id_quiz'];
+} else {
+    // Handle the error if `id_quiz` is not set
+    die("Error: Quiz ID non trouvé.");
+}
+
+$quizController = new QuestionController();
+$questions = $quizController->listQuestions($id_quiz); // Fetch all questions for the specific quiz
 ?>
 
 <!DOCTYPE html>
@@ -254,48 +262,37 @@ $quizzes = $quizController->listQuizzes(); // Fetch all quizzes from the databas
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                        <h1 class="text-center text-primary">Liste des Quizzes</h1>
-
+                    <h1 class="text-center text-primary">Liste des Questions pour le Quiz #<?= $id_quiz ?></h1>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">
                                 <thead class="thead-light">
                                     <tr>
                                         <th>ID</th>
-                                        <th>Titre</th>
-                                        <th>Description</th>
-                                        <th>Date de Création</th>
-                                        <th>Auteur</th>
-                                        <th>Durée (minutes)</th>
-                                        <th>Difficulté</th>
-                                        <th>Catégorie</th>
-                                        <th>Nombre de Questions</th>
+                                        <th>Contenu</th>
+                                        <th>Points</th>
+                                        <th>Type</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php if (!empty($quizzes)): ?>
-                                        <?php foreach ($quizzes as $quiz): ?>
+                                    <?php if (!empty($questions)): ?>
+                                        <?php foreach ($questions as $question): ?>
                                             <tr>
-                                                <td><?= htmlspecialchars($quiz['id']) ?></td>
-                                                <td><?= htmlspecialchars($quiz['title']) ?></td>
-                                                <td><?= htmlspecialchars($quiz['description']) ?></td>
-                                                <td><?= htmlspecialchars($quiz['creation_date']) ?></td>
-                                                <td><?= htmlspecialchars($quiz['author']) ?></td>
-                                                <td><?= htmlspecialchars($quiz['time_limit']) ?></td>
-                                                <td><?= htmlspecialchars($quiz['difficulty']) ?></td>
-                                                <td><?= htmlspecialchars($quiz['category']) ?></td>
-                                                <td><?= htmlspecialchars($quiz['total_questions']) ?></td>
+                                                <td><?= htmlspecialchars($question['id']) ?></td>
+                                                <td><?= htmlspecialchars($question['content']) ?></td>
+                                                <td><?= htmlspecialchars($question['points']) ?></td>
+                                                <td><?= htmlspecialchars($question['type']) ?></td>
                                                 <td>
-                                                    <a href="updateQuiz.php?id=<?= $quiz['id'] ?>" class="btn btn-sm btn-primary">Modifier</a>
-                                                    <a href="deleteQuiz.php?id=<?= $quiz['id'] ?>" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce quiz?')">Supprimer</a>
-                                                    <a href="listquestion.php?id_quiz=<?= $quiz['id'] ?>" class="btn btn-sm btn-info">Voir Questions</a>
+                                                    <a href="updatequestion.php?id=<?= $question['id'] ?>" class="btn btn-sm btn-primary">Modifier</a>
+                                                    <a href="deletequestion.php?id=<?= $question['id'] ?>&id_quiz=<?= $id_quiz ?>" 
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette question?')">Supprimer</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="10" class="text-center">Aucun Quiz trouvé</td>
+                                            <td colspan="5" class="text-center">Aucune Question trouvée</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -303,7 +300,8 @@ $quizzes = $quizController->listQuizzes(); // Fetch all quizzes from the databas
                         </div>
 
                         <p class="text-center mt-4">
-                            <a href="addQuiz.php" class="btn btn-success">Ajouter un nouveau Quiz</a>
+                            <a href="addquestion.php?id_quiz=<?= $id_quiz ?>" class="btn btn-success">Ajouter une nouvelle Question</a>
+                            <a href="listQuiz.php" class="btn btn-secondary">Retour</a>
                         </p>
                 </div>
                 <!-- /.container-fluid -->

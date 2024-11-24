@@ -1,36 +1,42 @@
 <?php
-include_once '../../Controller/QuizController.php';
-include_once '../../Model/Quiz.php';
+include_once '../../Controller/questionController.php';
+include_once '../../Model/question.php';
+
 
 $error = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['title'], $_POST['description'], $_POST['author'], $_POST['time_limit'], $_POST['difficulty'], $_POST['category'], $_POST['total_questions']) &&
-        !empty($_POST['title']) &&
-        !empty($_POST['description']) &&
-        !empty($_POST['author']) &&
-        !empty($_POST['time_limit']) &&
-        !empty($_POST['difficulty']) &&
-        !empty($_POST['category']) &&
-        !empty($_POST['total_questions'])) {
 
-        $quiz = new Quiz(
+$id_quiz = null;
+
+// Fetch `id_quiz` from the URL
+if (isset($_GET['id_quiz']) && !empty($_GET['id_quiz'])) {
+    $id_quiz = $_GET['id_quiz']; // Retrieve the quiz ID from the URL
+} else {
+    die("Error: Quiz ID non trouvé."); // Stop execution if the quiz ID is missing
+}
+
+// Process form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['content'], $_POST['points'], $_POST['type']) &&
+        !empty($_POST['content']) &&
+        !empty($_POST['points']) &&
+        !empty($_POST['type'])) {
+
+        $question = new Question(
             NULL, 
-            $_POST['title'],
-            $_POST['description'],
-            new DateTime(),  //Automatically puts the current date
-            $_POST['author'],
-            $_POST['time_limit'], // Updated time limit
-            $_POST['difficulty'], // Updated difficulty
-            $_POST['category'], // Updated category
-            $_POST['total_questions']
+            $_POST['content'], 
+            $_POST['points'], 
+            $_POST['type'], 
+            $id_quiz // Associate the question with the quiz
         );
 
-        $quizController = new QuizController();
-        $quizController->addQuiz($quiz);
+        $quizController = new QuestionController();
+        $quizController->addQuestion($question);
 
-        header('Location:listQuiz.php'); // Redirect to the list of quizzes page after success
+        // Redirect back to the question list of the quiz
+        header("Location: listQuestion.php?id_quiz=$id_quiz");
+        exit;
     } else {
-        $error = "Tous les champs sont OBLIGATOIRS.";
+        $error = "Tous les champs sont OBLIGATOIRES.";
     }
 }
 ?>
@@ -282,68 +288,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <!-- End of Topbar -->
                 
                 <!-- Begin Page Content -->
+                          
                 <div class="container-fluid">
 
                     <div class="container mt-5">
-                        <h1 class="text-primary text-center">Ajouter Un Nouveau Quiz</h1>
+                        <h1 class="text-primary text-center">Ajouter Une Nouvelle Question</h1>
                         <?php if (!empty($error)): ?>
-                            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>   //Error message from the database if all the fields not filled (all fields are required)
+                            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
                         <?php endif; ?>
-                        <!--FORM-->
-                        <form id="quizForm" action="addQuiz.php" method="POST" class="form"  onsubmit="return validateForm() ">   
+
+                        <!-- Form -->
+                        <form id="questionForm" action="addQuestion.php?id_quiz=<?= htmlspecialchars($id_quiz) ?>"  method="POST" class="form" onsubmit="return validateForm()">
                             <div class="form-group">
-                                <label for="title" class="text-primary">Titre du Quiz:</label>
-                                <span id="titleError" class="text-danger"></span>
-                                <input type="text" name="title" id="title" class="form-control" >
+                                <label for="content" class="text-primary">Contenu de la Question:</label>
+                                <span id="contentError" class="text-danger"></span>
+                                <textarea name="content" id="content" rows="4" class="form-control"></textarea>
                             </div>
-                            
+
                             <div class="form-group">
-                                <label for="description" class="text-primary">Description:</label>
-                                <span id="descriptionError" class="text-danger"></span>
-                                <textarea name="description" id="description" rows="4" class="form-control" ></textarea>
-                            
+                                <label for="points" class="text-primary">Points:</label>
+                                <span id="pointsError" class="text-danger"></span>
+                                <input type="number" name="points" id="points" class="form-control">
                             </div>
+
                             <div class="form-group">
-                                <label for="author" class="text-primary">Auteur:</label>
-                                <span id="authorError" class="text-danger"></span>
-                                <input type="text" name="author" id="author" class="form-control" >
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="time_limit" class="text-primary">Durée (minutes):</label>
-                                <span id="timeLimitError" class="text-danger"></span>
-                                <input type="number" name="time_limit" id="time_limit" class="form-control" >
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="difficulty" class="text-primary">Difficulté:</label>
-                                <span id="difficultyError" class="text-danger"></span>
-                                <select name="difficulty" id="difficulty" class="form-control">
+                                <label for="type" class="text-primary">Type:</label>
+                                <span id="typeError" class="text-danger"></span>
+                                <select name="type" id="type" class="form-control">
                                     <option value="">Choisir...</option>
-                                    <option value="Facile">Facile</option>
-                                    <option value="Moyenne">Moyenne</option>
-                                    <option value="Difficile">Difficile</option>
+                                    <option value="QCM">QCM</option>
+                                    <option value="Vrai/Faux">Vrai/Faux</option>
+                                    <option value="Réponse Courte">Réponse Courte</option>
                                 </select>
                             </div>
-                            
-                            <div class="form-group">
-                                <label for="category" class="text-primary">Catégorie:</label>
-                                <span id="categoryError" class="text-danger"></span>
-                                <select name="category" id="category" class="form-control" >
-                                    <option value="">Choisir...</option>
-                                    <option value="BI">BI</option>
-                                    <option value="Cloud">Cloud</option>
-                                    <option value="Web Dev">Web Dev</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="total_questions" class="text-primary">Nombre de Questions:</label>
-                                <span id="totalQuestionsError" class="text-danger"></span>
-                                <input type="number" name="total_questions" id="total_questions" class="form-control" >
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary btn-block">Ajouter Quiz</button>
+
+                           
+
+                            <button type="submit" class="btn btn-primary btn-block">Ajouter Question</button>
+                            <a href="listQuestion.php?id_quiz=<?= htmlspecialchars($id_quiz) ?>" class="btn btn-secondary btn-block">Annuler</a>
                         </form>
                     </div>
                 </div>

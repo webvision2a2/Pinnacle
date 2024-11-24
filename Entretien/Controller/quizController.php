@@ -19,7 +19,7 @@ class QuizController {
 // CREATE: Add a new quiz
     public function addQuiz($quiz) {
         $sql = "INSERT INTO quiz
-                VALUES (NULL,:title, :description, :author, :creation_date)";
+                VALUES (NULL,:title, :description, :author, :creation_date, :time_limit, :difficulty, :category, :total_questions)";
         $db = config::getConnexion();
         try {
             $stmt = $db->prepare($sql);
@@ -27,7 +27,12 @@ class QuizController {
                 'title' => $quiz->getTitle(),
                 'description' => $quiz->getDescription(),
                 'author' => $quiz->getAuthor(),
-                'creation_date' => date("Y-m-d") // Auto-generate creation_date (the current date)
+                'creation_date' => date("Y-m-d"), // Auto-generate creation_date (the current date)
+                'time_limit' => $quiz->getTimeLimit(),
+                'difficulty' => $quiz->getDifficulty(),
+                'category' => $quiz->getCategory(),
+                'total_questions' => $quiz->getTotalQuestions()
+
             ]);
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
@@ -53,7 +58,11 @@ class QuizController {
                 title = :title, 
                 description = :description, 
                 author = :author, 
-                creation_date = :creation_date 
+                creation_date = :creation_date,
+                time_limit = :time_limit, 
+                difficulty = :difficulty, 
+                category = :category, 
+                total_questions = :total_questions 
                 WHERE id = :id";
         $db = config::getConnexion();
         try {
@@ -63,7 +72,11 @@ class QuizController {
                 'title' => $quiz->getTitle(),
                 'description' => $quiz->getDescription(),
                 'creation_date' => $quiz->getDatec()->format('y-m-d'),
-                'author' => $quiz->getAuthor()
+                'author' => $quiz->getAuthor(),
+                'time_limit' => $quiz->getTimeLimit(),
+                'difficulty' => $quiz->getDifficulty(),
+                'category' => $quiz->getCategory(),
+                'total_questions' => $quiz->getTotalQuestions()
             ]);
         } catch (Exception $e) {
             echo "Error: ". $e->getMessage();
@@ -98,6 +111,10 @@ class QuizController {
                     <th>Description</th>
                     <th>Author</th>
                     <th>Creation Date</th>
+                    <th>Time Limit (minutes)</th>
+                    <th>Difficulty</th>
+                    <th>Category</th>
+                    <th>Total Questions</th>
                 </tr>
                 <tr>
                     <td>{$quiz->getId()}</td>
@@ -105,6 +122,10 @@ class QuizController {
                     <td>{$quiz->getDescription()}</td>
                     <td>{$quiz->getAuthor()}</td>
                     <td>{$quiz->getCreationDate()}</td>
+                    <td>{$quiz->getTimeLimit()}</td>
+                    <td>{$quiz->getDifficulty()}</td>
+                    <td>{$quiz->getCategory()}</td>
+                    <td>{$quiz->getTotalQuestions()}</td>
                 </tr>
             </table>
         ";

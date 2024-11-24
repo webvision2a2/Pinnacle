@@ -31,24 +31,32 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (
-        isset($_POST['title'], $_POST['description'], $_POST['author'], $_POST['creation_date']) &&
+        isset($_POST['title'], $_POST['description'], $_POST['author'], $_POST['creation_date'], $_POST['time_limit'], $_POST['difficulty'], $_POST['category'], $_POST['total_questions']) &&
         !empty($_POST['title']) &&
         !empty($_POST['description']) &&
         !empty($_POST['author']) &&
-        !empty($_POST['creation_date'])
+        !empty($_POST['creation_date']) &&
+        !empty($_POST['time_limit']) &&
+        !empty($_POST['difficulty']) &&
+        !empty($_POST['category']) &&
+        !empty($_POST['total_questions'])
     ) {
         try {
             $quizToUpdate = new Quiz(
-                $quizId, // ID from the query parameter
-                $_POST['title'], // Updated title
-                $_POST['description'], // Updated description
-                new DateTime($_POST['creation_date']), // Updated creation date
-                $_POST['author'] // Updated author
+                $quizId, // ID from the query parameter (doesn't change)
+                $_POST['title'], 
+                $_POST['description'], 
+                new DateTime($_POST['creation_date']), 
+                $_POST['author'], 
+                (int)$_POST['time_limit'], 
+                $_POST['difficulty'], 
+                $_POST['category'], 
+                (int)$_POST['total_questions'] 
             );
 
             $quizController = new QuizController();
             $quizController->updateQuiz($quizId, $quizToUpdate); // Pass both the ID and the $Quiz object
-            header('Location: listQuiz.php'); // Redirect back to the quiz list
+            header('Location: listQuiz.php'); // Redirect back to the list of quizzes
             exit;
         } catch (Exception $e) {
             $error = "Error updating quiz: " . $e->getMessage();
@@ -316,25 +324,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
 
                         <?php if ($quiz): ?>
-                            <form action="updateQuiz.php?id=<?= htmlspecialchars($quizId) ?>" method="POST" class="form">
+                            <!--FORM-->
+                            <form action="updateQuiz.php?id=<?= htmlspecialchars($quizId) ?>" method="POST" class="form" onsubmit="return validateForm()">
                                 <div class="form-group">
                                     <label for="title" class="text-primary">Titre du Quiz:</label>
-                                    <input type="text" name="title" id="title" class="form-control" value="<?= htmlspecialchars($quiz['title']) ?>" required>
+                                    <span id="titleError" class="text-danger"></span>
+                                    <input type="text" name="title" id="title" class="form-control" value="<?= htmlspecialchars($quiz['title']) ?>" >
                                 </div>
 
                                 <div class="form-group">
                                     <label for="description" class="text-primary">Description:</label>
-                                    <textarea name="description" id="description" rows="4" class="form-control" required><?= htmlspecialchars($quiz['description']) ?></textarea>
+                                    <textarea name="description" id="description" rows="4" class="form-control" ><?= htmlspecialchars($quiz['description']) ?></textarea>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="creation_date" class="text-primary">Date de Creation:</label>
-                                    <input type="date" name="creation_date" id="creation_date" class="form-control" value="<?= htmlspecialchars($quiz['creation_date']) ?>" required>
+                                    <span id="descriptionError" class="text-danger"></span>
+                                    <input type="date" name="creation_date" id="creation_date" class="form-control" value="<?= htmlspecialchars($quiz['creation_date']) ?>" >
                                 </div>
 
                                 <div class="form-group">
                                     <label for="author" class="text-primary">Auteur:</label>
-                                    <input type="text" name="author" id="author" class="form-control" value="<?= htmlspecialchars($quiz['author']) ?>" required>
+                                    <span id="authorError" class="text-danger"></span>
+                                    <input type="text" name="author" id="author" class="form-control" value="<?= htmlspecialchars($quiz['author']) ?>" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="time_limit" class="text-primary">Durée (minutes):</label>
+                                    <span id="timeLimitError" class="text-danger"></span>
+                                    <input type="number" name="time_limit" id="time_limit" class="form-control" value="<?= htmlspecialchars($quiz['time_limit']) ?>">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="difficulty" class="text-primary">Difficulté:</label>
+                                    <span id="difficultyError" class="text-danger"></span>
+                                    <select name="difficulty" id="difficulty" class="form-control" >
+                                        <option value="Facile" <?= $quiz['difficulty'] === 'Facile' ? 'selected' : '' ?>>Facile</option>
+                                        <option value="Moyenne" <?= $quiz['difficulty'] === 'Moyenne' ? 'selected' : '' ?>>Moyenne</option>
+                                        <option value="Difficile" <?= $quiz['difficulty'] === 'Difficile' ? 'selected' : '' ?>>Difficile</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="category" class="text-primary">Catégorie:</label>
+                                    <span id="categoryError" class="text-danger"></span>
+                                    <select name="category" id="category" class="form-control" >
+                                        <option value="BI" <?= $quiz['category'] === 'BI' ? 'selected' : '' ?>>BI</option>
+                                        <option value="Cloud" <?= $quiz['category'] === 'Cloud' ? 'selected' : '' ?>>Cloud</option>
+                                        <option value="Web Dev" <?= $quiz['category'] === 'Web Dev' ? 'selected' : '' ?>>Web Dev</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="total_questions" class="text-primary">Nombre de Questions:</label>
+                                    <span id="totalQuestionsError" class="text-danger"></span>
+                                    <input type="number" name="total_questions" id="total_questions" class="form-control" value="<?= htmlspecialchars($quiz['total_questions']) ?>" >
                                 </div>
 
                                 <button type="submit" class="btn btn-primary btn-block">Modifier Quiz</button>
@@ -400,16 +444,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="template/js/sb-admin-2.min.js"></script>
     <script>
         // JavaScript for Form Validation    //form id = quizForm
-        document.getElementById('quizForm').addEventListener('submit', function (event) {   //form id = quizForm
-            const title = document.getElementById('title').value.trim();
-            const description = document.getElementById('description').value.trim();
-            const author = document.getElementById('author').value.trim();
+        function validateForm() {
+        let isValid = true; // Tracks overall form validity
 
-            if (!title || !description || !author) {
-                event.preventDefault();  //preventing the data from being sent
-                alert('Please fill in all required fields.');  //dispalay of an alert box 
-            }
-        });
+        // Reset error messages
+        document.getElementById('titleError').textContent = '';
+        document.getElementById('descriptionError').textContent = '';
+        document.getElementById('authorError').textContent = '';
+        document.getElementById('timeLimitError').textContent = '';
+        document.getElementById('difficultyError').textContent = '';
+        document.getElementById('categoryError').textContent = '';
+        document.getElementById('totalQuestionsError').textContent = '';
+
+        // Get input values
+        const title = document.getElementById('title').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const author = document.getElementById('author').value.trim();
+        const timeLimit = document.getElementById('time_limit').value.trim();
+        const difficulty = document.getElementById('difficulty').value.trim();
+        const category = document.getElementById('category').value.trim();
+        const totalQuestions = document.getElementById('total_questions').value.trim();
+
+        // Validate title
+        if (!title) {
+            document.getElementById('titleError').textContent = 'Le titre est requis.';
+            isValid = false;
+        }
+
+        // Validate description
+        if (!description) {
+            document.getElementById('descriptionError').textContent = 'La description est requise.';
+            isValid = false;
+        }
+
+        // Validate author
+        if (!author) {
+            document.getElementById('authorError').textContent = 'L\'auteur est requis.';
+            isValid = false;
+        }
+
+        // Validate time limit (must not be negative)
+        if (!timeLimit || timeLimit < 0) {
+            document.getElementById('timeLimitError').textContent = 'La durée doit être un nombre positif.';
+            isValid = false;
+        }
+
+        // Validate difficulty
+        if (!difficulty) {
+            document.getElementById('difficultyError').textContent = 'La difficulté est requise.';
+            isValid = false;
+        }
+
+        // Validate category
+        if (!category) {
+            document.getElementById('categoryError').textContent = 'La catégorie est requise.';
+            isValid = false;
+        }
+
+        // Validate total questions (must not be negative)
+        if (!totalQuestions || totalQuestions < 0) {
+            document.getElementById('totalQuestionsError').textContent = 'Le nombre de questions doit être un nombre positif.';
+            isValid = false;
+        }
+
+        return isValid; // Prevents form submission if any field is invalid
+    }
+
+
     </script>
 
 </body>

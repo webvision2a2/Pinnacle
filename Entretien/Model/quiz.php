@@ -5,7 +5,12 @@ class Quiz {
     private ?string $description;
     private ?DateTime $datec;
     private ?string $author;
-    public function __construct( $id ,$title , $description , $datec ,$author ) {
+    private ?int $time_limit;
+    private ?string $difficulty;
+    private ?string $category;
+    private ?int $total_questions;
+    
+    public function __construct( $id ,$title , $description , $datec ,$author ,$time_limit,$difficulty, $category, $total_questions) {
         
         $this->id = $id;
         $this->title = $title;
@@ -22,6 +27,10 @@ class Quiz {
         //}
 
         $this->author = $author;
+        $this->time_limit = $time_limit;
+        $this->difficulty = $difficulty;
+        $this->category = $category;
+        $this->total_questions = $total_questions;
     
     }
 
@@ -45,6 +54,21 @@ class Quiz {
     public function getDatec(): ?DateTime {
         return $this->datec;
     }
+    public function getTimeLimit(): int {
+        return $this->time_limit;
+    }
+
+    public function getDifficulty(): string {
+        return $this->difficulty;
+    }
+
+    public function getCategory(): string {
+        return $this->category;
+    }
+
+    public function getTotalQuestions(): int {
+        return $this->total_questions;
+    }
 
     // Display method
     public function show() {
@@ -56,6 +80,10 @@ class Quiz {
                     <th>Description</th>
                     <th>Auteur</th>
                     <th>Date de Creation</th>
+                    <th>Time Limit (minutes)</th>
+                    <th>Difficulty</th>
+                    <th>Category</th>
+                    <th>Total Questions</th>
                 </tr>
                 <tr>
                     <td>{$this->id}</td>
@@ -63,6 +91,10 @@ class Quiz {
                     <td>{$this->description}</td>
                     <td>{$this->author}</td>
                     <td>{$this->datec}</td>
+                     <td>{$this->time_limit}</td>
+                    <td>{$this->difficulty}</td>
+                    <td>{$this->category}</td>
+                    <td>{$this->total_questions}</td>
                 </tr>
             </table>
         ";
