@@ -393,8 +393,12 @@
     
                     <!-- Page Heading -->
                     <?php
+<<<<<<< HEAD
                     
                     require_once 'addsociete.php';
+=======
+                    // Inclure le fichier pour lister les sociétés
+>>>>>>> origin/Ahmed
                     require_once 'societeList.php';
                     ?>
 
@@ -454,7 +458,13 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+<<<<<<< HEAD
     
+=======
+
+    <!-- <script src="condition1.js"></script> -->
+
+>>>>>>> origin/Ahmed
 </body>
 
 </html>
