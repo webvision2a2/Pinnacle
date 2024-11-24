@@ -1,15 +1,21 @@
 <?php
 // catalogue.php
-
 // Include the database connection and CRUD functions
-include   '../../Models/Database.php';
-include '../../Controller/CRUD.php';
+include_once '../../Models/Domaine.php'; // Use include_once to prevent multiple inclusions
+include_once '../../Controller/CRUD.php'; // Ensure this includes CRUD functions // Use include_once to prevent multiple inclusions
+include_once 'C:\xampp\htdocs\validation 2\config.php'; // Use include_once
 // Enable error reporting for debugging (remove or comment out in production)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Fetch all domaines from the database
 $domaines = readdomaines(); // Ensure you have this function defined in CRUD.php
+// Initialize variable for selected domain ID
+// Initialize variable for selected domain ID
+$domaineId = isset($_GET['domaine_id']) ? intval($_GET['domaine_id']) : 0;
+
+// Fetch courses based on selected domaine ID if provided
+$cours = $domaineId > 0 ? getCoursByDomaineId($domaineId) : [];
 
 ?>
 
@@ -168,7 +174,40 @@ h1 {
     <!-- Catalogue Content Start -->
    <div class='container py-5'>
        <h1 class='text-center'>Les domaines disponibles</h1>
-        
+   <form method="GET" class="mb-4">
+       <div class="input-group">
+           <select name="domaine_id" class="form-select" onchange="this.form.submit()">
+               <option value="">Sélectionner un domaine</option>
+               <?php foreach ($domaines as $domaine): ?>
+                   <option value="<?php echo htmlspecialchars($domaine['id']); ?>" <?php echo ($domaineId == $domaine['id']) ? 'selected' : ''; ?>>
+                       <?php echo htmlspecialchars($domaine['name']); ?>
+                   </option>
+               <?php endforeach; ?>
+           </select>
+           <button class="btn btn-primary" type="submit">Afficher Cours</button>
+       </div>
+   </form>
+
+   <?php if ($domaineId > 0): ?>
+       <h2 class='text-center'>Cours pour le domaine "<?php echo htmlspecialchars(getDomaineById($domaineId)['name']); ?>"</h2>
+       <div class='row justify-content-around mt-4'>
+           <?php if (!empty($cours)): ?>
+               <?php foreach ($cours as $course): ?>
+                   <div class='col-md-4 mb-4'>
+                       <!-- Course Card -->
+                       <div class='domaine-card shadow-sm p-4 rounded text-center'>
+                           <h5><?php echo htmlspecialchars($course['nom']); ?></h5>
+                           <a class='btn-cours' href="<?php echo htmlspecialchars($course['fichier']); ?>" target="_blank">Télécharger le cours</a>
+                       </div>
+                   </div> 
+               <?php endforeach; ?>
+           <?php else: ?>
+               <p>Aucun cours trouvé pour ce domaine.</p>
+           <?php endif; ?>
+       </div> 
+   <?php endif; ?>
+
+</div> 
        <?php if (!empty($domaines)): ?>
            <div class='row justify-content-around mt-4'>
                <?php foreach ($domaines as $domaine): ?>
@@ -183,8 +222,10 @@ h1 {
                            <?php endif; ?>
                            <h4><?php echo htmlspecialchars($domaine['name']); ?></h4>
                            <p><?php echo htmlspecialchars($domaine['description']); ?></p>
+                           <p><?php echo htmlspecialchars($domaine['competence']); ?></p>
+
                            <!-- Button to view course -->
-                           <a href='cours.php'class='btn-cours'>Voir Cours</a>
+                           <a class='btn-cours'href="listecours.php?Domaine_id=<?php echo $domaine['id']; ?>">Voir Cours</a>
                        </div>
                    </div> 
                <?php endforeach; ?>

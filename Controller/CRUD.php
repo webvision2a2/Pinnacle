@@ -1,22 +1,20 @@
 <?php
-// Models/CRUD.php
+include_once 'C:\xampp\htdocs\validation 2\config.php';
 
-include_once  '../../Models/Database.php';
-
-function adddomaines($name, $description, $image) {
+function addDomaines($name, $description, $competence, $image) {  
     $database = new Database();
     $db = $database->connect();
 
-    $stmt = $db->prepare("INSERT INTO domaines (name, description, image) VALUES (:name, :description, :image)");
+    $stmt = $db->prepare("INSERT INTO domaines (name, description, competence, image) VALUES (:name, :description, :competence, :image)");
     
     $stmt->bindParam(':name', $name);
     $stmt->bindParam(':description', $description);
+    $stmt->bindParam(':competence', $competence);
     $stmt->bindParam(':image', $image);
     
     return $stmt->execute();
 }
-
-function deletedomaines($id) {
+function deleteDomaines($id) {
     $database = new Database();
     $db = $database->connect();
 
@@ -27,65 +25,136 @@ function deletedomaines($id) {
     return $stmt->execute();
 }
 
-function readdomaines() {
+function readDomaines() {
     $database = new Database();
     $db = $database->connect();
 
-    // Check if the connection was successful
     if (!$db) {
-        throw new Exception("Database connection failed.");
+        return "Database connection failed.";
     }
 
-    // Prepare and execute the query using PDO
-    $stmt = $db->query("SELECT * FROM domaines");
-    
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all domaines as an associative array
+    return $db->query("SELECT * FROM domaines")->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getDomaineById($id) {
     $database = new Database();
-    $db = $database->connect(); // Establish a connection
+    $db = $database->connect();
 
     if (!$db) {
-        throw new Exception("Database connection failed.");
+        return "Database connection failed.";
     }
 
     $stmt = $db->prepare("SELECT * FROM domaines WHERE id = :id");
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     
     if ($stmt->execute()) {
-        return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch the domaine as an associative array
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     } else {
-        return null; // No domaine found with that ID
+        return null; 
     }
 }
 
-function updatedomaines($id, $name, $description, $image = null) {
+function updateDomaines($id, $name, $description, $competence, $image = null) {
     $database = new Database();
-    $db = $database->connect(); // Establish a connection
+    $db = $database->connect();
 
     if (!$db) {
-        throw new Exception("Database connection failed.");
+        return "Database connection failed.";
     }
 
-    if ($image) {
+    if ($image !== null) {
         // Update query with image
-        $stmt = $db->prepare("UPDATE domaines SET name = :name, description = :description, image = :image WHERE id = :id");
+        $stmt = $db->prepare("UPDATE domaines SET name = :name, description = :description, competence = :competence, image = :image WHERE id = :id");
+        // Bind parameters
         $stmt->bindParam(':image', $image);
     } else {
         // Update query without image
-        $stmt = $db->prepare("UPDATE domaines SET name = :name, description = :description WHERE id = :id");
+        $stmt = $db->prepare("UPDATE domaines SET name = :name, description = :description, competence = :competence WHERE id = :id");
     }
 
-    // Bind parameters and execute the statement
-    if ($stmt) {  // Check if statement was prepared successfully
+    // Bind remaining parameters and execute the statement
+    if ($stmt) { 
+        // Bind parameters
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':competence', $competence);
+
+        // Bind ID
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         
-        return $stmt->execute(); // Execute the update and return success status
+        return $stmt->execute(); 
     } else {
-        throw new Exception("Failed to prepare SQL statement.");
+        return "Failed to prepare SQL statement.";
     }
-    
+
 }
+
+
+function addCours($Domaine_id, $nom, $fichier) {
+    $database = new Database();
+    $db = $database->connect();
+
+    $stmt = $db->prepare("INSERT INTO cours (Domaine_id, nom, fichier) VALUES (:Domaine_id, :nom, :fichier)");
+    $stmt->bindParam(':Domaine_id', $Domaine_id);
+    $stmt->bindParam(':nom', $nom);
+    $stmt->bindParam(':fichier', $fichier);
+
+    return $stmt->execute();
+}
+function deleteCours($id_cours) {
+    $database = new Database();
+    $db = $database->connect();
+
+    $stmt = $db->prepare("DELETE FROM cours WHERE id_cours = :id_cours");
+    $stmt->bindParam(':id_cours', $id_cours, PDO::PARAM_INT);
+
+    return $stmt->execute();
+}
+// Remove this function from catalogue.php
+function getCoursByDomaineId($domaineId) {
+    $database = new Database();
+    $db = $database->connect();
+
+    $stmt = $db->prepare("SELECT * FROM cours WHERE Domaine_id = :domaine_id");
+    $stmt->bindParam(':domaine_id', $domaineId, PDO::PARAM_INT);
+    
+    if ($stmt->execute()) {
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        return [];
+    }
+}
+function readCours() {
+    $database = new Database();
+    $db = $database->connect();
+
+    return $db->query("SELECT * FROM cours")->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getCoursById($id_cours) {
+    $database = new Database();
+    $db = $database->connect();
+
+    $stmt = $db->prepare("SELECT * FROM cours WHERE id_cours = :id_cours");
+    $stmt->bindParam(':id_cours', $id_cours, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function updateCours($id_cours, $Domaine_id, $nom, $fichier) {
+    $database = new Database();
+    $db = $database->connect();
+
+    $stmt = $db->prepare("UPDATE cours SET Domaine_id = :Domaine_id, nom = :nom, fichier = :fichier WHERE id_cours = :id_cours");
+    $stmt->bindParam(':Domaine_id', $Domaine_id);
+    $stmt->bindParam(':nom', $nom);
+    $stmt->bindParam(':fichier', $fichier);
+    $stmt->bindParam(':id_cours', $id_cours, PDO::PARAM_INT);
+
+    return $stmt->execute();
+}
+
+// CRUD functions for Domaines...
+// (Include the addDomaines, deleteDomaines, readDomaines, getDomaineById, and updateDomaines functions here as shown previously)
+?>
