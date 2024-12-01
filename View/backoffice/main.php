@@ -121,7 +121,11 @@ include 'stageList.php'; */
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Reseaux:</h6>
+<<<<<<< HEAD
                         <a class="collapse-item active" href="main.php">Stages</a>
+=======
+                        <a class="collapse-item" href="main.php">Stages</a>
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
                         <a class="collapse-item" href="main2.php">Societes</a>
                     </div>
                 </div>
@@ -403,9 +407,14 @@ include 'stageList.php'; */
                     <?php
                     
                     require_once 'addstage.php';
+<<<<<<< HEAD
                     require_once 'stageList.php'; 
                     ?>
                     
+=======
+                    require_once 'stageList.php';
+                    ?>
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
 
                 </div>
                 <!-- /.container-fluid -->

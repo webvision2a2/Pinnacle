@@ -53,8 +53,13 @@ $list = $societeController->listSociete();
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav mx-auto py-0">
                         <a href="index.php" class="nav-item nav-link">Home</a>
+<<<<<<< HEAD
                         <a href="main.php" class="nav-item nav-link active">Societes</a>
                         <a href="main2.php" class="nav-item nav-link ">Stages</a>
+=======
+                        <a href="main.php" class="nav-item nav-link">Societes</a>
+                        <a href="main2.php" class="nav-item nav-link active">Stages</a>
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
                         <a href="project.html" class="nav-item nav-link">Project</a>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>

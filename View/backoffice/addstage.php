@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 <!-- <?php
 /* require_once '../../controller/StageController.php';
+=======
+<?php
+require_once '../../controller/StageController.php';
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
 
 $stageController = new StageController();
 $error = "";
@@ -30,7 +35,11 @@ if (isset($_POST["submit"])) {
             $error = "Une erreur s'est produite lors de l'ajout du stage.";
         }
     }
+<<<<<<< HEAD
 } */
+=======
+}
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +58,11 @@ if (isset($_POST["submit"])) {
             <select id="id_societe" name="id_societe" class="form-control" required>
                 <?php
                 // Récupérer toutes les sociétés depuis la base de données
+<<<<<<< HEAD
                 /* require_once '../../controller/SocieteController.php';
+=======
+                require_once '../../controller/SocieteController.php';
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
                 $societeController = new SocieteController();
                 $societes = $societeController->listSociete();
 
@@ -60,7 +73,11 @@ if (isset($_POST["submit"])) {
                     foreach ($societes as $societe) {
                         echo "<option value='{$societe['id']}'>{$societe['nom_soc']}</option>";
                     }
+<<<<<<< HEAD
                 } */
+=======
+                }
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
                 ?>
             </select>
         </div>
@@ -189,6 +206,7 @@ if (isset($_POST["submit"])) {
     });
     </script>
 </body>
+<<<<<<< HEAD
 </html> -->
 <?php
 require_once '../../controller/StageController.php';
@@ -401,3 +419,6 @@ if (isset($_POST["submit"])) {
 </body>
 </html>
             
+=======
+</html>
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091

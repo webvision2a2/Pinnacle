@@ -3,6 +3,7 @@ require_once '../../controller/StageController.php';
 require_once '../../controller/SocieteController.php';
 
 $stageController = new StageController();
+<<<<<<< HEAD
 $societeController = new SocieteController();
 
 $limit = 6; // Nombre de stages par page
@@ -21,6 +22,11 @@ if ($societe_id) {
 
 $totalPages = ceil($totalStages / $limit);
 
+=======
+$stages = $stageController->listStage();
+
+$societeController = new SocieteController();
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
 $societes = $societeController->listSociete();
 ?>
 
@@ -73,7 +79,11 @@ $societes = $societeController->listSociete();
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav mx-auto py-0">
                         <a href="index.php" class="nav-item nav-link">Home</a>
+<<<<<<< HEAD
                         <a href="main.php" class="nav-item nav-link ">Societes</a>
+=======
+                        <a href="main.php" class="nav-item nav-link">Societes</a>
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
                         <a href="main2.php" class="nav-item nav-link active">Stages</a>
                         <a href="project.html" class="nav-item nav-link">Project</a>
                         <div class="nav-item dropdown">
@@ -109,6 +119,7 @@ $societes = $societeController->listSociete();
         </div>
         <!-- Navbar & Hero End -->
 
+<<<<<<< HEAD
         <!-- Barre de Recherche -->
         <div class="container py-5">
             <form method="GET" action="main2.php">
@@ -126,6 +137,8 @@ $societes = $societeController->listSociete();
             </form>
         </div>
 
+=======
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
         <!-- Service Start -->
         <div class="container-xxl py-5">
             <div class="container py-5 px-lg-5">
@@ -137,10 +150,16 @@ $societes = $societeController->listSociete();
                                 <div class="service-icon flex-shrink-0">
                                     <i class="fas fa-briefcase fa-2x"></i>
                                 </div>
+<<<<<<< HEAD
                                 <?php 
                                     $stageName = htmlspecialchars($stage['nom_stage']); // Stage name
                                     $societeName = 'Unknown'; // Default society name
                                     
+=======
+                                <!-- Affichage du nom de la société en fonction de l'ID de la société -->
+                                <?php 
+                                    $societeName = 'Unknown';
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
                                     foreach ($societes as $societe) {
                                         if ($societe['id'] == $stage['id_societe']) {
                                             $societeName = htmlspecialchars($societe['nom_soc']);
@@ -148,16 +167,28 @@ $societes = $societeController->listSociete();
                                         }
                                     }
                                 ?>
+<<<<<<< HEAD
 
                                 <h5 class="mb-3"><?= $stageName; ?> - <?= $societeName; ?></h5> 
                                 <p class="m-0"><?= htmlspecialchars($stage['speciality']); ?></p>
                                 <p class="m-0"><?= htmlspecialchars($stage['duration']); ?></p>
                                 <p class="m-0"><?= htmlspecialchars($stage['email']); ?></p>
+=======
+                                <h5 class="mb-3"><?= $societeName; ?></h5>
+                                <!-- Affichage des spécialités -->
+                                <p class="m-0"><?= htmlspecialchars($stage['speciality']); ?></p>
+                                <!-- Affichage de la durée -->
+                                <p class="m-0"><?= htmlspecialchars($stage['duration']); ?></p>
+                                <!-- Affichage de l'email -->
+                                <p class="m-0"><?= htmlspecialchars($stage['email']); ?></p>
+                                <!-- Lien vers la page de détails du stage -->
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
                                 <a class="btn btn-square" href="stageDetails.php?id=<?= $stage['id_stage']; ?>"><i class="fa fa-arrow-right"></i></a>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
+<<<<<<< HEAD
                 <br><br><br>
                 <!-- Pagination Start -->
                 <div class="d-flex justify-content-center">
@@ -184,6 +215,12 @@ $societes = $societeController->listSociete();
             </div>
         </div>
         
+=======
+            </div>
+        </div>
+        <!-- Service End -->
+
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
         <!-- Footer Start -->
         <div class="container-fluid bg-primary text-light footer wow fadeIn" data-wow-delay="0.1s">
             <div class="container py-5 px-lg-5">
@@ -204,12 +241,21 @@ $societes = $societeController->listSociete();
             </div>
         </div>
         <!-- Footer End -->
+<<<<<<< HEAD
         
+=======
+
+        <!-- Back to Top -->
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
         <a href="#" class="btn btn-lg btn-secondary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<<<<<<< HEAD
+=======
+
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>

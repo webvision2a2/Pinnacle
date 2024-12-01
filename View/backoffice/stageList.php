@@ -1,11 +1,15 @@
 <?php
 require_once '../../controller/StageController.php';
+<<<<<<< HEAD
 require_once '../../controller/SocieteController.php';
+=======
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
 
 // Instancier le contrôleur de stages pour récupérer les données
 $stageController = new StageController();
 $list = $stageController->listStage(); // Liste des stages récupérée
 
+<<<<<<< HEAD
 // Instancier le contrôleur de sociétés pour récupérer les données
 $societeController = new SocieteController();
 $societes = $societeController->listSocietes(); // Liste des sociétés récupérée
@@ -15,6 +19,8 @@ $societeNames = [];
 foreach ($societes as $societe) {
     $societeNames[$societe['id']] = $societe['nom_soc'];
 }
+=======
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
 ?>
 
 <!DOCTYPE html>
@@ -61,14 +67,20 @@ foreach ($societes as $societe) {
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
+<<<<<<< HEAD
                                                         <th>Nom du stage</th>
+=======
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
                                                         <th>Société</th>
                                                         <th>Type</th>
                                                         <th>Durée</th>
                                                         <th>Email</th>
                                                         <th>Spécialité</th>
                                                         <th>Documents</th>
+<<<<<<< HEAD
                                                         <th>Candidatures</th>
+=======
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -78,6 +90,7 @@ foreach ($societes as $societe) {
                                                     foreach ($list as $stage) {
                                                         // Vérifiez que speciality est un tableau avant d'utiliser implode()
                                                         $specialities = is_array($stage['speciality']) ? implode(", ", $stage['speciality']) : $stage['speciality'];
+<<<<<<< HEAD
                                                         
                                                         // Récupérer les candidatures pour ce stage
                                                         $candidatures = $stageController->getCandidaturesForStage($stage['id_stage']);
@@ -101,14 +114,32 @@ foreach ($societes as $societe) {
                                                                 <?= $candidatureCount ?> Candidature(s)
                                                             </a>
                                                         </td>
+=======
+                                                    ?>
+                                                    <tr>
+                                                        <td><?= $stage['id_stage']; ?></td>
+                                                        <td><?= $stage['id_societe']; ?></td>
+                                                        <td><?= $stage['type']; ?></td>
+                                                        <td><?= $stage['duration']; ?></td>
+                                                        <td><?= $stage['email']; ?></td>
+                                                        <td><?= $specialities; ?></td>
+                                                        <td><?= $stage['documents']; ?></td>
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
                                                         <td>
                                                             <!-- Formulaire pour mettre à jour un stage -->
                                                             <form method="POST" action="updateStage.php">
                                                                 <input class="btn btn-primary" type="submit" name="update" value="Modifier">
+<<<<<<< HEAD
                                                                 <input type="hidden" value="<?= htmlspecialchars($stage['id_stage']); ?>" name="id_stage">
                                                             </form>
                                                             <!-- Lien pour supprimer un stage -->
                                                             <a href="deleteStage.php?id_stage=<?= htmlspecialchars($stage['id_stage']); ?>" class="btn btn-danger">Supprimer</a>
+=======
+                                                                <input type="hidden" value="<?= $stage['id_stage']; ?>" name="id_stage">
+                                                            </form>
+                                                            <!-- Lien pour supprimer un stage -->
+                                                            <a href="deleteStage.php?id_stage=<?= $stage['id_stage']; ?>" class="btn btn-danger">Supprimer</a>
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
                                                         </td>
                                                     </tr>
                                                     <?php
