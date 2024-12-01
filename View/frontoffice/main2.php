@@ -1,7 +1,27 @@
 <?php
+require_once '../../controller/StageController.php';
 require_once '../../controller/SocieteController.php';
+
+$stageController = new StageController();
 $societeController = new SocieteController();
-$list = $societeController->listSociete();
+
+$limit = 6; // Nombre de stages par page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
+$societe_id = isset($_GET['societe']) ? (int)$_GET['societe'] : null;
+
+if ($societe_id) {
+    $stages = $stageController->listStagesBySociete($societe_id, $limit, $offset);
+    $totalStages = $stageController->countStagesBySociete($societe_id);
+} else {
+    $stages = $stageController->listStagesWithPagination($limit, $offset);
+    $totalStages = $stageController->countStages();
+}
+
+$totalPages = ceil($totalStages / $limit);
+
+$societes = $societeController->listSociete();
 ?>
 
 <!DOCTYPE html>
@@ -53,8 +73,8 @@ $list = $societeController->listSociete();
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav mx-auto py-0">
                         <a href="index.php" class="nav-item nav-link">Home</a>
-                        <a href="main.php" class="nav-item nav-link active">Societes</a>
-                        <a href="main2.php" class="nav-item nav-link ">Stages</a>
+                        <a href="main.php" class="nav-item nav-link ">Societes</a>
+                        <a href="main2.php" class="nav-item nav-link active">Stages</a>
                         <a href="project.html" class="nav-item nav-link">Project</a>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -74,12 +94,12 @@ $list = $societeController->listSociete();
                 <div class="container my-5 py-5 px-lg-5">
                     <div class="row g-5 py-5">
                         <div class="col-12 text-center">
-                            <h1 class="text-white animated slideInDown">Our Companies</h1>
+                            <h1 class="text-white animated slideInDown">Our Stages</h1>
                             <hr class="bg-white mx-auto mt-0" style="width: 90px;">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-content-center">
                                     <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
-                                    <li class="breadcrumb-item text-white active" aria-current="page">Companies</li>
+                                    <li class="breadcrumb-item text-white active" aria-current="page">Stages</li>
                                 </ol>
                             </nav>
                         </div>
@@ -89,31 +109,81 @@ $list = $societeController->listSociete();
         </div>
         <!-- Navbar & Hero End -->
 
+        <!-- Barre de Recherche -->
+        <div class="container py-5">
+            <form method="GET" action="main2.php">
+                <div class="input-group mb-3">
+                    <select class="form-select" name="societe">
+                        <option value="">Select Society</option>
+                        <?php foreach ($societes as $societe): ?>
+                            <option value="<?= htmlspecialchars($societe['id']); ?>" <?= isset($_GET['societe']) && $_GET['societe'] == $societe['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($societe['nom_soc']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+
         <!-- Service Start -->
         <div class="container-xxl py-5">
             <div class="container py-5 px-lg-5">
-                <h1 class="text-center mb-5">List of Our Companies</h1>
+                <h1 class="text-center mb-5">List of Our Stages</h1>
                 <div class="row g-4">
-                    <?php foreach ($list as $societe) : ?>
+                    <?php foreach ($stages as $stage) : ?>
                         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="service-item d-flex flex-column text-center rounded">
                                 <div class="service-icon flex-shrink-0">
-                                    <i class="fas fa-building fa-2x"></i>
+                                    <i class="fas fa-briefcase fa-2x"></i>
                                 </div>
-                                <h5 class="mb-3"><?= htmlspecialchars($societe['nom_soc']); ?></h5>
-                                <p class="m-0"><?= htmlspecialchars($societe['speciality']); ?></p>
-                                <p class="m-0"><?= htmlspecialchars($societe['adresse']); ?></p>
-                                <p class="m-0"><?= htmlspecialchars($societe['numero']); ?></p>
-                                <p class="m-0"><?= htmlspecialchars($societe['email']); ?></p>
-                                <a class="btn btn-square" href="companyDetails.php?id=<?= $societe['id']; ?>"><i class="fa fa-arrow-right"></i></a>
+                                <?php 
+                                    $stageName = htmlspecialchars($stage['nom_stage']); // Stage name
+                                    $societeName = 'Unknown'; // Default society name
+                                    
+                                    foreach ($societes as $societe) {
+                                        if ($societe['id'] == $stage['id_societe']) {
+                                            $societeName = htmlspecialchars($societe['nom_soc']);
+                                            break;
+                                        }
+                                    }
+                                ?>
+
+                                <h5 class="mb-3"><?= $stageName; ?> - <?= $societeName; ?></h5> 
+                                <p class="m-0"><?= htmlspecialchars($stage['speciality']); ?></p>
+                                <p class="m-0"><?= htmlspecialchars($stage['duration']); ?></p>
+                                <p class="m-0"><?= htmlspecialchars($stage['email']); ?></p>
+                                <a class="btn btn-square" href="stageDetails.php?id=<?= $stage['id_stage']; ?>"><i class="fa fa-arrow-right"></i></a>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
+                <br><br><br>
+                <!-- Pagination Start -->
+                <div class="d-flex justify-content-center">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <?php if ($page > 1): ?>
+                                <li class="page-item"><a class="page-link" href="?page=<?= $page - 1; ?><?= $societe_id ? '&societe=' . $societe_id : ''; ?>">Previous</a></li>
+                            <?php endif; ?>
+                            
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <li class="page-item <?= $i == $page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?= $i; ?><?= $societe_id ? '&societe=' . $societe_id : ''; ?>"><?= $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <?php if ($page < $totalPages): ?>
+                                <li class="page-item"><a class="page-link" href="?page=<?= $page + 1; ?><?= $societe_id ? '&societe=' . $societe_id : ''; ?>">Next</a></li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- Pagination End -->
+
             </div>
         </div>
-        <!-- Service End -->
-
+        
         <!-- Footer Start -->
         <div class="container-fluid bg-primary text-light footer wow fadeIn" data-wow-delay="0.1s">
             <div class="container py-5 px-lg-5">
@@ -134,8 +204,7 @@ $list = $societeController->listSociete();
             </div>
         </div>
         <!-- Footer End -->
-
-        <!-- Back to Top -->
+        
         <a href="#" class="btn btn-lg btn-secondary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
 
