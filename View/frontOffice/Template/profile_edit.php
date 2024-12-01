@@ -13,6 +13,54 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION
 $profile = null;
 
 $profileController = new ProfileController();
+// Assuming you've already included the database connection file
+include_once '../../../config.php'; // Modify this path as per your project structure
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
+    echo "<pre>";
+    print_r($_FILES['file']);
+    echo "</pre>";
+
+    // Check if a file was uploaded successfully
+    if ($_FILES['file']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = __DIR__ . "/uploads/";
+
+        // Ensure upload directory exists
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        // Move the uploaded file to the uploads directory
+        $uploadedFilePath = $uploadDir . basename($_FILES['file']['name']);
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadedFilePath)) {
+            // Update the database
+            try {
+                include_once '../../../config.php'; // Adjust path to include database connection
+                $pdo = config::getConnexion();
+
+                $sql = "UPDATE profiles SET photo_profil = :photo_profil WHERE user_id = :user_id";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([
+                    ':photo_profil' => 'uploads/' . basename($_FILES['file']['name']),
+                    ':user_id' => $_SESSION['id']
+                ]);
+
+                // Redirect to the same page to reflect the updated profile
+                header("Location: profile.php");
+                exit;
+            } catch (PDOException $e) {
+                echo '<div class="alert alert-danger">Database error: ' . $e->getMessage() . '</div>';
+            }
+        } else {
+            echo '<div class="alert alert-danger">Failed to move uploaded file.</div>';
+        }
+    } else {
+        echo '<div class="alert alert-danger">File upload error: ' . $_FILES['file']['error'] . '</div>';
+    }
+}
+
+
+
     if (isset($_POST["domaine"]) && isset($_POST["occupation"]) && isset($_POST["telephone"]) && isset($_POST["age"]) && isset($_POST["photo_profil"])) {
         if (!empty($_POST["domaine"]) && !empty($_POST["occupation"]) && !empty($_POST["telephone"]) && !empty($_POST["age"]) && !empty($_POST["photo_profil"])) {
         $profile = new Profile(
@@ -27,10 +75,9 @@ $profileController = new ProfileController();
 
         $profileController->updateProfile($_SESSION['id'], $profile);
         echo "<p class='success'>Profil mis à jour avec succès.</p>";
-        header('Location:profile.php');
+        /* header('Location:profile.php'); */
     }
 }
- 
 ?>
 
 <!DOCTYPE html>
@@ -150,77 +197,97 @@ $profileController = new ProfileController();
         <div class="container py-5">
             <div class="main-body">
                 <?php
-                    if (isset($_POST['id'])) {
-                        echo $_POST['id']; 
-                        $profile = $profileController->showProfile($_POST['id']);
-                    
+                if (isset($_POST['id']) || isset($_GET['id'])) {
+                    $id = $_POST['id'] ?? $_GET['id'];
+                    $profile = $profileController->showProfile($id);
                 ?>
-                <form id="UpdateForm" action="" method="POST" >
-                <input type="hidden" name="id" value="<?php echo $_POST['id']; ?>">
-                    <div class="row gutters-sm">
-                        <!-- Profile Info Card -->
-                        <div class="col-md-4 mb-3">
-                            <div class="card">
-                                <div class="card-body text-center">
-                                    <img id="profile-picture-preview" src="img/blank-profile-picture-973460_1280.webp" alt="User" class="rounded-circle" width="150">
-                                    <div class="mt-3">
-                                        <h4>
-                                            <?php echo $_SESSION["nom"] . " " .$_SESSION["prenom"]; ?>
-                                        </h4>
-                                        <h6 class="mb-0">Domaine</h6>
-                                        <input type="text" id="domaine" name="domaine" class="form-control text-center text-secondary mb-1" placeholder="Domaine" value="<?php echo isset($_POST['domaine']) ? htmlspecialchars($_POST['domaine']) : $profile['domaine'];?>">
-                                        <span class="error" id="domaine_err"></span>
-                                        <h6 class="mb-0">Occupation</h6>
-                                        <input type="text" id="occupation" name="occupation" class="form-control text-center text-muted font-size-sm" placeholder="occupation" value="<?php echo isset($_POST['occupation'])? htmlspecialchars($_POST['occupation']) : $profile['occupation'];?>">
-                                        <span class="error" id="occupation_err"></span>
-                                        <div class="mt-3">
-                                            <label for="photo_profil" class="form-label">Changer la photo de profil</label>
-                                            <input type="text" name="photo_profil" id="photo_profil" class="form-control" value="<?php echo isset($_POST['photo_profil'])? htmlspecialchars($_POST['photo_profil']) : $profile['photo_profil'];?>">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Profile Details Card -->
-                        <div class="col-md-8">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">Âge</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input type="number" id="age" name="age" class="form-control" placeholder="Âge" value="<?php echo $profile['age']; ?>">
-                                            <span class="error" id="age_err"></span>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">Téléphone</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input type="text" id="telephone" name="telephone" class="form-control" placeholder="Numéro de téléphone" value="<?php echo isset($_POST['telephone'])? htmlspecialchars($_POST['telephone']) : $profile['telephone'];?>">
-                                            <span class="error" id="telephone_err"></span>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    
-                                    <div class="text-end">
-                                        <button type="submit"  class="btn btn-primary">Enregistrer</button>
-                                        <a href="profile.php" class="btn btn-secondary">Annuler</a>
-                                    </div>
-                                </div>
+                <div class="row">
+                    <!-- Left Column: Profile Picture and Upload -->
+                    <div class="col-md-4 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <img id="profile-picture-preview" 
+                                    src="uploads/<?php echo basename($profile['photo_profil']); ?>" 
+                                    alt="Profile Picture" 
+                                    class="rounded-circle photo_profil mb-3" width="150">
+                                <h4><?php echo $_SESSION["nom"] . " " . $_SESSION["prenom"]; ?></h4>
+                                <form action="" method="POST" enctype="multipart/form-data">
+                                    <label for="fileInput" class="form-label">Changer la photo de profil</label>
+                                    <input type="file" name="file" id="fileInput" class="form-control mb-2">
+                                    <input type="hidden" name="id" value="<?php echo $_SESSION['id']; ?>">
+                                    <button type="submit" name="submit" class="btn btn-primary">Enregistrer</button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                </form>
+                    
+                    <!-- Right Column: Profile Information -->
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <form id="UpdateForm" action="" method="POST">
+                                    <input type="hidden" name="id" value="<?php echo $id; ?>">
+                                    
+                                    <!-- Domaine -->
+                                    <div class="mb-3">
+                                        <label for="domaine" class="form-label">Domaine</label>
+                                        <input type="text" id="domaine" name="domaine" 
+                                            class="form-control" 
+                                            placeholder="Domaine" 
+                                            value="<?php echo isset($_POST['domaine']) ? htmlspecialchars($_POST['domaine']) : $profile['domaine']; ?>">
+                                        <span class="error text-danger" id="domaine_err"></span>
+                                    </div>
+
+                                    <!-- Occupation -->
+                                    <div class="mb-3">
+                                        <label for="occupation" class="form-label">Occupation</label>
+                                        <input type="text" id="occupation" name="occupation" 
+                                            class="form-control" 
+                                            placeholder="Occupation" 
+                                            value="<?php echo isset($_POST['occupation']) ? htmlspecialchars($_POST['occupation']) : $profile['occupation']; ?>">
+                                        <span class="error text-danger" id="occupation_err"></span>
+                                    </div>
+
+                                    <!-- Age -->
+                                    <div class="mb-3">
+                                        <label for="age" class="form-label">Âge</label>
+                                        <input type="number" id="age" name="age" 
+                                            class="form-control" 
+                                            placeholder="Âge" 
+                                            value="<?php echo $profile['age']; ?>">
+                                        <span class="error text-danger" id="age_err"></span>
+                                    </div>
+
+                                    <!-- Telephone -->
+                                    <div class="mb-3">
+                                        <label for="telephone" class="form-label">Téléphone</label>
+                                        <input type="text" id="telephone" name="telephone" 
+                                            class="form-control" 
+                                            placeholder="Numéro de téléphone" 
+                                            value="<?php echo isset($_POST['telephone']) ? htmlspecialchars($_POST['telephone']) : $profile['telephone']; ?>">
+                                        <span class="error text-danger" id="telephone_err"></span>
+                                    </div>
+                                    
+                                    <!-- Save and Cancel Buttons -->
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                        <a href="profile.php" class="btn btn-secondary">Annuler</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <?php
-                    } else {
-                        echo "ID is not set";
-                    }
+                } else {
+                    echo "<div class='alert alert-danger'>ID is not set</div>";
+                }
                 ?>
+            </div>
+        </div>
+    </div>
+</div>
+
                 
             </div>
         </div>
@@ -331,6 +398,58 @@ $profileController = new ProfileController();
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <script>
+        /* const previewImage = () => {
+            let file = document.querySelector('#fileInput');
+            let photo_profil = document.querySelector(".photo_profil");
+            let message = document.querySelector(".message");
+            let submit = document.querySelector(".submit");
+
+            photo_profil.src = window.URL.createObjectURL(file.file[0]);
+            let regex = new RegExp("[^.]+$");
+            fileExtension = file.value.match(regex);
+            if(fileEctension == "jpeg" || fileEctension == "jpg" || fileEctension == "png" ){
+                submit.style.display="block";
+                message.innerHTML="";
+            }else{
+                photo_profil.src = "img/error.png"
+                submit.style.display="none";
+                message.innerHTML="<b>." + fileExtension + "<b> file is not allowed.<br/>Choose a .jpg or .png file only";
+            }
+        } */
+
+        const previewImage = () => {
+            let file = document.querySelector('#fileInput'); 
+            let photoProfil = document.querySelector(".photo_profil");
+            let message = document.querySelector(".message");
+            let submit = document.querySelector(".submit");
+
+            if (file.files && file.files[0]) {
+                // Preview the selected file
+                photoProfil.src = window.URL.createObjectURL(file.files[0]);
+
+                // Extract file extension (case-insensitive match)
+                let regex = /[^.]+$/;
+                let fileExtension = file.value.match(regex)?.[0].toLowerCase();
+
+                // Check allowed extensions
+                if (fileExtension === "jpeg" || fileExtension === "jpg" || fileExtension === "png") {
+                    submit.style.display = "block";
+                    message.innerHTML = "";
+                } else {
+                    photoProfil.src = "img/error.png";
+                    submit.style.display = "none";
+                    message.innerHTML = `<b>.${fileExtension}</b> file is not allowed.<br/>Choose a .jpg or .png file only.`;
+                }
+            } else {
+                photoProfil.src = "img/default.png"; // Fallback to default image
+                message.innerHTML = "No file selected.";
+                submit.style.display = "none";
+            }
+        };
+
+    </script>
 </body>
 
 </html>

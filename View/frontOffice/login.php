@@ -14,7 +14,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 include(__DIR__ . '/../../config.php');
 $pdo = config::getConnexion();
 
-$email = $password = $nom = $prenom = $role = "";
+$email = $password = $nom = $prenom = $role = $verification = "";
 $email_err = $password_err = $login_err = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($email_err) && empty($password_err)) {
-        $sql = "SELECT id, nom, prenom, password, role FROM users WHERE email = :email";
+        $sql = "SELECT id, nom, prenom, password, role, verification FROM users WHERE email = :email";
 
         if ($stmt = $pdo->prepare($sql)) {
             $stmt->bindParam(":email", $email, PDO::PARAM_STR);
@@ -49,14 +49,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $prenom = $row["prenom"];
                     $hashed_password = $row["password"];
                     $role = intval($row["role"]);
+                    $verification = $row['verification'];
 
-                    if ($password === $hashed_password)  {
+                    if (password_verify($password, $hashed_password))  {
                         $_SESSION["loggedin"] = true;
                         $_SESSION["id"] = $id;
                         $_SESSION["email"] = $email;
                         $_SESSION["nom"] = $nom;
                         $_SESSION["prenom"] = $prenom;
                         $_SESSION["role"] = $role;
+                        $_SESSION["verification"] = $verification;
 
                         if ($role === 2) {
                             header("location: Template/index.php");
@@ -65,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
                         exit;
                     } else {
-                        $login_err = "Email ou mot de passe invalide.";
+                        $login_err = "mot de passe invalide.";
                     }
                 } else {
                     $login_err = "Email ou mot de passe invalide.";
@@ -132,6 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <button id="submit" type="submit" class="btn btn-primary btn-block w-100 rounded-pill">Se connecter</button>
     <div class="text-center mt-3">
         <p class="mb-0">Vous n'avez pas de compte ? <a href="signup.php">S'inscrire</a></p>
+        <p class="mb-0">Mot de passe oublié ? <a href="sent_reset_link.php">Reset mot de passe</a></p>
     </div>
 </form>
         </div>

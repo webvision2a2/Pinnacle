@@ -28,7 +28,7 @@ class ProfileController
                 'occupation' => 'Non spécifié',       
                 'age' => 0,                       
                 'telephone' => 'Non spécifié',    
-                'photo_profil' => 'default.jpg' 
+                'photo_profil' => 'img/blank-profile-picture-973460_1280.webp' 
             ]);
         } catch (PDOException $e) {
             die('SQL Error: ' . $e->getMessage());
@@ -49,7 +49,7 @@ class ProfileController
         }
     }
 
-    /* public function updateProfile($id, $profile)
+    public function updateProfile($id, $profile)
     {
         $sql = "UPDATE profiles 
                 SET id = :id, 
@@ -74,33 +74,12 @@ class ProfileController
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage(); 
         }
-    } */
-
-    public function updateProfile($userId, $profile)
-    {
-        $sql = "UPDATE profiles 
-                SET domaine = :domaine, 
-                    occupation = :occupation, 
-                    age = :age, 
-                    telephone = :telephone, 
-                    photo_profil = :photo_profil
-                WHERE user_id = :user_id";
-        $db = config::getConnexion();
-        try {
-            $stmt = $db->prepare($sql);
-            $stmt->execute([
-                'user_id' => $userId, 
-                'domaine' => $profile->getDomaine() ?: 'Non spécifié', 
-                'occupation' => $profile->getOccupation() ?: 'Non spécifié', 
-                'age' => $profile->getAge() ?: 0, 
-                'telephone' => $profile->getTelephone() ?: 'Non spécifié', 
-                'photo_profil' => $profile->getProfilePicture() ?: 'default.jpg' 
-            ]);
-            echo "Profile updated successfully.";
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
     }
+
+    
+
+
+
 
 
     function showProfile($id)

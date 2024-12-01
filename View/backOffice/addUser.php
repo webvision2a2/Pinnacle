@@ -9,7 +9,6 @@ $user = null;
 
 $userController = new UserController();
 $profileController = new ProfileController();
-
 if (
     isset($_POST["nom"]) && isset($_POST["prenom"]) &&
     isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm_password"])
@@ -27,7 +26,8 @@ if (
             $_POST['email'],
             $hashed_password,
             $_POST['role'],
-            new DateTime($date_creation)
+            new DateTime($date_creation),
+            $_POST['verification']
         );
 
         $newUserId = $userController->addUser($user, 'back'); 
@@ -230,6 +230,13 @@ if (
                                     <select class="form-control" id="role" name="role">
                                         <option value="1">Admin</option>
                                         <option value="2">Client</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="role">Verification</label>
+                                    <select class="form-control" id="verification" name="verification">
+                                        <option value="1">Verifié</option>
+                                        <option value="0">Non Verifié</option>
                                     </select>
                                 </div>
 

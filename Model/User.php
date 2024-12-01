@@ -8,9 +8,10 @@ class User {
     private ?string $password;
     private ?int $role;
     private ?DateTime $date_creation;
+    private ?int $verification;
 
     // Constructor
-    public function __construct(?int $id, ?string $nom, ?string $prenom, ?string $email, ?string $password, ?int $role, ?DateTime $date_creation) {
+    public function __construct(?int $id, ?string $nom, ?string $prenom, ?string $email, ?string $password, ?int $role, ?DateTime $date_creation, ?int $verification) {
         $this->id = $id;
         $this->nom = $nom;
         $this->prenom = $prenom;
@@ -18,6 +19,7 @@ class User {
         $this->password = $password;
         $this->role = $role;
         $this->date_creation = $date_creation;
+        $this->verification = $verification;
     }
 
 
@@ -75,6 +77,13 @@ class User {
 
     public function setRole(?int $role): void {
         $this->role = $role;
+    }
+    public function getVerification(): ?int {
+        return $this->verification;
+    }
+
+    public function setVerification(?int $verification): void {
+        $this->role = $verification;
     }
 }
 

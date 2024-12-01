@@ -29,7 +29,8 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"])) {
             $_POST['email'],
             $hashed_password, 
             $_POST['role'],
-            new DateTime($date_creation)
+            new DateTime($date_creation),
+            $_POST['verification']
         );
 
         $userController->updateUser($user, $_POST['id']);
@@ -217,6 +218,13 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"])) {
                                     <select class="form-control" id="role" name="role">
                                         <option value="1" <?php if ($user['role'] == 1) echo 'selected'; ?>>Admin</option>
                                         <option value="2" <?php if ($user['role'] == 2) echo 'selected'; ?>>Client</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="verification">verification</label>
+                                    <select class="form-control" id="verification" name="verification">
+                                        <option value="1" <?php if ($user['verification'] == 1) echo 'selected'; ?>>Verifié</option>
+                                        <option value="0" <?php if ($user['verification'] == 0) echo 'selected'; ?>>Non Verifié</option>
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Update</button>

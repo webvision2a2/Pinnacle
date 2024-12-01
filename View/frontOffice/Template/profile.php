@@ -132,7 +132,7 @@ if (!$profile) {
                             <div class="col-md-4 mb-3">
                                 <div class="card">
                                     <div class="card-body text-center">
-                                        <img src="img/blank-profile-picture-973460_1280.webp" alt="profile" class="rounded-circle" width="150">
+                                        <img src="uploads/<?php echo basename($profile['photo_profil']); ?>" alt="profile" class="rounded-circle" width="150">
                                         <div class="mt-3">
                                         <h4><?php echo $_SESSION["nom"] . " " .$_SESSION["prenom"]; ?></h4>
                                         <p class="text-secondary mb-1"><?php echo $profile['domaine']; ?></p>
@@ -183,12 +183,17 @@ if (!$profile) {
                                             </div>
                                         </div>
                                         <hr>
-                                        <div class="text-end">
-                                            <form method="POST" action="profile_edit.php">
-                                                <input type="submit" name="update" value="Modifier le profil">
-                                                <input type="hidden" value=<?php echo $profile['id']; ?> name="id">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <!-- Reset Password Button -->
+                                            <a href="resetPassword.php" class="btn btn-secondary rounded-pill">Réinitialiser le mot de passe</a>
+                                            
+                                            <!-- Edit Profile Form -->
+                                            <form id="UpdateForm" method="POST" action="profile_edit.php" class="mb-0">
+                                                <input type="hidden" value="<?php echo $profile['id']; ?>" name="id">
+                                                <button class="btn btn-primary rounded-pill" type="submit" name="update" id="update" >Modifier le profil</button>
                                             </form>
                                         </div>
+
                                         
                                     </div>
                                 </div>
