@@ -30,28 +30,29 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) &&
             );
 
             $newUserId = $userController->addUser($user, 'front');
-
+            if ($newUserId) {
+                $profileController->createProfile($newUserId);
+            }
             
 
-            if ($newUserId) {
+            /* if ($newUserId) {
                 // Send confirmation email with token
                 $userController->envoyerEmailConfirmation($newUserId);
                 // Create a profile for the user
-                $profileController->createProfile($newUserId);
+                
 
                 echo "Inscription réussie. Veuillez vérifier votre e-mail.";
             } else {
                 echo "Erreur lors de l'inscription.";
-            }
-
-            /* header('Location: Template/index.php'); */
+            } */
+            header('Location: sent_verification_link.php');
 
     } else {
         $error = "Informations manquantes.";
     }
 }
 
-if (isset($_POST['id']) && isset($_POST['verification']) && $_POST['verification'] == '1') {
+/* if (isset($_POST['id']) && isset($_POST['verification']) && $_POST['verification'] == '1') {
     $userId = $_POST['id'];
     
     // Call the controller method to verify the email
@@ -60,7 +61,7 @@ if (isset($_POST['id']) && isset($_POST['verification']) && $_POST['verification
     } else {
         echo "Ce lien de vérification est invalide ou votre compte est déjà vérifié.";
     }
-}
+} */
 
 ?>
 
@@ -123,7 +124,7 @@ if (isset($_POST['id']) && isset($_POST['verification']) && $_POST['verification
                     <p id="p_confirmpassword"></p>
                 </div>
             
-                <button type="submit" class="btn btn-primary btn-block w-100 rounded-pill" onclick="showEmailModal()">S'inscrire</button>
+                <button type="submit" class="btn btn-primary btn-block w-100 rounded-pill">S'inscrire</button>
 
                 <div class="text-center mt-3">
                     <p class="mb-0">Vous avez déjà un compte ? <a href="login.php">Se connecter</a></p>
@@ -133,61 +134,9 @@ if (isset($_POST['id']) && isset($_POST['verification']) && $_POST['verification
     </div>
 
 
-    <!-- <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="emailModalLabel">Vérification par e-mail</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="emailVerificationForm">
-                        <div class="mb-3">
-                            <label for="emailInput" class="form-label">Adresse e-mail</label>
-                            <input type="email" id="emailInput" class="form-control" placeholder="Entrez votre email" required>
-                        </div>
-                        <button type="button" class="btn btn-primary">Envoyer</button>
-                    </form>
-                    <div id="emailFeedback" class="mt-2"></div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
     <script src="../backOffice/js/addUser.js"></script>
     <script>
-        // Show email modal
-        function showEmailModal() {
-            const emailModal = new bootstrap.Modal(document.getElementById('emailModal'));
-            emailModal.show();
-        }
-
-        /* function sendVerificationEmail() {
-            const email = document.getElementById('emailInput').value;
-            const feedback = document.getElementById('emailFeedback');
-
-            if (!email) {
-                feedback.innerHTML = 'Veuillez entrer une adresse e-mail.';
-                feedback.className = 'text-danger';
-                return;
-            }
-
-            fetch('send_verification_email.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: email })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    feedback.innerHTML = data.message;
-                    feedback.className = data.success ? 'text-success' : 'text-danger';
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                    feedback.innerHTML = "Une erreur s'est produite.";
-                    feedback.className = 'text-danger';
-                });
-        } */
+       
 
 
         

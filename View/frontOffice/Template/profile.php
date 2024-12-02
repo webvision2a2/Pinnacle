@@ -3,7 +3,7 @@ session_start();
 
 require_once '../../../controller/ProfileController.php';
 
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 2){
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 2 ){
     header("location: ../login.php");
     exit;
 }

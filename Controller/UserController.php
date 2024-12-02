@@ -47,12 +47,14 @@ class UserController
             $verification = 0;
         } else {
             $role = $user->getRole();
+            $verification = 1;
         }
 
         $hashedPassword = password_hash($user->getPassword(), PASSWORD_DEFAULT);
     
         $sql = "INSERT INTO users 
-                VALUES (NULL, :nom, :prenom, :email, :password, :role, :verification)";
+            (nom, prenom, email, password, role, verification) 
+            VALUES (:nom, :prenom, :email, :password, :role, :verification)";
         $db = config::getConnexion();
         try {
             var_dump($user);
@@ -275,7 +277,7 @@ class UserController
 
 
 
-    public function envoyerEmail(string $to, string $subject, string $body): void
+    /* public function envoyerEmail(string $to, string $subject, string $body): void
     {
         $mail = new PHPMailer(true);
 
@@ -309,9 +311,9 @@ class UserController
             error_log("Erreur lors de l'envoi de l'email : " . $mail->ErrorInfo);
             echo "Erreur lors de l'envoi de l'e-mail : " . $mail->ErrorInfo;
         }
-    }
+    } */
 
-    public function envoyerEmailConfirmation( $client_id)
+    /* public function envoyerEmailConfirmation( $client_id)
     {
         $db = config::getConnexion();
         $sql = "SELECT email FROM users WHERE id = ? LIMIT 1";
@@ -332,42 +334,50 @@ class UserController
         } else {
             error_log("Email non trouvé pour le client $client_id");
         }
-    }
+    } */
 
     // In UserController.php
 
-    public function verifyEmail($userId)
-    {
-        $db = config::getConnexion();
-        
-        // Check if the user exists and if the verification is still pending (0)
-        $sql = "SELECT verification FROM users WHERE id = $userId LIMIT 1";
-        $query = $db->prepare($sql);
-        $query->execute([$userId]);
-        $result = $query->fetch(PDO::FETCH_ASSOC);
-        
-        if ($result && $result['verification'] == 0) {
-            // Update verification status to 1 (verified)
-            $updateSql = "UPDATE users SET verification = 1 WHERE id = $userId";
-            $updateQuery = $db->prepare($updateSql);
-            $updateQuery->execute([$userId]);
-            
-            return true;  // Success
+    public function verifyEmail($token)
+{
+    $db = config::getConnexion();
+    $verification_valid = 1;
+
+    try {
+        // Step 1: Check if the token exists and is still valid
+        $sql = "SELECT email FROM password_resets WHERE token = :token AND expires_at >= NOW()";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+        $stmt->execute();
+        $userEmail = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($userEmail) {
+            // Step 2: Update the user's verification status
+            $sqlUpdate = "UPDATE users SET verification = :verification WHERE email = :email";
+            $stmtUpdate = $db->prepare($sqlUpdate);
+            $stmtUpdate->bindParam(':verification', $verification_valid, PDO::PARAM_INT);
+            $stmtUpdate->bindParam(':email', $userEmail['email'], PDO::PARAM_STR);
+            $stmtUpdate->execute();
+
+            // Step 3: Delete the token from the password_resets table
+            $sqlDelete = "DELETE FROM password_resets WHERE email = :email";
+            $stmtDelete = $db->prepare($sqlDelete);
+            $stmtDelete->bindParam(':email', $userEmail['email'], PDO::PARAM_STR);
+            $stmtDelete->execute();
+
+            return true;
         } else {
-            return false; // Already verified or invalid link
+            // No valid token found
+            return false;
         }
+    } catch (PDOException $e) {
+        // Log the error for debugging purposes
+        error_log("Error in verifyEmail: " . $e->getMessage());
+        return false;
     }
+}
 
 
-    /* public function getUserByToken(string $token): ?User {
-        $db = config::getConnexion();
-        // Query the database for the user with the matching token
-        $query = "SELECT * FROM users WHERE verification_token = ?";
-        $stmt = $db->prepare($query);
-        $stmt->execute([$token]);
-        $user = $stmt->fetchObject(User::class);
-        return $user ?: null;
-    } */
 
 
     public function storePasswordResetToken($email, $token, $expires) {

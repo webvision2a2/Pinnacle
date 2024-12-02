@@ -28,7 +28,7 @@ class ProfileController
                 'occupation' => 'Non spécifié',       
                 'age' => 0,                       
                 'telephone' => 'Non spécifié',    
-                'photo_profil' => 'img/blank-profile-picture-973460_1280.webp' 
+                'photo_profil' => 'C:\xampp\htdocs\Projet_web\View\frontOffice\Template\img\blank-profile-picture-973460_1280.png' 
             ]);
         } catch (PDOException $e) {
             die('SQL Error: ' . $e->getMessage());
@@ -51,8 +51,8 @@ class ProfileController
 
     public function updateProfile($id, $profile)
     {
-        $sql = "UPDATE profiles 
-                SET id = :id, 
+        $sql = "UPDATE profiles
+                SET id = :id,
                 domaine = :domaine, 
                 occupation = :occupation, 
                 age = :age, 

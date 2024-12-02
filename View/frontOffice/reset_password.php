@@ -1,52 +1,4 @@
-<!-- <?php
-/* include  '../../config.php';
-require_once '../../controller/UserController.php';
 
-
-session_start();
-$controller = new UserController();
-?>
-
-<body>
-    <form id="reset-password-form" method="POST" autocomplete="off" novalidate="true">
-        <label for="password">New Password:</label>
-        <input type="password" id="password" name="password">
-        <label for="confirm_password">Confirm New Password:</label>
-        <input type="password" id="confirm_password" name="confirm_password">
-    </form>
-    <button type="submit" class="nav-button">Reset Password</button>
-</body>
-
-
-<?php
-$token = $_GET['token'];
-$password = $_POST['password'];//badel name
-$confirmPassword = $_POST['confirm_password'];//badel name
-echo "token=".$token;
-if (empty($_GET['token'])) {
-    echo 'LOLOLOLOLO TOKEN FAMECH';
-    exit();
-}
-if ($password === $confirmPassword) {
-    $currentPasswordHash = $controller->getCurrentPasswordHashByToken($token);
-    if (password_verify($password, $currentPasswordHash)) {
-        //dhaharlou erreur tkolou fehaa new pass cannot be the same as the old password.
-        echo "passwords cannot be the same";
-
-    } else {
-        $resetStatus = $controller->resetPassword($token, $password);
-        if ($resetStatus) {
-            echo "password updated successfully";
-            //dhaharlou info li password mteou updated successfully
-        } else {
-            echo "reset erreur";
-            //dhaharlou erreur
-        }
-    }
-} else {
-    echo "passwords do not match";
-} */
-?> -->
 
 <?php
 include '../../config.php';
@@ -56,17 +8,64 @@ session_start();
 $controller = new UserController();
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Login - Pinnacle</title>
+    <!-- Favicon -->
+    <link href="Template/img/favicon.ico" rel="icon">
+    <!-- Google Web Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500&family=Jost:wght@500;600;700&display=swap" rel="stylesheet"> 
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!-- Bootstrap and Custom Stylesheet -->
+    <link href="Template/css/bootstrap.min.css" rel="stylesheet">
+    <link href="Template/css/style.css" rel="stylesheet">
+</head>
+
 <body>
+<div class="container-xxl bg-white d-flex flex-column align-items-center justify-content-center vh-100">
+        <!-- Logo et Titre Centrés -->
+        <div class="text-center mb-4">
+            <h1 class="m-0" style="color: #2C24CE ;"><img class="logo" src="Template/img/LOGO 1 blue.png" alt="Pinnacle Logo" style="max-width: 45px;">Pinnacle</h1>
+        </div>
+
+        <div class="card p-5 shadow-lg border-0" style="max-width: 400px; width: 100%;">
     <form id="reset-password-form" method="POST" autocomplete="off" novalidate="true">
-        <label for="password">New Password:</label>
-        <input type="password" id="password" name="password">
+
+        <div class="form-group mb-3">
+            <label for="password">Nouveau Mot de Passe:</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Saisir un mot de passe">
+            <p id="p_password"></p>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="confirm_password">Confirmation du Nouveau Mot de passe:</label>
+            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirmer le mot de passe">
+            <p id="p_confirmpassword"></p>
+        </div>
         
-        <label for="confirm_password">Confirm New Password:</label>
-        <input type="password" id="confirm_password" name="confirm_password">
-        
-        <button type="submit" class="nav-button">Reset Password</button>
+        <button id="submit" type="submit" class="btn btn-primary btn-block w-100 rounded-pill">Réinitialiser mot de passe</button>
     </form>
+    </div>
+ <!-- JavaScript Libraries -->
+ <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="Template/lib/wow/wow.min.js"></script>
+    <script src="Template/lib/easing/easing.min.js"></script>
+    <script src="Template/lib/waypoints/waypoints.min.js"></script>
+    <script src="Template/lib/counterup/counterup.min.js"></script>
+    <script src="Template/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="Template/lib/isotope/isotope.pkgd.min.js"></script>
+    <script src="Template/lib/lightbox/js/lightbox.min.js"></script>
+    <!-- Template Javascript -->
+
+
 </body>
+</html> 
+
 
 <?php
 // Retrieve the token from the URL

@@ -34,7 +34,7 @@ $controller = new UserController();
     </div>
     <div class="card p-5 shadow-lg border-0" style="max-width: 400px; width: 100%;">
         <form id="forgot-password-form" method="post" autocomplete="off" novalidate="true">
-            <h3 class="text-center mb-4">Mot de Passe Oublié?</h3>
+            <h3 class="text-center mb-4">Verification d'Inscription</h3>
             <div class="form-group mb-3">
                 <label for="email">Saisissez votre adresse email:</label>
                 <input type="text" class="form-control" id="email" name="email" placeholder="Entrez votre email">
@@ -89,13 +89,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
 
                 $mail->isHTML(true);// Set email format to HTML
                 $mail->Subject = 'Password Reset Request';
-                $resetLink = "http://localhost/Projet_web/View/frontOffice/reset_password.php?token=".$token;
+                $resetLink = "http://localhost/Projet_web/View/frontOffice/email_verification.php?token=".$token;
                 $mail->Body    = "
-                Please click on the following link to reset your password: <a href='{$resetLink}'>Reset Password</a>
+                Please click on the following link to validate your registration: <a href='{$resetLink}'>Validate registration</a>
                 ";
 
                 $mail->send();
-                echo "Check your email for the password reset link.";
+                echo "Check your email for the email verification link.";
+                header('location:signup.php');
             } catch (Exception $e) {
                 echo 'Mailer Error: '.$mail->ErrorInfo;
             }

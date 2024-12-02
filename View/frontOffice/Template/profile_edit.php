@@ -4,7 +4,7 @@ session_start();
 
 require_once '../../../controller/ProfileController.php';
 
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 2) {
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 2 ) {
     header("location: ../login.php");
     exit;
 }
@@ -13,16 +13,14 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION
 $profile = null;
 
 $profileController = new ProfileController();
-// Assuming you've already included the database connection file
-include_once '../../../config.php'; // Modify this path as per your project structure
+include_once '../../../config.php'; 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
-    echo "<pre>";
-    print_r($_FILES['file']);
-    echo "</pre>";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo_profil'])) {
+    if(isset($_POST['submit_profile2'])){
 
     // Check if a file was uploaded successfully
-    if ($_FILES['file']['error'] === UPLOAD_ERR_OK) {
+    if ($_FILES['photo_profil']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = __DIR__ . "/uploads/";
 
         // Ensure upload directory exists
@@ -31,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
         }
 
         // Move the uploaded file to the uploads directory
-        $uploadedFilePath = $uploadDir . basename($_FILES['file']['name']);
-        if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadedFilePath)) {
+        $uploadedFilePath = $uploadDir . basename($_FILES['photo_profil']['name']);
+        if (move_uploaded_file($_FILES['photo_profil']['tmp_name'], $uploadedFilePath)) {
             // Update the database
             try {
                 include_once '../../../config.php'; // Adjust path to include database connection
@@ -41,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
                 $sql = "UPDATE profiles SET photo_profil = :photo_profil WHERE user_id = :user_id";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute([
-                    ':photo_profil' => 'uploads/' . basename($_FILES['file']['name']),
+                    ':photo_profil' => 'uploads/' . basename($_FILES['photo_profil']['name']),
                     ':user_id' => $_SESSION['id']
                 ]);
 
@@ -55,27 +53,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
             echo '<div class="alert alert-danger">Failed to move uploaded file.</div>';
         }
     } else {
-        echo '<div class="alert alert-danger">File upload error: ' . $_FILES['file']['error'] . '</div>';
+        echo '<div class="alert alert-danger">File upload error: ' . $_FILES['photo_profil']['error'] . '</div>';
     }
 }
+}
+
+$current_user = $profileController->getProfileByUserId($_SESSION['id']);
 
 
+if(isset($_POST['submit'])){
+    echo 'updating';
+    if (isset($_POST["domaine"]) && isset($_POST["occupation"]) && isset($_POST["telephone"]) && isset($_POST["age"])) {
+        if (!empty($_POST["domaine"]) && !empty($_POST["occupation"]) && !empty($_POST["telephone"]) && !empty($_POST["age"])) {
+            $profile = new Profile(
+                $current_user['id'],
+                $_SESSION['id'],
+                $_POST['domaine'],
+                $_POST['occupation'],
+                $_POST['age'],
+                $_POST['telephone'],
+                $current_user['photo_profil']
+            );
 
-    if (isset($_POST["domaine"]) && isset($_POST["occupation"]) && isset($_POST["telephone"]) && isset($_POST["age"]) && isset($_POST["photo_profil"])) {
-        if (!empty($_POST["domaine"]) && !empty($_POST["occupation"]) && !empty($_POST["telephone"]) && !empty($_POST["age"]) && !empty($_POST["photo_profil"])) {
-        $profile = new Profile(
-            null,
-            $_SESSION['id'],
-            $_POST['domaine'],
-            $_POST['occupation'],
-            $_POST['age'],
-            $_POST['telephone'],
-            $_POST['photo_profil']
-        );
-
-        $profileController->updateProfile($_SESSION['id'], $profile);
-        echo "<p class='success'>Profil mis à jour avec succès.</p>";
-        /* header('Location:profile.php'); */
+            $profileController->updateProfile($_SESSION['id'], $profile);
+            echo "<p class='success'>Profil mis à jour avec succès.</p>";
+            header('Location:profile.php');
+        }
     }
 }
 ?>
@@ -197,8 +200,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
         <div class="container py-5">
             <div class="main-body">
                 <?php
-                if (isset($_POST['id']) || isset($_GET['id'])) {
-                    $id = $_POST['id'] ?? $_GET['id'];
+                if (isset($_POST['id'])) {
+                    $id = $_POST['id'] ;
+                    echo 'mon id est:'.$id;
                     $profile = $profileController->showProfile($id);
                 ?>
                 <div class="row">
@@ -213,9 +217,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
                                 <h4><?php echo $_SESSION["nom"] . " " . $_SESSION["prenom"]; ?></h4>
                                 <form action="" method="POST" enctype="multipart/form-data">
                                     <label for="fileInput" class="form-label">Changer la photo de profil</label>
-                                    <input type="file" name="file" id="fileInput" class="form-control mb-2">
+                                    <input type="file" name="photo_profil" id="fileInput" class="form-control mb-2">
                                     <input type="hidden" name="id" value="<?php echo $_SESSION['id']; ?>">
-                                    <button type="submit" name="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="submit" name="submit_profile2" class="btn btn-primary">Enregistrer</button>
                                 </form>
                             </div>
                         </div>
@@ -254,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
                                         <input type="number" id="age" name="age" 
                                             class="form-control" 
                                             placeholder="Âge" 
-                                            value="<?php echo $profile['age']; ?>">
+                                            value="<?php echo isset($_POST['age']) ? htmlspecialchars($_POST['age']) : $profile['age']; ?>">
                                         <span class="error text-danger" id="age_err"></span>
                                     </div>
 
@@ -270,7 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
                                     
                                     <!-- Save and Cancel Buttons -->
                                     <div class="text-end">
-                                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                        <button type="submit" name="submit" class="btn btn-primary">Enregistrer</button>
                                         <a href="profile.php" class="btn btn-secondary">Annuler</a>
                                     </div>
                                 </form>
@@ -421,7 +425,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
 
         const previewImage = () => {
             let file = document.querySelector('#fileInput'); 
-            let photoProfil = document.querySelector(".photo_profil");
+            let photoProfil = document.querySelector(".file");
             let message = document.querySelector(".message");
             let submit = document.querySelector(".submit");
 
