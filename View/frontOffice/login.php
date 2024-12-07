@@ -246,7 +246,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta name="google-signin-client_id" content="178187630539-ib6ihipv7p7qajdos50p3runf9gcq4c6.apps.googleusercontent.com">
     <title>Login - Pinnacle</title>
     <!-- Favicon -->
     <link href="Template/img/favicon.ico" rel="icon">
