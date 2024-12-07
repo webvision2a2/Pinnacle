@@ -8,7 +8,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+<<<<<<< HEAD
     <title>Topics list </title>
+=======
+    <title>Topics list admin</title>
+>>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
 
     <!-- Custom fonts for this template -->
     <link href="./backoffice/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -43,6 +47,7 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
+<<<<<<< HEAD
             <!-- Nav Item - Topiclist -->
             <li class="nav-item">
                 <a class="nav-link" href="topicsList.php">
@@ -66,6 +71,102 @@
         
 
             <!-- Divider -->
+=======
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Interface
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Components</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Components:</h6>
+                        <a class="collapse-item" href="buttons.html">Buttons</a>
+                        <a class="collapse-item" href="cards.html">Cards</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Utilities</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Utilities:</h6>
+                        <a class="collapse-item" href="utilities-color.html">Colors</a>
+                        <a class="collapse-item" href="utilities-border.html">Borders</a>
+                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
+                        <a class="collapse-item" href="utilities-other.html">Other</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Addons
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                    aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Pages</span>
+                </a>
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Login Screens:</h6>
+                        <a class="collapse-item" href="login.html">Login</a>
+                        <a class="collapse-item" href="register.html">Register</a>
+                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                        <div class="collapse-divider"></div>
+                        <h6 class="collapse-header">Other Pages:</h6>
+                        <a class="collapse-item" href="404.html">404 Page</a>
+                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item">
+                <a class="nav-link" href="charts.html">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Charts</span></a>
+            </li>
+
+            <!-- Nav Item - Tables -->
+            <li class="nav-item active">
+                <a class="nav-link" href="tables.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Tables</span></a>
+            </li>
+
+            <!-- Divider -->
+>>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
@@ -92,6 +193,22 @@
                         </button>
                     </form>
 
+<<<<<<< HEAD
+=======
+                    <!-- Topbar Search -->
+                    <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+>>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -199,7 +316,11 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
+<<<<<<< HEAD
                                         <img class="rounded-circle" src="./backoffice/img/undraw_profile_2.svg"
+=======
+                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
+>>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
                                             alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
@@ -211,7 +332,11 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
+<<<<<<< HEAD
                                         <img class="rounded-circle" src="./backoffice/img/undraw_profile_3.svg"
+=======
+                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
+>>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
                                             alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
@@ -245,7 +370,11 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
                                 <img class="img-profile rounded-circle"
+<<<<<<< HEAD
                                     src="./backoffice/img/undraw_profile.svg">
+=======
+                                    src="img/undraw_profile.svg">
+>>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -276,6 +405,7 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
+<<<<<<< HEAD
                 <?php
                 require_once '../Controller/topicController.php';
 
@@ -336,10 +466,31 @@
                                             <th class="text-center">ID</th>
                                             <th>Title</th>
                                             <th>Description</th>
+=======
+                <div class="container-fluid">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Topics list</h6>
+                        </div>
+                        <?php
+                            require_once '../Controller/topicController.php';
+                            $topicController = new TopicController();
+                            $topics = $topicController->getTopic();
+                        ?>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>id</th>
+                                            <th>title</th>
+                                            <th>description</th>
+>>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
                                             <th colspan="2" class="text-center">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+<<<<<<< HEAD
                                         <?php if (!empty($topics)): ?>
                                             <?php foreach ($topics as $topic): ?>
                                                 <tr>
@@ -417,6 +568,24 @@
 
 
 
+=======
+                                        <?php foreach ($topics as $topic): ?>
+                                            <tr>
+                                                <td><?php echo ($topic['id']); ?></td>
+                                                <td><?php echo ($topic['title']); ?></td>
+                                                <td><?php echo ($topic['description']); ?></td>
+                                                <td><a href="updateTopic.php?id=<?php echo $topic['id']; ?>"><button class="btn btn-sm btn-outline-warning"> Edit </button></a></td>
+                                                <td><a href="deleteTopic.php?id=<?php echo $topic['id']; ?>"><button class="btn btn-sm btn-outline-secondary"> Delete </button></a></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+>>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
                 <!-- /.container-fluid -->
 
             </div>
@@ -426,7 +595,11 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
+<<<<<<< HEAD
                         <span>Copyright &copy; Your Website 2024</span>
+=======
+                        <span>Copyright &copy; Your Website 2020</span>
+>>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
                     </div>
                 </div>
             </footer>
@@ -464,6 +637,7 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
+<<<<<<< HEAD
     <script src="./backoffice/vendor/jquery/jquery.min.js"></script>
     <script src="./backoffice/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -480,6 +654,24 @@
     <!-- Page level custom scripts -->
     <script src="./backoffice/js/demo/datatables-demo.js"></script>
     
+=======
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/datatables-demo.js"></script>
+
+>>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
 </body>
 
 </html>

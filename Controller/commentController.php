@@ -78,6 +78,7 @@ class CommentController {
         }
     }
 
+<<<<<<< HEAD
     public function getCommentsCount($idtopic) {
         $conn = config::getConnexion();
     
@@ -91,4 +92,6 @@ class CommentController {
         }
     }
 
+=======
+>>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
 }
