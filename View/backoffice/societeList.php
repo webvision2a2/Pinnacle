@@ -43,7 +43,14 @@ $totalPages = ceil($totalResults / $limit); // Calculate the total number of pag
 
     <!-- Page Wrapper -->
     <div id="wrapper">
+<<<<<<< HEAD
         
+=======
+
+        
+        <!-- End of Sidebar -->
+
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -106,13 +113,18 @@ $totalPages = ceil($totalResults / $limit); // Calculate the total number of pag
                                                     <td align="center">
                                                         <form method="POST" action="updateSociete.php">
                                                             <input class="btn btn-primary" type="submit" name="update" value="Update">
+<<<<<<< HEAD
                                                             <input type="hidden" value="<?= $societe['id']; ?>" name="id">
+=======
+                                                            <input type="hidden" value=<?= $societe['id']; ?> name="id">
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
                                                         </form>
                                                     </td>
                                                     <td>
                                                         <a class="btn btn-danger" href="deleteSociete.php?id=<?= $societe['id']; ?>" role="button">Delete</a>
                                                     </td>
                                                 </tr>
+<<<<<<< HEAD
                                                 <?php endforeach; ?>
                                             </table>
 
@@ -139,6 +151,14 @@ $totalPages = ceil($totalResults / $limit); // Calculate the total number of pag
                                                 </ul>
                                             </nav>
 
+=======
+                                                
+                                                
+                                                <?php
+                                                    }
+                                                ?>
+                                            </table>
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
                                             <a class="btn btn-primary" href="main2.php" role="button">Add Company</a>
                                         </div>
                                     </div>
@@ -170,5 +190,16 @@ $totalPages = ceil($totalResults / $limit); // Calculate the total number of pag
         <!-- Custom scripts for all pages-->
         <script src="js/sb-admin-2.min.js"></script>
 
+<<<<<<< HEAD
+=======
+        <!-- Page level plugins -->
+        <script src="vendor/chart.js/Chart.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="js/demo/chart-area-demo.js"></script>
+        <script src="js/demo/chart-pie-demo.js"></script>
+        <script src="index.js"></script>
+
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
     </body>
 </html>

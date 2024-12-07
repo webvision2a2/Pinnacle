@@ -1,6 +1,10 @@
 <?php
 
+<<<<<<< HEAD
 /* class Candidature
+=======
+class Candidature
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
 {
     private $nom;
     private $prenom;
@@ -25,6 +29,7 @@
     public function getEmail() { return $this->email; }
     public function getCv() { return $this->cv; }
     public function getIdStage() { return $this->id_stage; }
+<<<<<<< HEAD
 } */
 
 class Candidature
@@ -65,4 +70,8 @@ class Candidature
 }
 
 
+=======
+}
+
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
 ?>

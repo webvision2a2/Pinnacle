@@ -113,8 +113,18 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Reseaux:</h6>
+<<<<<<< HEAD
                         <a class="collapse-item" href="main.php" >Stages</a>
                         <a class="collapse-item active" href="main2.php">Societes</a>
+=======
+<<<<<<< HEAD
+                        <a class="collapse-item" href="main.php" >Stages</a>
+                        <a class="collapse-item active" href="main2.php">Societes</a>
+=======
+                        <a class="collapse-item" href="main.php">Stages</a>
+                        <a class="collapse-item" href="main2.php">Societes</a>
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
                     </div>
                 </div>
             </li>
@@ -393,8 +403,22 @@
     
                     <!-- Page Heading -->
                     <?php
+<<<<<<< HEAD
                     
                     require_once 'addsociete.php';
+=======
+<<<<<<< HEAD
+                    
+                    require_once 'addsociete.php';
+=======
+<<<<<<< HEAD
+                    
+                    require_once 'addsociete.php';
+=======
+                    // Inclure le fichier pour lister les sociétés
+>>>>>>> origin/Ahmed
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
                     require_once 'societeList.php';
                     ?>
 
@@ -454,7 +478,21 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+<<<<<<< HEAD
     
+=======
+<<<<<<< HEAD
+    
+=======
+<<<<<<< HEAD
+    
+=======
+
+    <!-- <script src="condition1.js"></script> -->
+
+>>>>>>> origin/Ahmed
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
 </body>
 
 </html>
