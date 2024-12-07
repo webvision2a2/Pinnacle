@@ -26,32 +26,33 @@ $controller = new UserController();
 </head>
 
 <body>
-<div class="container-xxl bg-white d-flex flex-column align-items-center justify-content-center vh-100">
+    <div class="container-xxl bg-white d-flex flex-column align-items-center justify-content-center vh-100">
         <!-- Logo et Titre Centrés -->
         <div class="text-center mb-4">
             <h1 class="m-0" style="color: #2C24CE ;"><img class="logo" src="Template/img/LOGO 1 blue.png" alt="Pinnacle Logo" style="max-width: 45px;">Pinnacle</h1>
         </div>
 
         <div class="card p-5 shadow-lg border-0" style="max-width: 400px; width: 100%;">
-    <form id="reset-password-form" method="POST" autocomplete="off" novalidate="true">
+            <form id="reset-password-form" method="POST" autocomplete="off" novalidate="true">
 
-        <div class="form-group mb-3">
-            <label for="password">Nouveau Mot de Passe:</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Saisir un mot de passe">
-            <p id="p_password"></p>
-        </div>
+                <div class="form-group mb-3">
+                    <label for="password">Nouveau Mot de Passe:</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Saisir un mot de passe">
+                    <p id="p_password"></p>
+                </div>
 
-        <div class="form-group mb-3">
-            <label for="confirm_password">Confirmation du Nouveau Mot de passe:</label>
-            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirmer le mot de passe">
-            <p id="p_confirmpassword"></p>
+                <div class="form-group mb-3">
+                    <label for="confirm_password">Confirmation du Nouveau Mot de passe:</label>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirmer le mot de passe">
+                    <p id="p_confirmpassword"></p>
+                </div>
+                
+                <button id="submit" type="submit" class="btn btn-primary btn-block w-100 rounded-pill">Réinitialiser mot de passe</button>
+            </form>
         </div>
-        
-        <button id="submit" type="submit" class="btn btn-primary btn-block w-100 rounded-pill">Réinitialiser mot de passe</button>
-    </form>
     </div>
- <!-- JavaScript Libraries -->
- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="Template/lib/wow/wow.min.js"></script>
     <script src="Template/lib/easing/easing.min.js"></script>

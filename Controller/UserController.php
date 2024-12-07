@@ -313,73 +313,67 @@ class UserController
         }
     } */
 
-    /* public function envoyerEmailConfirmation( $client_id)
-    {
-        $db = config::getConnexion();
-        $sql = "SELECT email FROM users WHERE id = ? LIMIT 1";
-        $query = $db->prepare($sql);
-        $query->execute([$client_id]);
-        $result = $query->fetch(PDO::FETCH_ASSOC);
 
-        if ($result && isset($result['email'])) {
-            $email = $result['email'];
-
-            $verification_link = "http://localhost/Projet_web/View/frontOffice/login.php?id=" . $client_id;
-
-            $subject = "Votre inscription a ete validee";
-            $body = "Bonjour,\n\nVotre inscription a notre site Pinnacle a été validée avec succès.\n\nCliquez sur le lien ci-dessous pour valider votre compte:\n$verification_link\n\nCordialement,\nL'équipe Pinnacle";
-
-          
-            $this->envoyerEmail($email, $subject, $body);
-        } else {
-            error_log("Email non trouvé pour le client $client_id");
-        }
-    } */
-
-    // In UserController.php
+    
 
     public function verifyEmail($token)
-{
-    $db = config::getConnexion();
-    $verification_valid = 1;
+    {
+        $db = config::getConnexion();
+        $verification_valid = 1;
 
-    try {
-        // Step 1: Check if the token exists and is still valid
-        $sql = "SELECT email FROM password_resets WHERE token = :token AND expires_at >= NOW()";
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':token', $token, PDO::PARAM_STR);
-        $stmt->execute();
-        $userEmail = $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            // Step 1: Check if the token exists and is still valid
+            $sql = "SELECT email FROM password_resets WHERE token = :token AND expires_at >= NOW()";
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+            $stmt->execute();
+            $userEmail = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($userEmail) {
-            // Step 2: Update the user's verification status
-            $sqlUpdate = "UPDATE users SET verification = :verification WHERE email = :email";
-            $stmtUpdate = $db->prepare($sqlUpdate);
-            $stmtUpdate->bindParam(':verification', $verification_valid, PDO::PARAM_INT);
-            $stmtUpdate->bindParam(':email', $userEmail['email'], PDO::PARAM_STR);
-            $stmtUpdate->execute();
+            if ($userEmail) {
+                // Step 2: Update the user's verification status
+                $sqlUpdate = "UPDATE users SET verification = :verification WHERE email = :email";
+                $stmtUpdate = $db->prepare($sqlUpdate);
+                $stmtUpdate->bindParam(':verification', $verification_valid, PDO::PARAM_INT);
+                $stmtUpdate->bindParam(':email', $userEmail['email'], PDO::PARAM_STR);
+                $stmtUpdate->execute();
 
-            // Step 3: Delete the token from the password_resets table
-            $sqlDelete = "DELETE FROM password_resets WHERE email = :email";
-            $stmtDelete = $db->prepare($sqlDelete);
-            $stmtDelete->bindParam(':email', $userEmail['email'], PDO::PARAM_STR);
-            $stmtDelete->execute();
+                // Step 3: Delete the token from the password_resets table
+                $sqlDelete = "DELETE FROM password_resets WHERE email = :email";
+                $stmtDelete = $db->prepare($sqlDelete);
+                $stmtDelete->bindParam(':email', $userEmail['email'], PDO::PARAM_STR);
+                $stmtDelete->execute();
 
-            return true;
-        } else {
-            // No valid token found
+                return true;
+            } else {
+                // No valid token found
+                return false;
+            }
+        } catch (PDOException $e) {
+            // Log the error for debugging purposes
+            error_log("Error in verifyEmail: " . $e->getMessage());
             return false;
         }
-    } catch (PDOException $e) {
-        // Log the error for debugging purposes
-        error_log("Error in verifyEmail: " . $e->getMessage());
-        return false;
     }
-}
 
 
 
 
+    public function storeOpt($email, $otp, $expires) {
+        $db = config::getConnexion();
+        try {
+            $sql = "INSERT INTO user_otps (email, otp, expires_at) VALUES (:email, :otp, :expires_at)
+                    ON DUPLICATE KEY UPDATE otp = :otp, expires_at = :expires_at";
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':otp', $otp);
+            $stmt->bindParam(':expires_at', $expires);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+    
     public function storePasswordResetToken($email, $token, $expires) {
         $db = config::getConnexion();
         try {
@@ -395,7 +389,6 @@ class UserController
             return false;
         }
     }
-    
     public function resetPassword($token, $newPassword) {
         $db = config::getConnexion();
         try {
@@ -412,6 +405,7 @@ class UserController
                 $stmtUpdate->bindParam(':password', $hashedPassword);
                 $stmtUpdate->bindParam(':email', $userEmail['email']);
                 $stmtUpdate->execute();
+
                 $sqlDelete = "DELETE FROM password_resets WHERE email = :email";
                 $stmtDelete = $db->prepare($sqlDelete);
                 $stmtDelete->bindParam(':email', $userEmail['email']);

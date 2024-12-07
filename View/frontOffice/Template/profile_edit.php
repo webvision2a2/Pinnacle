@@ -215,12 +215,13 @@ if(isset($_POST['submit'])){
                                     alt="Profile Picture" 
                                     class="rounded-circle photo_profil mb-3" width="150">
                                 <h4><?php echo $_SESSION["nom"] . " " . $_SESSION["prenom"]; ?></h4>
-                                <form action="" method="POST" enctype="multipart/form-data">
+                                <form action="" method="POST" enctype="multipart/form-data" >
                                     <label for="fileInput" class="form-label">Changer la photo de profil</label>
                                     <input type="file" name="photo_profil" id="fileInput" class="form-control mb-2">
                                     <input type="hidden" name="id" value="<?php echo $_SESSION['id']; ?>">
                                     <button type="submit" name="submit_profile2" class="btn btn-primary">Enregistrer</button>
                                 </form>
+                                
                             </div>
                         </div>
                     </div>
@@ -403,57 +404,7 @@ if(isset($_POST['submit'])){
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
 
-    <script>
-        /* const previewImage = () => {
-            let file = document.querySelector('#fileInput');
-            let photo_profil = document.querySelector(".photo_profil");
-            let message = document.querySelector(".message");
-            let submit = document.querySelector(".submit");
 
-            photo_profil.src = window.URL.createObjectURL(file.file[0]);
-            let regex = new RegExp("[^.]+$");
-            fileExtension = file.value.match(regex);
-            if(fileEctension == "jpeg" || fileEctension == "jpg" || fileEctension == "png" ){
-                submit.style.display="block";
-                message.innerHTML="";
-            }else{
-                photo_profil.src = "img/error.png"
-                submit.style.display="none";
-                message.innerHTML="<b>." + fileExtension + "<b> file is not allowed.<br/>Choose a .jpg or .png file only";
-            }
-        } */
-
-        const previewImage = () => {
-            let file = document.querySelector('#fileInput'); 
-            let photoProfil = document.querySelector(".file");
-            let message = document.querySelector(".message");
-            let submit = document.querySelector(".submit");
-
-            if (file.files && file.files[0]) {
-                // Preview the selected file
-                photoProfil.src = window.URL.createObjectURL(file.files[0]);
-
-                // Extract file extension (case-insensitive match)
-                let regex = /[^.]+$/;
-                let fileExtension = file.value.match(regex)?.[0].toLowerCase();
-
-                // Check allowed extensions
-                if (fileExtension === "jpeg" || fileExtension === "jpg" || fileExtension === "png") {
-                    submit.style.display = "block";
-                    message.innerHTML = "";
-                } else {
-                    photoProfil.src = "img/error.png";
-                    submit.style.display = "none";
-                    message.innerHTML = `<b>.${fileExtension}</b> file is not allowed.<br/>Choose a .jpg or .png file only.`;
-                }
-            } else {
-                photoProfil.src = "img/default.png"; // Fallback to default image
-                message.innerHTML = "No file selected.";
-                submit.style.display = "none";
-            }
-        };
-
-    </script>
 </body>
 
 </html>

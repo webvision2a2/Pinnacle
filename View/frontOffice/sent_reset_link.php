@@ -12,7 +12,7 @@ $controller = new UserController();
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+ <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Login - Pinnacle</title>
@@ -25,13 +25,13 @@ $controller = new UserController();
     <!-- Bootstrap and Custom Stylesheet -->
     <link href="Template/css/bootstrap.min.css" rel="stylesheet">
     <link href="Template/css/style.css" rel="stylesheet">
-</head>
+</head> 
 
 <body>
 <div class="container-xxl bg-white d-flex flex-column align-items-center justify-content-center vh-100">
-    <div class="text-center mb-4">
+     <div class="text-center mb-4">
         <h1 class="m-0" style="color: #2C24CE ;"><img class="logo" src="Template/img/LOGO 1 blue.png" alt="Pinnacle Logo" style="max-width: 45px;">Pinnacle</h1>
-    </div>
+    </div> 
     <div class="card p-5 shadow-lg border-0" style="max-width: 400px; width: 100%;">
         <form id="forgot-password-form" method="post" autocomplete="off" novalidate="true">
             <h3 class="text-center mb-4">Mot de Passe Oublié?</h3>
@@ -41,11 +41,11 @@ $controller = new UserController();
             </div>
             <button id="submit" type="submit" class="btn btn-primary btn-block w-100 rounded-pill">Envoyer le lien de réinitialisation</button>
         </form>
-    </div>
+     </div>
 </div>
 
      <!-- JavaScript Libraries -->
-     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="Template/lib/wow/wow.min.js"></script>
     <script src="Template/lib/easing/easing.min.js"></script>
@@ -75,9 +75,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
         // Store the token in the database associated with the user
         if ($controller->storePasswordResetToken($email, $token, $expires_at)) {
             $mail = new PHPMailer(true);
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                         'verify_peer' => false,
+                         'verify_peer_name' => false,
+                         'allow_self_signed' => true
+                     )
+                 );  
             try {
                 $mail->isSMTP();
-                $mail->SMTPDebug = 1;
+                $mail->SMTPDebug = 10;
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
                 $mail->Username = 'doghri.zeineb24@gmail.com';  // SMTP username

@@ -480,6 +480,10 @@ $current_page = min($current_page, $total_pages); // Adjust page if it exceeds t
     <script src="Template/js/demo/chart-pie-demo.js"></script>
     <script src="Template/js/demo/chart-bar-demo.js"></script>
 
+    <!-- Include Firebase SDK -->
+   
+
+
 </body>
 
 </html>

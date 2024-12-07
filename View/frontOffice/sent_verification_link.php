@@ -75,6 +75,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
         // Store the token in the database associated with the user
         if ($controller->storePasswordResetToken($email, $token, $expires_at)) {
             $mail = new PHPMailer(true);
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                         'verify_peer' => false,
+                         'verify_peer_name' => false,
+                         'allow_self_signed' => true
+                     )
+                 );  
             try {
                 $mail->isSMTP();
                 $mail->SMTPDebug = 1;
@@ -88,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
                 $mail->addAddress($email);     // Add a recipient
 
                 $mail->isHTML(true);// Set email format to HTML
-                $mail->Subject = 'Password Reset Request';
+                $mail->Subject = 'Registration Verification';
                 $resetLink = "http://localhost/Projet_web/View/frontOffice/email_verification.php?token=".$token;
                 $mail->Body    = "
                 Please click on the following link to validate your registration: <a href='{$resetLink}'>Validate registration</a>
