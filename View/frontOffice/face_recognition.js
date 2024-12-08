@@ -18,12 +18,12 @@ function startFaceRecognition() {
                     .then(faceId => {
                         faceIdInput.value = faceId;  // Store the faceId in a hidden input to be sent with the form
                         stream.getTracks().forEach(track => track.stop());  // Stop the camera stream
-                        alert("Face registered successfully!");
+                        alert("Visage enregistré avec succès!");
                         stopVideoStream(video);
                         //activate check mark and desactivate button
                     })
                     .catch(error => {
-                        alert("Failed to register face: " + error.message);
+                        alert("Aucun visage détecté: " + error.message);
                         stopVideoStream(video);
                     });
             }, 2000);

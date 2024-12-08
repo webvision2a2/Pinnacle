@@ -49,14 +49,14 @@ try {
             } else {
                 $redirectUrl = "../backOffice/users.php";
             }
-            echo json_encode(['success' => true, 'message' => 'Welcome!','redirect'=>$redirectUrl, 'face_id' => $face_token]);
+            echo json_encode(['success' => true, 'message' => 'Bienvenue!','redirect'=>$redirectUrl, 'face_id' => $face_token]);
             exit;
         } else {
-            echo json_encode(['success' => false, 'message' => 'Face ID does not match any user. ', 'face_id' => $face_token]);
+            echo json_encode(['success' => false, 'message' => 'Face ID ne correspond à aucun utilisateur. ', 'face_id' => $face_token]);
 
         }
     } else {
-        echo json_encode(['success' => false, 'message' => 'No face detected or API error']);
+        echo json_encode(['success' => false, 'message' => 'Aucune correspondance détectée ou Face ID ne correspond à aucun utilisateur.']);
     }
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'message' => 'Error: ' .error_get_last()['message']

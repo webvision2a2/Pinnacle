@@ -28,7 +28,7 @@ class ProfileController
                 'occupation' => 'Non spécifié',       
                 'age' => 0,                       
                 'telephone' => 'Non spécifié',    
-                'photo_profil' => 'C:\xampp\htdocs\Projet_web\View\frontOffice\Template\img\blank-profile-picture-973460_1280.png' 
+                'photo_profil' => 'uploads/blank-profile-picture-973460_1280.png' 
             ]);
         } catch (PDOException $e) {
             die('SQL Error: ' . $e->getMessage());

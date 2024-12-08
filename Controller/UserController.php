@@ -470,7 +470,7 @@ class UserController
         }
     }
 
-    /* function generateCode($length){
+    function generateCode($length){
 		$chars = "vwxyzABCD02789";
 		$code = ""; 
 		$clen = strlen($chars) - 1;
@@ -482,16 +482,19 @@ class UserController
 
     function insertData($data) {
         $db = config::getConnexion();
+
         
         // Check if the user already exists based on the email
-        $checkUser = $db->prepare("SELECT * FROM users WHERE email=:email");
+         $checkUser = $db->prepare("SELECT * FROM users WHERE email=:email");
         $checkUser->execute(array('email' => $data['email']));
         $info = $checkUser->fetch(PDO::FETCH_ASSOC);
         
         // If the user doesn't exist, insert new user data
-        if (!$info["id"]) {
+        if (!$info) {
             // Generate a random password for Google login, as users login using their Google credentials
             $password = $this->generateCode(5);  // You can leave this as it is or modify it to null if not needed
+            $role = 2;
+            $verification = 1;
             
             // Insert new user into the database
             $insertNewUser = $db->prepare("INSERT INTO users (nom, prenom, email, password, role, verification) 
@@ -501,30 +504,54 @@ class UserController
                 ':prenom' => $data["familyName"],        // Last name
                 ':email' => $data["email"],              // User's email
                 ':password' => $password,                // Google login doesn't require a password, but you can set one
-                ':role' => 2,                       // Default role, can be 'user', 'admin', or any other role as needed
-                ':verification' => 1                     // Mark user as verified or set to null if needed
+                ':role' => $role,                        // Default role, can be 'user', 'admin', or any other role as needed
+                ':verification' => $verification         // Mark user as verified or set to null if needed
             ]);
             
             // Check if user inserted successfully
             if ($insertNewUser) {
-                // Set cookies to keep the user logged in
-                setcookie("id", $db->lastInsertId(), time() + 60 * 60 * 24 * 30, "/", NULL);
-                setcookie("sess", $password, time() + 60 * 60 * 24 * 30, "/", NULL);  // or use session ID if necessary
+                // Start the session
+                session_start();
+
+                // Store user information in the session
+                $_SESSION["loggedin"] = true;
+                $_SESSION['id'] = $db->lastInsertId();  // Store the user's unique ID
+                $_SESSION['nom'] = $data['familyName'];  // Last name
+                $_SESSION['prenom'] = $data['givenName'];  // First name
+                $_SESSION['role'] = $role;             // Optionally store the user's role
+                $_SESSION['email'] = $data['email'];   // Store the user's email
+                $_SESSION['verification'] = $verification; // Verification status
+
+                $profileController = new ProfileController();
+                $profileController->createProfile($_SESSION['id']);
                 
+
                 // Redirect to homepage or dashboard
-                header('Location: login.php');
+                header('Location: Template/index.php');
                 exit();
-            } else {
+            }else {
                 return "Error inserting user!";
             }
         } else {
-            // If the user already exists, set cookies and redirect
-            setcookie("id", $info['id'], time() + 60 * 60 * 24 * 30, "/", NULL);
-            setcookie("sess", $info["session"], time() + 60 * 60 * 24 * 30, "/", NULL);
-            header('Location: index.php');
+            // If the user already exists, set session variables and redirect
+            session_start();
+
+            // Store the necessary user information in the session
+            $_SESSION["loggedin"] = true;
+            $_SESSION['id'] = $info['id'];          // Store the user's ID
+            $_SESSION['nom'] = $info['nom'];  // Last name
+            $_SESSION['prenom'] = $info['prenom'];  // First name
+            $_SESSION['role'] = $info['role'];      // Optionally store the user's role
+            $_SESSION['email'] = $info['email'];    // Store the user's email
+            $_SESSION['verification'] = $info['verification']; // Store verification status if applicable
+            
+
+            // Redirect to the homepage or dashboard
+            header('Location: Template/index.php');
             exit();
+
         }
-    } */
+    }
     
 
 

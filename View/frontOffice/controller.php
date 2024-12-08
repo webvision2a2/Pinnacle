@@ -4,10 +4,10 @@ require_once "google_login_config.php";
 
 if (isset($_GET['code'])) {
     $token = $gClient->fetchAccessTokenWithAuthCode($_GET['code']);
-}else{
-    header('Location: login.php');
+}/* else{
+     header('Location: login.php'); 
     exit();
-}
+} */
 /* if(isset($token["error"]) && ($token["error"] != "invalid_grant")){ */
     // get data from google
     $oAuth = new Google_Service_Oauth2($gClient);
@@ -18,7 +18,7 @@ if (isset($_GET['code'])) {
     echo '</pre>';
 
     //insert data in the database
-    /* $Controller = new UserController;
+    $Controller = new UserController;
     echo $Controller -> insertData(
         array(
             'email' => $userData['email'], // Keep email
@@ -27,7 +27,7 @@ if (isset($_GET['code'])) {
             'role' => 2, // You can set the default role as 2 'client'
             'verification' => 1, // You can set default verification status as 1 (verified)
         )
-    ); */
+    );
 /* else{
     header('Location: login.php');
     exit();

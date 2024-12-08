@@ -187,7 +187,7 @@ if (!$profile) {
                                         <hr>
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <!-- Reset Password Button -->
-                                            <a href="resetPassword.php" class="btn btn-secondary rounded-pill">Réinitialiser le mot de passe</a>
+                                            <!-- <a href="resetPassword.php" class="btn btn-secondary rounded-pill">Réinitialiser le mot de passe</a> -->
                                             
                                             <!-- Edit Profile Form -->
                                             <form id="UpdateForm" method="POST" action="profile_edit.php" class="mb-0">

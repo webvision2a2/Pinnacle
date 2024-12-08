@@ -258,18 +258,100 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Bootstrap and Custom Stylesheet -->
     <link href="Template/css/bootstrap.min.css" rel="stylesheet">
     <link href="Template/css/style.css" rel="stylesheet">
+    <style>
+        #video,
+        #canvas {
+            position: absolute;
+            /* Absolute positioning to fit the container */
+            top: 50%;
+            /* Center vertically */
+            left: 50%;
+            /* Center horizontally */
+            transform: translate(-50%, -50%);
+            border-radius: 25px;
+            /* Rounds the corners to match the container */
+            z-index: 1000;
+            border: 2px solid #1c5739;
+            transition: 0.6s ease;
+            animation: movingBorder 2s infinite ease;
+            /* Apply the animation */
+        }
+
+        @keyframes movingBorder {
+
+            0%,
+            100% {
+                border-color: #1c5799;
+                /* Starting color */
+                box-shadow: 0 0 15px #1c5799;
+            }
+
+            5%,
+            95% {
+                border-color: #1a639f;
+                box-shadow: 0 0 16px #1a639f;
+            }
+
+            10%,
+            90% {
+                border-color: #176ea9;
+                box-shadow: 0 0 17px #176ea9;
+            }
+
+            15%,
+            85% {
+                border-color: #1579af;
+                box-shadow: 0 0 18px #1579af;
+            }
+
+            20%,
+            80% {
+                border-color: #1384b5;
+                box-shadow: 0 0 19px #1384b5;
+            }
+
+            25%,
+            75% {
+                border-color: #108fbd;
+                box-shadow: 0 0 20px #108fbd;
+            }
+
+            30%,
+            70% {
+                border-color: #0e9ac7;
+                box-shadow: 0 0 21px #0e9ac7;
+            }
+
+            35%,
+            65% {
+                border-color: #0ba5d3;
+                box-shadow: 0 0 22px #0ba5d3;
+            }
+
+            40%,
+            60% {
+                border-color: #07b0df;
+                box-shadow: 0 0 23px #07b0df;
+            }
+
+            50% {
+                border-color: #04bbeb;
+                box-shadow: 0 0 25px #04bbeb;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div class="container-xxl bg-white d-flex flex-column align-items-center justify-content-center vh-100">
         <!-- Logo et Titre Centrés -->
-        <div class="text-center mb-4">
-            <h1 class="m-0" style="color: #2C24CE ;"><img class="logo" src="Template/img/LOGO 1 blue.png"
-                    alt="Pinnacle Logo" style="max-width: 45px;">Pinnacle</h1>
-        </div>
-
-
         <div class="card p-5 shadow-lg border-0" style="max-width: 400px; width: 100%;">
+            <div class="text-center mb-4">
+                <h1 class="m-0" style="color: #2C24CE ;"><img class="logo" src="Template/img/LOGO 1 blue.png"
+                        alt="Pinnacle Logo" style="max-width: 45px;">Pinnacle</h1>
+            </div>
+
+
             <h3 class="text-center mb-4">Connexion à Pinnacle</h3>
             <?php if (!empty($login_err)): ?>
                 <div class="alert alert-danger"><?php echo $login_err; ?></div>
@@ -295,14 +377,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <button id="submit" type="submit" class="btn btn-primary btn-block w-100 rounded-pill">Se
-                    connecter</button>
-                <button id="face-login-btn" type="button" class="btn btn-secondary btn-block w-100 rounded-pill"
-                    onclick="startFaceRecognition()">Connexion Avec Face Id</button>
+                    Connecter</button>
                 <div class="text-center mt-3">
-                    <p>ou</p>
+                    <hr>
+                    <p>Se Connecter Avec Face ID</p>
+                    <button id="face-login-btn" type="button" class="btn btn-secondary btn-block w-100 rounded-pill"
+                        onclick="startFaceRecognition()">Connexion Avec Face Id</button>
+                </div>
+                <div class="text-center mt-3">
+                    <hr>
                     <p>Se Connecter Avec Google</p>
                     <button type="button" onclick="window.location = '<?php echo $login_url; ?>'"
-                        class="btn btn-danger">Login with Google</button>
+                        class="btn btn-danger rounded-pill">Connexion Avec Google</button>
                 </div>
                 <div class="text-center mt-3">
                     <p class="mb-0">Vous n'avez pas de compte ? <a href="signup.php">S'inscrire</a></p>
@@ -367,33 +453,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             headers: {
                                 "Content-Type": "application/x-www-form-urlencoded",
                             },
-                            body:`image_data=${encodeURIComponent(imageData)}`,
-          })
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log("Server response:", data);
-                    if (data.success) {
-                        console.log("Face ID detected:", data.face_id); // Log face ID
-                        setInfoMessage(data.message);
-                        
-                        console.log('redirect:',data.redirect);
-                        setTimeout(() => { window.location.href = data.redirect }, 2000); // Redirect to profile page
-                        document.body.style.cursor = "pointer";
-                        stopVideoStream(video);
-                    } else {
-                        console.error("Error from server:", data.message);
-                        setErrorMessage(data.message);
-                        stopVideoStream(video);
+                            body: `image_data=${encodeURIComponent(imageData)}`,
+                        })
+                            .then((response) => response.json())
+                            .then((data) => {
+                                console.log("Server response:", data);
+                                if (data.success) {
+                                    console.log("Face ID detected:", data.face_id); // Log face ID
+                                    setInfoMessage(data.message);
+
+                                    console.log('redirect:', data.redirect);
+                                    setTimeout(() => { window.location.href = data.redirect }, 2000); // Redirect to profile page
+                                    document.body.style.cursor = "pointer";
+                                    stopVideoStream(video);
+                                } else {
+                                    console.error("Error from server:", data.message);
+                                    setErrorMessage(data.message);
+                                    stopVideoStream(video);
+                                }
+                            })
+                            .catch(function (error) {
+                                console.error("Error in fetch request:", error);
+                                setErrorMessage("An error occurred while processing the request.");
+                                stopVideoStream(video);
+                            });
                     }
-                })
-                .catch(function (error) {
-                    console.error("Error in fetch request:", error);
-                    setErrorMessage("An error occurred while processing the request.");
-                    stopVideoStream(video);
                 });
         }
-      });
-  }
 
         function stopVideoStream(video) {
             const stream = video.srcObject;

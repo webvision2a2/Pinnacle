@@ -1,24 +1,3 @@
-<!-- <?php
-// Retrieve the token from the URL
-/* $token = $_GET['token'] ?? null;
-
-if (!$token) {
-    echo 'Token is missing.';
-    exit();
-}
-// Check if the form was submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    
-            $resetStatus = $controller->verifyEmail($token);
-            if ($resetStatus) {
-                echo "Password updated successfully.";
-            } else {
-                echo "An error occurred during the password reset.";
-            }
-        }
-     */
-?> -->
 <?php
 require_once '../../Controller/UserController.php';
 session_start();
@@ -38,10 +17,10 @@ if (!$token) {
     $resetStatus = $controller->verifyEmail($token);
 
     if ($resetStatus) {
-        $message = 'Your email has been successfully verified!';
+        $message = 'Votre adresse e-mail a été vérifiée avec succès!';
         $status = 'success';
     } else {
-        $message = 'Verification failed! The token is invalid or has expired. Please request a new verification email.';
+        $message = 'Échec de la vérification ! Le jeton est invalide ou a expiré. Veuillez demander un nouvel e-mail de vérification.';
         $status = 'error';
     }
 }
@@ -89,9 +68,9 @@ if (!$token) {
                 <?php echo $message; ?>
             </h2>
             <?php if ($status === 'success'): ?>
-                <a href="login.php" class="btn-custom">Go to Login</a>
+                <a href="login.php" class="btn-custom">Aller à la Page de Connexion</a>
             <?php else: ?>
-                <a href="signup.php" class="btn-custom">Return to Signup</a>
+                <a href="signup.php" class="btn-custom">Retour à l'inscription</a>
             <?php endif; ?>
         <?php endif; ?>
     </div>
