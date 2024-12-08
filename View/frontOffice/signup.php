@@ -16,6 +16,10 @@ $profileController = new ProfileController();
 if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm_password"])) {
     if (!empty($_POST["nom"]) && !empty($_POST["prenom"]) && !empty($_POST["email"]) && !empty($_POST["password"]) && !empty($_POST["confirm_password"])) {
         
+            $faceId = null;
+            if(isset($_POST['face_id']) && !empty($_POST['face_id'])){
+                $faceId = $_POST['face_id'];
+            }
             $hashed_password = $_POST["password"]; 
             $date_creation = date('Y-m-d H:i:s');
             $user = new User(
@@ -26,11 +30,37 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) &&
                 $hashed_password,
                 $_POST['role'],
                 new DateTime($date_creation),
-                0
+                0,
+                $faceId
             );
 
             $newUserId = $userController->addUser($user, 'front');
+
             if ($newUserId) {
+                if ($faceId != null) {
+
+                    $addFaceUrl = 'https://api-us.faceplusplus.com/facepp/v3/faceset/addface';
+                    $addFaceData = [
+                        'api_key' => "Yt-Jl7lyIMnxqeix-Yvdz-rqrXpafWG_",
+                        'api_secret' => "gVhY10PUviYgcejYFSyrcocah3nJmygn",
+                        'faceset_token' => "7c116b608162a5cd58f738e10b8ccb93",
+                        'face_tokens' => $faceId
+                    ];
+                
+                    $options = [
+                        'http' => [
+                            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                            'method' => 'POST',
+                            'content' => http_build_query($addFaceData)
+                        ]
+                    ];
+                    $context = stream_context_create($options);
+                    $addFaceResult = file_get_contents($addFaceUrl, false, $context);
+                
+                    if ($addFaceResult === FALSE) {
+                        echo json_encode(['success' => false, 'message' => 'Failed to add face to FaceSet.']);
+                    }
+                }
                 $profileController->createProfile($newUserId);
             }
             
@@ -91,8 +121,11 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) &&
         <div class="card p-5 shadow-lg border-0" style="max-width: 400px; width: 100%;">
             <h3 class="text-center mb-4">Créer un Compte</h3>
 
+            <video id="video" width="640" height="480" autoplay hidden></video>
+            <canvas id="canvas" width="640" height="480" hidden></canvas>
             
             <form id="signupForm" action="" method="post">
+
                 <input type="hidden" name="role" value="2">
                 <div class="form-group mb-3">
                     <label for="nom">Nom</label>
@@ -123,8 +156,10 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) &&
                     <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirmer le mot de passe">
                     <p id="p_confirmpassword"></p>
                 </div>
-            
+                <input type="hidden" name="face_id" id="face_id">
+                <button type="button" id="registerFace" class="btn btn-secondary btn-block w-100 rounded-pill" onclick="startFaceRecognition()">Setuper face id </button>
                 <button type="submit" class="btn btn-primary btn-block w-100 rounded-pill">S'inscrire</button>
+
 
                 <div class="text-center mt-3">
                     <p class="mb-0">Vous avez déjà un compte ? <a href="login.php">Se connecter</a></p>
@@ -135,12 +170,8 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) &&
 
 
     <script src="../backOffice/js/addUser.js"></script>
-    <script>
-       
 
-
-        
-    </script>
+    <script src="face_recognition.js"></script>
     
     
 

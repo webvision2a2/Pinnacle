@@ -9,9 +9,10 @@ class User {
     private ?int $role;
     private ?DateTime $date_creation;
     private ?int $verification;
+    private ?string $face_id;
 
     // Constructor
-    public function __construct(?int $id, ?string $nom, ?string $prenom, ?string $email, ?string $password, ?int $role, ?DateTime $date_creation, ?int $verification) {
+    public function __construct(?int $id, ?string $nom, ?string $prenom, ?string $email, ?string $password, ?int $role, ?DateTime $date_creation, ?int $verification, ?string $face_id = null) {
         $this->id = $id;
         $this->nom = $nom;
         $this->prenom = $prenom;
@@ -20,6 +21,7 @@ class User {
         $this->role = $role;
         $this->date_creation = $date_creation;
         $this->verification = $verification;
+        $this->face_id = $face_id;
     }
 
 
@@ -84,6 +86,13 @@ class User {
 
     public function setVerification(?int $verification): void {
         $this->role = $verification;
+    }
+    public function getFaceId(): ?string {
+        return $this->face_id;
+    }
+
+    public function setFaceId(?string $face_id): void {
+        $this->face_id = $face_id;
     }
 }
 

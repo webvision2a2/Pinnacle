@@ -53,8 +53,8 @@ class UserController
         $hashedPassword = password_hash($user->getPassword(), PASSWORD_DEFAULT);
     
         $sql = "INSERT INTO users 
-            (nom, prenom, email, password, role, verification) 
-            VALUES (:nom, :prenom, :email, :password, :role, :verification)";
+            (nom, prenom, email, password, role, verification, face_id) 
+            VALUES (:nom, :prenom, :email, :password, :role, :verification, :face_id)";
         $db = config::getConnexion();
         try {
             var_dump($user);
@@ -65,7 +65,8 @@ class UserController
                 'email' => $user->getEmail(),
                 'password' => $hashedPassword,
                 'role' => $role, 
-                'verification' => $verification
+                'verification' => $verification,
+                'face_id' => $user->getFaceId()
             ]);
             return $db->lastInsertId();
         } catch (Exception $e) {
@@ -454,6 +455,77 @@ class UserController
             return null;  
         }
     }
+
+    public function getUserByFaceId($faceId) {
+        $sql = "SELECT * FROM users WHERE face_id = :face_id";
+        $db = config::getConnexion();
+        try {
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':face_id', $faceId, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error in getUserByFaceId: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /* function generateCode($length){
+		$chars = "vwxyzABCD02789";
+		$code = ""; 
+		$clen = strlen($chars) - 1;
+		while (strlen($code) < $length){ 
+			$code .= $chars[mt_rand(0,$clen)];
+		}
+		return $code;
+    }
+
+    function insertData($data) {
+        $db = config::getConnexion();
+        
+        // Check if the user already exists based on the email
+        $checkUser = $db->prepare("SELECT * FROM users WHERE email=:email");
+        $checkUser->execute(array('email' => $data['email']));
+        $info = $checkUser->fetch(PDO::FETCH_ASSOC);
+        
+        // If the user doesn't exist, insert new user data
+        if (!$info["id"]) {
+            // Generate a random password for Google login, as users login using their Google credentials
+            $password = $this->generateCode(5);  // You can leave this as it is or modify it to null if not needed
+            
+            // Insert new user into the database
+            $insertNewUser = $db->prepare("INSERT INTO users (nom, prenom, email, password, role, verification) 
+                                          VALUES (:nom, :prenom, :email, :password, :role, :verification)");
+            $insertNewUser->execute([
+                ':nom' => $data["givenName"],            // First name
+                ':prenom' => $data["familyName"],        // Last name
+                ':email' => $data["email"],              // User's email
+                ':password' => $password,                // Google login doesn't require a password, but you can set one
+                ':role' => 2,                       // Default role, can be 'user', 'admin', or any other role as needed
+                ':verification' => 1                     // Mark user as verified or set to null if needed
+            ]);
+            
+            // Check if user inserted successfully
+            if ($insertNewUser) {
+                // Set cookies to keep the user logged in
+                setcookie("id", $db->lastInsertId(), time() + 60 * 60 * 24 * 30, "/", NULL);
+                setcookie("sess", $password, time() + 60 * 60 * 24 * 30, "/", NULL);  // or use session ID if necessary
+                
+                // Redirect to homepage or dashboard
+                header('Location: login.php');
+                exit();
+            } else {
+                return "Error inserting user!";
+            }
+        } else {
+            // If the user already exists, set cookies and redirect
+            setcookie("id", $info['id'], time() + 60 * 60 * 24 * 30, "/", NULL);
+            setcookie("sess", $info["session"], time() + 60 * 60 * 24 * 30, "/", NULL);
+            header('Location: index.php');
+            exit();
+        }
+    } */
+    
 
 
 }

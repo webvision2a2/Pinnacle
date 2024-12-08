@@ -14,7 +14,6 @@ class config
                 self::$pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
                 self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 self::$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-                echo "Connected to the database successfully!";
             } catch (Exception $e) {
                 die('Error: ' . $e->getMessage());
             }

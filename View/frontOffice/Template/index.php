@@ -1,8 +1,10 @@
 <?php
 session_start();
  
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 2 ){
+if( $_SESSION["loggedin"] !== true){
+    $_SESSION = array();
     header("location: ../login.php");
+    session_destroy();
     exit;
 }
 
@@ -66,7 +68,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION[
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav mx-auto py-0">
-                <a href="index.php" class="nav-item nav-link text-white active">Acceuil</a>
+                <a href="index.php" class="nav-item nav-link text-white active">Accueil</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown">Catalogue</a>
                     <div class="dropdown-menu m-0">

@@ -4,8 +4,10 @@ session_start();
 
 require_once '../../../controller/ProfileController.php';
 
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["role"] !== 2 ) {
+if( $_SESSION["loggedin"] !== true){
+    $_SESSION = array();
     header("location: ../login.php");
+    session_destroy();
     exit;
 }
 
