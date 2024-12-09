@@ -1,142 +1,256 @@
 <?php
+session_start();
 include '../../config.php';
 
+// Get the database connection
+$db = config::getConnexion();
+
+// Fetch the events
+$query = "SELECT * FROM events WHERE status = 'accepted'";
+$stmt = $db->prepare($query);
+$stmt->execute();
+$events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>checkbox List with Descriptions</title>
+    <title>Manage Events</title>
     <link rel="stylesheet" href="css/evstyles.css">
-    <form id="optionsForm" method="POST" action="save_options.php"></form>
-    <body>
-    <div class="container">
-        <h1>Select Your Options</h1>
-        <form id="optionsForm" action="../../controller/controllerevent.php?action=insertion" method="post">
-            <div class="checkbox-item">
-                <label class="custom-checkbox">
-                    <input type="checkbox" id="option1" name="options[]" value="Coding">
-                    <span class="checkmark"></span>
-                    Coding
-                    <a href="#" class="see-more" onclick="toggleDescription('desc1')">voir plus</a>   
-                </label>
-                <div class="description-box" id="desc1">La programmation consiste à écrire des instructions pour les ordinateurs en utilisant des langages de programmation. C'est la base du développement logiciel, permettant la création d'applications, de sites Web et de systèmes.</div>
-            </div>
-            <div class="checkbox-item">
-                <label class="custom-checkbox">
-                    <input type="checkbox" id="option2" name="options[]" value="Hackathon">
-                    <span class="checkmark"></span>
-                    Hackathon
-                    <a href="#" class="see-more" onclick="toggleDescription('desc2')">voir plus</a>
-                </label>
-                <div class="description-box" id="desc2">Un hackathon est un événement collaboratif où des individus se réunissent pour résoudre des problèmes grâce à la programmation et à l'innovation dans un délai limité.</div>
-            </div>
-            <div class="checkbox-item">
-                <label class="custom-checkbox">
-                    <input type="checkbox" id="option3" name="options[]" value="Graphic Design">
-                    <span class="checkmark"></span>
-                    Graphic Design
-                    <a href="#" class="see-more" onclick="toggleDescription('desc3')">voir plus</a>
-                </label>
-                <div class="description-box" id="desc3">Le design graphique est l'art de la communication visuelle à travers la typographie, les images, les couleurs et la mise en page. Les designers créent du contenu visuel pour divers médias.</div>
-            </div>
-            <div class="checkbox-item">
-                <label class="custom-checkbox">
-                    <input type="checkbox" id="option4" name="options[]" value="Game Development">
-                    <span class="checkmark"></span>
-                    Game Development
-                    <a href="#" class="see-more" onclick="toggleDescription('desc4')">voir plus</a>
-                </label>
-                <div class="description-box" id='desc4'>Le développement de jeux englobe le processus de conception, de création et de publication de jeux sur diverses plateformes.</div>
-            </div>
-            <div class="checkbox-item">
-                <label class="custom-checkbox">
-                    <input type="checkbox" id="option5" name="options[]" value="Data Science">
-                    <span class="checkmark"></span>
-                    Data Science
-                    <a href="#" class="see-more" onclick="toggleDescription('desc5')">voir plus</a>
-                </label>
-                <div class="description-box" id='desc5'>La science des données implique l'extraction d'informations à partir d'ensembles de données complexes en utilisant des techniques d'analyse statistique et d'apprentissage automatique.</div>
-            </div>
-            <div class="checkbox-item">
-                <label class="custom-checkbox">
-                    <input type="checkbox" id='option6' name='options[]' value='Cyber Security'>
-                    <span class='checkmark'></span>
-                    Cyber Security
-                    <a href='#' class='see-more' onclick='toggleDescription("desc6")'>voir plus</a>
-                </label>
-                <div class='description-box' id='desc6'>La cybersécurité se concentre sur la protection des systèmes, des réseaux et des données contre les attaques numériques.</div>
-            </div>
-            <div class="date-item">
-                <label class="custom-date">
-                    <input type="date" id='option6' name='date' value='Option 6'>
-                    <span class='checkmark'></span>
-                    Date
-                   
-                </label>
-                <div class='description-box' id='desc6'>La cybersécurité se concentre sur la protection des systèmes, des réseaux et des données contre les attaques numériques.</div>
-            </div>
+</head>
 
-           
-            <button type='submit' id='validateButton' class="close-btn" onclick="">Valider</button>
-          
-            <p id='errorMessage' class='error-message'></p>
-
-        </form>
-
-        <div id='customAlert' class='modal'>
-            <div class='modal-content'>
-                <span class='close-button' onclick='closeAlert()'>&times;</span>
-                <p id='alertMessage'></p>
-                <button onclick='closeAlert()'>OK</button>  
-            </div>
-        </div>
-
-    </div>
-     <script>
-    function toggleDescription(descId) {
-        const description = document.getElementById(descId);
-        description.style.display = description.style.display === 'none' || description.style.display === '' ? 'block' : 'none';
-    }
-    
-    document.getElementById('validateButton').addEventListener('click', function () {
-        const checkboxes = document.querySelectorAll('input[name="options"]:checked');
-    
-        if (checkboxes.length === 0) {
-            showAlert('Veuillez sélectionner au moins un evenement.'); 
-        } else {
-            showAlert('Options validées avec succès !'); 
+<body>
+    <style>
+        /* Custom Alert Box */
+        #customAlert {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #dc3545;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: none;
+            z-index: 1000;
         }
-    });
-    
-    function showAlert(message) {
-        document.getElementById('alertMessage').textContent = message;
-        document.getElementById('customAlert').style.display = 'block'; 
-    }
-    
-    function closeAlert() {
-        document.getElementById('customAlert').style.display = 'none'; 
-        closeModal(); 
-        showSecondAlert(); 
-    }
-    
-    function closeModal() {
-        window.parent.document.getElementById('projectModal').style.display = 'none'; 
-    }
-    
-    function showSecondAlert() {
-        const secondAlertBox = document.getElementById('secondCustomAlert');
-        const secondAlertMessage = document.getElementById('secondAlertMessage');
-        
-        secondAlertMessage.textContent = 'Votre sélection a bien été enregistrée. Merci !'; 
-        secondAlertBox.style.display = 'block'; 
-    }
-    
-    function closeSecondAlert() {
-        document.getElementById('secondCustomAlert').style.display = 'none'; 
-    }
+
+        #customAlert .btn-close {
+            background-color: #fff;
+            color: #dc3545;
+            border: none;
+            padding: 5px 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #customAlert .btn-close:hover {
+            background-color: #dc3545;
+            color: #fff;
+        }
+    </style>
+    <div class="container">
+        <h1>Ajouter un nouveau événement</h1>
+
+        <!-- Display Success/Failure Message -->
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="message-box success">
+                <?= $_SESSION['success']; ?>
+                <?php unset($_SESSION['success']); ?>
+            </div>
+        <?php elseif (isset($_SESSION['error'])): ?>
+            <div class="message-box error">
+                <?= $_SESSION['error']; ?>
+                <?php unset($_SESSION['error']); ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Form for adding new event -->
+        <form id="addEventForm" action="../../controller/controllerevent.php?action=insertion" method="POST" enctype="multipart/form-data">
+            <!-- Event Title -->
+            <div class="form-group">
+                <label for="eventTitle">Titre d'événement:</label>
+                <input type="text" id="eventTitle" name="title" placeholder="Enter event title">
+            </div>
+            <!-- Categories Section -->
+            <h3>Categories:</h3>
+            <div class="categories-container">
+                <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option1" name="options[]" value="Artificial Intelligence">
+                        <span class="checkmark"></span>
+                        Artificial Intelligence
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option1" name="options[]" value=" Web Development">
+                        <span class="checkmark"></span>
+                        Web Development
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option1" name="options[]" value="Software Engineering">
+                        <span class="checkmark"></span>
+                        Software Engineering
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option1" name="options[]" value="Cloud Computing">
+                        <span class="checkmark"></span>
+                        Cloud Computing
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option2" name="options[]" value="Blockchain & Cryptocurrency">
+                        <span class="checkmark"></span>
+                        Blockchain & Cryptocurrency
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option3" name="options[]" value="Graphic Design">
+                        <span class="checkmark"></span>
+                        Graphic Design
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option4" name="options[]" value="Game Development">
+                        <span class="checkmark"></span>
+                        Game Development
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option5" name="options[]" value="Digital Marketing">
+                        <span class="checkmark"></span>
+                        Digital Marketing
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option6" name="options[]" value="Cyber Security">
+                        <span class="checkmark"></span>
+                        Cyber Security
+                    </label>
+                </div>
+            </div>
+
+
+
+            <!-- Event Description -->
+            <div class="form-group">
+                <label for="eventDescription">Description:</label>
+                <input type="text" name="description" placeholder="Description de l'événement">
+            </div>
+
+            <!-- Event Image -->
+            <div class="form-group">
+                <label for="eventImage">Image d'événement:</label>
+                <input type="file" id="eventImage" name="image" accept="image/*">
+            </div>
+
+            <!-- Event Date -->
+            <div class="form-group">
+                <label for="eventDate">Date événement:</label>
+                <input type="date" id="eventDate" name="date">
+            </div>
+
+            <!-- Number of Participants -->
+            <div class="form-group">
+                <label for="participants">Nombre de Participants:</label>
+                <input type="number" id="participants" name="participants" min="1" placeholder="nombre participants">
+            </div>
+
+            <!-- Submit and Cancel Buttons -->
+         
+                <button class="event-button2" type="submit">Ajouter</button>
+        </form>
+    </div>
+</body>
+<div id="customAlert" class="message-box error" style="display: none;">
+    <span id="errorMessages"></span>
+    <button id="closeAlert" class="btn-close">Close</button>
+</div>
+
+
+</html>
+<script>
+    document.getElementById('addEventForm').addEventListener('submit', function(event) {
+                // Get form inputs
+                const title = document.getElementById('eventTitle').value.trim();
+                const description = document.querySelector('input[name="description"]').value.trim();
+                const image = document.getElementById('eventImage').value;
+                const date = document.getElementById('eventDate').value;
+                const participants = document.getElementById('participants').value.trim();
+                const categories = document.querySelectorAll('input[name="options[]"]:checked');
+
+                // Validation flags
+                let isValid = true;
+                let errorMessage = '';
+
+                // Title validation
+                if (title === '') {
+                    isValid = false;
+                    errorMessage += 'Le titre de l\'événement est obligatoire.\n';
+                }
+
+                // Description validation
+                if (description === '') {
+                    isValid = false;
+                    errorMessage += 'La description de l\'événement est obligatoire.\n';
+                }
+
+                // Image validation
+                if (image === '') {
+                    isValid = false;
+                    errorMessage += 'Veuillez sélectionner une image pour l\'événement.\n';
+                }
+
+                // Date validation
+                if (date === '') {
+                    isValid = false;
+                    errorMessage += 'La date de l\'événement est obligatoire.\n';
+                }
+
+                // Participants validation
+                if (participants === '' || isNaN(participants) || participants <= 0) {
+                    isValid = false;
+                    errorMessage += 'Le nombre de participants doit être un nombre positif.\n';}
+                if (participants > 500) {
+                        isValid = false;
+                        errorMessage += 'Le nombre de participants maximale est 500.\n';
+                    }
+
+                    // Categories validation
+                    if (categories.length === 0) {
+                        isValid = false;
+                        errorMessage += 'Veuillez sélectionner au moins une catégorie.\n';
+                    }
+
+                    // If not valid, prevent form submission and show errors in custom alert
+                    if (!isValid) {
+                        event.preventDefault();
+
+                        // Show the custom alert
+                        document.getElementById('errorMessages').textContent = errorMessage;
+                        document.getElementById('customAlert').style.display = 'block';
+                    }
+                });
+
+            // Close the custom alert
+            document.getElementById('closeAlert').addEventListener('click', function() {
+                document.getElementById('customAlert').style.display = 'none';
+            });
 </script>
 
-</body>
-</html>
+</div>

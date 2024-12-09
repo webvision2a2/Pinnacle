@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DGital - Digital Agency HTML Template</title>
+    <title>Pinnacle</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -45,65 +45,106 @@
 
         <!-- Navbar & Hero Start -->
         <div class="container-xxl position-relative p-0">
-            <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
-                <a href="" class="navbar-brand p-0">
-                    <img class ='logo' src="img/LOGO 1 blue.png">
-                    <h1 class="m-0">Pinnacle</h1>
-                    <!-- <img src="img/logo.png" alt="Logo"> -->
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                    <span class="fa fa-bars"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <div class="navbar-nav mx-auto py-0">
-                        <a href="index.html" class="nav-item nav-link active">Acceuil</a>
-                        <a href="about.html" class="nav-item nav-link">à Propos</a>
-                        <a href="service.html" class="nav-item nav-link">Services</a>
+        <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
+    <a href="" class="navbar-brand p-0">
+        <img class='logo' src="img/LOGO 1 blue.png">
+        <h1 class="m-0">Pinnacle</h1>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="fa fa-bars"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav mx-auto py-0">
+            <a href="index.html" class="nav-item nav-link active">Acceuil</a>
+            <a href="about.html" class="nav-item nav-link">à Propos</a>
+            <a href="service.html" class="nav-item nav-link">Services</a>
 
-
-                        <!-- Projects Section Trigger -->
-<a href="../FrontOffice/Evenement.php" class="nav-item nav-link" onclick="openModal()">Evenement</a>
-
-<!-- Modal Structure -->
-<div id="projectModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <iframe src="../FrontOffice/Evenement.php" frameborder="0" class="modal-frame"></iframe>
-    </div>
-</div>
-<script>
-    // Open the modal
-    function openModal() {
-        document.getElementById("projectModal").style.display = "block";
-    }
-
-    // Close the modal
-    function closeModal() {
-        document.getElementById("projectModal").style.display = "none";
-    }
-
-    // Close the modal if user clicks outside the modal-content
-    window.onclick = function(event) {
-        const modal = document.getElementById("projectModal");
-        if (event.target === modal) {
-            closeModal();
-        }
-    };
-</script>
-
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                            <div class="dropdown-menu m-0">
-                                <a href="team.html" class="dropdown-item">Notre Equipe</a>
-                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                <a href="404.html" class="dropdown-item">404 Page</a>
+            <!-- Dropdown for Evenement -->
+            <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Evenement</a>
+                            <div class="dropdown-menu">
+                                <a href="../FrontOffice/eventdispo.php" class="dropdown-item">Nos événements</a>
+                                <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addEventModal">Ajouter un événement</a>
                             </div>
                         </div>
-                        <a href="contact.html" class="nav-item nav-link">Contact</a>
                     </div>
-                    <a href="" class="btn rounded-pill py-2 px-4 ms-3 d-none d-lg-block">Commencer</a>
+                    <a href="" class="btn btn-primary py-2 px-4">Contactez-Nous</a>
                 </div>
             </nav>
+
+            <!-- Modal -->
+            <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addEventModalLabel">Ajouter un événement</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Load the external page inside an iframe -->
+                            <iframe src="../FrontOffice/Evenement.php" style="width: 100%; height: 500px; border: none;"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<style>
+    .modal {
+        z-index: 1050; /* Ensure modal appears above other elements */
+        display: none; /* Hidden by default */
+        position: fixed;
+        left: 10;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.3); /* Darker backdrop */
+        padding-top: 0px;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        border-radius: 15px;
+        margin: 5% auto; /* Center the modal */
+        width: 250%; /* Adjust width */
+        /* max-width: 700px; Set a maximum width */
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Add a shadow */
+        text-align: center;
+    }
+
+    .modal-header {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #007BFF;
+        margin-bottom: 15px;
+    }
+
+    .modal-body {
+        font-size: 1.2rem;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 1.5rem;
+        font-weight: bold;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 10px;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+    }
+</style>
+        </div>
+    </div>
+
 
             <div class="container-xxl bg-primary hero-header">
                 <div class="container px-lg-5">
@@ -212,7 +253,7 @@
                     </div>
                     <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.3s">
                         <i class="fa fa-users-cog fa-3x text-secondary mb-3"></i>
-                        <h1 class="text-white mb-2" data-toggle="counter-up">1234</h1>
+                        <h1 class="text-white mb-2" data-toggle="counter-up">6</h1>
                         <p class="text-white mb-0">Team Members</p>
                     </div>
                     <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.5s">

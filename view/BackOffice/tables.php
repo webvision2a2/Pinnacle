@@ -14,7 +14,7 @@ $events = GetAllevents();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>Events Table</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -39,11 +39,11 @@ $events = GetAllevents();
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">Pinnacle</div>
             </a>
 
             <!-- Divider -->
@@ -51,96 +51,42 @@ $events = GetAllevents();
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
+            </li> 
+            <hr class="sidebar-divider"> <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
-            </div>
+                FrontOffice
+</div>
+            
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
-                    </div>
-                </div>
+
+            <!-- Nav Item - Tables -->
+            <li class="nav-item active">
+                <a class="nav-link" href="../../view/FrontOffice/index.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Menu</span></a>
             </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
+            <hr class="sidebar-divider"> <!-- Heading -->
             <div class="sidebar-heading">
-                Addons
-            </div>
+                Tables
+</div>
+            
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
                 <a class="nav-link" href="tables.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                    <span>Tables des evenements</span></a>
             </li>
+            <hr class="sidebar-divider">
+            <li class="nav-item active">
+                <a class="nav-link" href="events_participants.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Tables des participants</span></a>
+            </li> 
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -333,7 +279,7 @@ $events = GetAllevents();
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Dhia Allagui</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -369,53 +315,100 @@ $events = GetAllevents();
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Evenement</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Evenements</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Tables des evennements</h6>
-                        </div>
-                        <div class="card-body">
-                        <form action="add_event.php" method="POST">
-                        <h2>Ajouter un nouveaux</h2>
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required>
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" required>
-        <label for="id">ID Evenement:</label>
-        <input type="text" id="id" name="id" required>
-        <button type="submit">Add Event</button>
-</form>
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Tables des evennements</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Titre</th>
+                        <th style="width: 250px;">Description</th>
+                        <th >Date</th>
+                        <th>Participants</th>
+                        <th>Categories</th>
+                        <th>Images</th>
+                        <th>Status</th> 
+                        <th style="width: 180px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($events as $event): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($event['id'] ?? 'N/A') ?></td>
+                            <td><?= htmlspecialchars($event['title'] ?? 'N/A') ?></td>
+                            <td><?= htmlspecialchars($event['description'] ?? 'N/A') ?></td>
+                            <td><?= htmlspecialchars($event['date'] ?? 'N/A') ?></td>
+                            <td><?= htmlspecialchars($event['participants'] ?? 'N/A') ?></td>
+                            <td><?= htmlspecialchars($event['categories'] ?? 'N/A') ?></td>
+                            <td>
+                                <img src="../../uploads/<?= htmlspecialchars($event['image']) ?>" alt="Event Image" style="width: 50px; height: auto;">
+                            </td>
+                            <td><?= htmlspecialchars($event['status'] ?? 'Pending') ?></td> <!-- Display Status -->
+                            <td>
+                                <a href="../../controller/delete_event.php?action=delete&id=<?= $event['id'] ?>"
+                                    style="color: red;"
+                                    onclick="return confirm('Are you sure?')">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </a> |
 
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                
-                            
-                                
-    <thead>
-        <tr>
-            <th>ID Event</th>
-            <th>ID Client</th>
-            <th>Title</th>
-            <th>Date</th>
-            <th>Edit</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($events as $event): ?>
-        <tr>
-            <td><?= htmlspecialchars($event['id']) ?></td>
-            <td><?= htmlspecialchars($event['id_client']) ?></td>
-            <td><?= htmlspecialchars($event['title']) ?></td>
-            <td><?= htmlspecialchars($event['event_date']) ?></td>
-            <td>
-                <a href="../../controller/edit_event.php?id=<?= $event['id'] ?>">Edit</a> |
-                <a href="../../controller/delete_event.php?id=<?= $event['id'] ?>" onclick="return confirm('Are you sure you want to delete this event?')" style="color: red;">Delete</a>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-</tbody>
+                                <a href="../../controller/controllerevent.php?action=accept&eventId=<?= $event['id'] ?>" style="color: green;">
+                                    <i class="fas fa-check"></i> Accept
+                                </a><br>
+
+                                <a href="../../controller/editevent.php?id=<?= $event['id'] ?>"
+                                    style="color: blue;">
+                                    <i class="fas fa-edit"></i> Edit&nbsp;&nbsp;&nbsp;&nbsp;
+                                </a>|
+                                <a href="../../controller/reject_event.php?action=reject&id=<?= $event['id'] ?>"
+                                    style="color: orange;">
+                                    <i class="fas fa-times"></i> Reject
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+                                    <style>
+                                        .fas.fa-trash-alt {
+                                            margin-right: 5px;
+                                            /* Space between trash icon and text */
+                                            color: red;
+                                            /* Trash icon color */
+                                            font-size: 16px;
+                                            /* Adjust trash icon size */
+                                            vertical-align: middle;
+                                            /* Aligns icon with text */
+                                        }
+
+                                        .fas.fa-edit {
+                                            margin-right: 5px;
+                                            /* Space between pencil icon and text */
+                                            color: blue;
+                                            /* Pencil icon color */
+                                            font-size: 16px;
+                                            /* Adjust pencil icon size */
+                                            vertical-align: middle;
+                                            /* Aligns icon with text */
+                                        }
+
+                                        a {
+                                            text-decoration: none;
+                                            /* Removes underline from links */
+                                            font-weight: bold;
+                                            /* Makes text bold for better visibility */
+                                        }
+                                    </style>
 
 
 
@@ -429,15 +422,7 @@ $events = GetAllevents();
             </div>
             <!-- End of Main Content -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
+
 
         </div>
         <!-- End of Content Wrapper -->
@@ -486,6 +471,44 @@ $events = GetAllevents();
 
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
+    <script>
+        function acceptEvent(eventId) {
+            // Send an AJAX request to the backend to accept the event
+            fetch(`../../controller/controllerevent.php?action=accept&event_id=${eventId}`, {
+                    method: 'GET',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Find the event element by its ID and update its status
+                    const eventElement = document.getElementById(`event-${eventId}`);
+                    eventElement.querySelector('.status').textContent = 'Accepted'; // Update the status text
+                    eventElement.querySelector('.accept-btn').style.display = 'none'; // Hide accept button
+                    eventElement.querySelector('.reject-btn').style.display = 'none'; // Hide reject button
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function rejectEvent(eventId) {
+            // Send an AJAX request to the backend to reject the event
+            fetch(`../../controller/controllerevent.php?action=reject&event_id=${eventId}`, {
+                    method: 'GET',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Find the event element by its ID and update its status
+                    const eventElement = document.getElementById(`event-${eventId}`);
+                    eventElement.querySelector('.status').textContent = 'Rejected' // Update the status text
+                    eventElement.querySelector('.accept-btn').style.display = 'none'; // Hide accept button
+                    eventElement.querySelector('.reject-btn').style.display = 'none'; // Hide reject button
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+
 
 </body>
 
