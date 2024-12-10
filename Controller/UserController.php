@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../config_zeineb.php';
 include(__DIR__ . '/../Model/User.php');
 include(__DIR__ . '/ProfileController.php');
 
@@ -278,7 +278,7 @@ class UserController
 
 
 
-    /* public function envoyerEmail(string $to, string $subject, string $body): void
+    public function envoyerEmail(string $to): void
     {
         $mail = new PHPMailer(true);
 
@@ -289,7 +289,7 @@ class UserController
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com'; // Serveur SMTP
             $mail->SMTPAuth = true;
-            $mail->Username = 'doghri.zeineb24@gmail.com'; 
+            $mail->Username = 'doghri.zeineb24@gmail.com'; //email mteek
             $mail->Password = 'jqdi bkac bizg zktg';//votre mot de passe d'application
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
             $mail->Port = 587;
@@ -300,19 +300,19 @@ class UserController
 
             // Contenu de l'email
             $mail->isHTML(true);
-            $mail->Subject = $subject;
-            $mail->Body = $body; // Contenu HTML
+            $mail->Subject = 'Alech baatht il mail';
+            $mail->Body = 'chnya fi west il mail'; // Contenu HTML
 
 
          
             $mail->send();
             echo 'Email envoyé avec succès.';
-            error_log("Email envoyé avec succès à $to pour le sujet : $subject.");
+            error_log("Email envoyé avec succès à $to pour le sujet : 'mail'.");
         } catch (Exception $e) {
             error_log("Erreur lors de l'envoi de l'email : " . $mail->ErrorInfo);
             echo "Erreur lors de l'envoi de l'e-mail : " . $mail->ErrorInfo;
         }
-    } */
+    }
 
 
     
