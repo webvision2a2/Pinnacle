@@ -1,5 +1,5 @@
 <?php
-include(__DIR__ . '/../config.php');
+include_once(__DIR__ . '/../config.php');
 include(__DIR__ . '/../Model/question.php');
 
 class QuestionController {
@@ -88,6 +88,36 @@ class QuestionController {
             echo "Error: " . $e->getMessage();
         }
     }
+    
+    // READ: Count the number of questions for a specific quiz
+    public function countQuestions($id_quiz) {
+        $sql = "SELECT COUNT(*) FROM question WHERE id_quiz = :id_quiz";
+        $db = config::getConnexion();
+        try {
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':id_quiz', $id_quiz);
+            $stmt->execute();
+
+            // Return the count of questions
+            return $stmt->fetchColumn();
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+    // READ: Fetch the ID and Type for all questions of a specific quiz
+    public function getQuestionTypes($id_quiz) {
+        $sql = "SELECT id, type FROM question WHERE id_quiz = :id_quiz";
+        $db = config::getConnexion();
+        try {
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':id_quiz', $id_quiz, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC); // Returns an array of questions with id and type
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
 
 // NOT USED:
     // Display question details using the Question class's `show` method

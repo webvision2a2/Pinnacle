@@ -1,21 +1,28 @@
 <?php
 include '../../Controller/reponseController.php';
 
+// Retrieve id_question from GET parameters
+$id_question = $_GET['id_question'] ?? null;
 
-// Check if `id_question` is passed in the URL and is not empty
-if (isset($_GET['id_question']) && !empty($_GET['id_question'])) {
-    $id_question = $_GET['id_question'];
-} else {
-    die("Error: Question ID non trouvé.");
+// Retrieve quiz_id from GET parameters
+$quiz_id = $_GET['quiz_id'] ?? null;
+
+// Check if id_question or quiz_id is missing
+if (!$id_question || !$quiz_id) {
+    die("Error: Quiz ID or Question ID non trouvé."); // Stops execution if id_question or quiz_id is missing
 }
 
+// Retrieve question_type from GET parameters (optional)
+$question_type = $_GET['question_type'] ?? null;
+
+// Instantiate the ReponseController and fetch responses for the question
 $reponseController = new ReponseController();
-$reponses = $reponseController->listReponses($id_question); // Fetch all responses for the specific question
+$reponses = $reponseController->listReponses($id_question);
 
-
-
-
-
+// Display message if no responses are found
+if (empty($reponses)) {
+    echo "No responses found for Question ID: " . htmlspecialchars($id_question);
+}
 ?>
 
 <!DOCTYPE html>
@@ -109,7 +116,7 @@ $reponses = $reponseController->listReponses($id_question); // Fetch all respons
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item active" href="listQuiz.php">Quiz</a>
                 <a class="collapse-item" href="#">Scores</a>
-                <a class="collapse-item" href="#">Feedback</a>
+                <a class="collapse-item" href="listFeedback.php">Feedback</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">detail</h6>
                 <a class="collapse-item" href="#">Quiz</a>
@@ -286,10 +293,9 @@ $reponses = $reponseController->listReponses($id_question); // Fetch all respons
                                             <td><?= htmlspecialchars($reponse['content']) ?></td>
                                             <td><?= $reponse['is_correct'] ? 'Oui' : 'Non' ?></td>
                                             <td>
-                                                <a href="updateReponse.php?id=<?= $reponse['id'] ?>&id_question=<?= $id_question ?>" class="btn btn-sm btn-primary">Modifier</a>
-                                                <a href="deleteReponse.php?id=<?= $reponse['id'] ?>&id_question=<?= $id_question ?>" 
-                                                class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réponse?')">Supprimer</a>
+                                                <a href="updateReponse.php?id=<?= $reponse['id'] ?>&id_question=<?= $id_question?>&quiz_id=<?= $quiz_id ?>&question_type=<?= htmlspecialchars($question_type) ?>" class="btn btn-sm btn-primary">Modifier</a>
+                                                <a href="deleteReponse.php?id=<?= $reponse['id'] ?>&quiz_id=<?= $quiz_id?>&id_question=<?= $id_question ?>&question_type=<?= htmlspecialchars($question_type) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réponse?')">Supprimer</a>
+
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -303,8 +309,9 @@ $reponses = $reponseController->listReponses($id_question); // Fetch all respons
                     </div>
 
                     <p class="text-center mt-4">
-                        <a href="addReponse.php?id_question=<?= $id_question ?>" class="btn btn-success">Ajouter une nouvelle Réponse</a>
-
+                    <a href="addReponse.php?id_question=<?= htmlspecialchars($id_question) ?>&question_type=<?= htmlspecialchars($question_type) ?>&quiz_id=<?= htmlspecialchars($quiz_id) ?>" class="btn btn-success">Ajouter Réponse</a>
+                    <a href="listQuestion.php?id_quiz=<?= htmlspecialchars($quiz_id) ?>" class="btn btn-secondary">Retour</a>
+            
 
                     </p>
                 </div>

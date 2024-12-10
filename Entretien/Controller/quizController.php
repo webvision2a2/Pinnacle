@@ -1,5 +1,5 @@
 <?php
-include(__DIR__ . '/../config.php');
+include_once(__DIR__ . '/../config.php');
 include(__DIR__ . '/../Model/quiz.php');
 
 class QuizController {
@@ -100,6 +100,56 @@ class QuizController {
             die('Error: ' . $e->getMessage());
         }
     }
+
+
+    public function listQuizzesPaginated($limit, $offset) {
+        $db = config::getConnexion();
+        $stmt = $db->prepare("SELECT * FROM quiz LIMIT :limit OFFSET :offset");
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function countQuizzes() {
+        $db = config::getConnexion();
+        $stmt = $db->query("SELECT COUNT(*) AS total FROM quiz");
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
+    }
+
+    public function listQuizzesByCategoryPaginated($category, $limit, $offset) {
+        $db = config::getConnexion();
+        if ($category) {
+            $stmt = $db->prepare("SELECT * FROM quiz WHERE category = :category LIMIT :limit OFFSET :offset");
+            $stmt->bindValue(':category', $category, PDO::PARAM_STR);
+        } else {
+            $stmt = $db->prepare("SELECT * FROM quiz LIMIT :limit OFFSET :offset");
+        }
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function countQuizzesByCategory($category) {
+        $db = config::getConnexion();
+        if ($category) {
+            $stmt = $db->prepare("SELECT COUNT(*) AS total FROM quiz WHERE category = :category");
+            $stmt->bindValue(':category', $category, PDO::PARAM_STR);
+        } else {
+            $stmt = $db->query("SELECT COUNT(*) AS total FROM quiz");
+        }
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
+    }
+    
+    public function listCategories() {
+        $db = config::getConnexion();
+        $stmt = $db->query("SELECT DISTINCT category AS name FROM quiz");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 // Display a quiz (HTML table format)
     public function showQuizDetails($quiz) {

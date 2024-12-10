@@ -1,42 +1,65 @@
 <?php
 include_once '../../Controller/questionController.php';
 include_once '../../Model/question.php';
-
+include_once '../../Controller/quizController.php';  // You may need this to get the quiz details
 
 $error = '';
 
 $id_quiz = null;
+$max_questions = 0;  
 
-// Fetch `id_quiz` from the URL
 if (isset($_GET['id_quiz']) && !empty($_GET['id_quiz'])) {
-    $id_quiz = $_GET['id_quiz']; // Retrieve the quiz ID from the URL
+    $id_quiz = $_GET['id_quiz']; 
 } else {
-    die("Error: Quiz ID non trouvé."); // Stop execution if the quiz ID is missing
+    die("Error: Quiz ID non trouvé."); 
 }
+
+
+
+
+// Check current number of questions in the quiz
+$questionController = new QuestionController();
+$current_question_count = $questionController->countQuestions($id_quiz);
+
+// Get the quiz details to retrieve the max allowed questions (total_questions)
+$quizController = new QuizController();
+$quiz = $quizController->showQuiz($id_quiz);
+if ($quiz) {
+    $max_questions = $quiz['total_questions'];  // Get the max number of questions allowed for this quiz
+} else {
+    die("Error: Quiz not found.");
+}
+
+
 
 // Process form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['content'], $_POST['points'], $_POST['type']) &&
         !empty($_POST['content']) &&
         !empty($_POST['points']) &&
-        !empty($_POST['type'])) {
+        !empty($_POST['type']) && 
+        $current_question_count < $max_questions) {
 
-        $question = new Question(
-            NULL, 
-            $_POST['content'], 
-            $_POST['points'], 
-            $_POST['type'], 
-            $id_quiz // Associate the question with the quiz
-        );
+        // Validate points to be a positive number
+        if ($_POST['points'] <= 0) {
+            $error = "Les points doivent être un nombre positif supérieur à 0.";
+        } else {
+            $question = new Question(
+                NULL, 
+                $_POST['content'], 
+                $_POST['points'], 
+                $_POST['type'], 
+                $id_quiz // Associate the question with the quiz
+            );
 
-        $quizController = new QuestionController();
-        $quizController->addQuestion($question);
+            $quizController = new QuestionController();
+            $quizController->addQuestion($question);
 
-        // Redirect back to the question list of the quiz
-        header("Location: listQuestion.php?id_quiz=$id_quiz");
-        exit;
+            header("Location: listQuestion.php?id_quiz=$id_quiz");
+            exit;
+        }
     } else {
-        $error = "Tous les champs sont OBLIGATOIRES.";
+        $error = "Tous les champs sont OBLIGATOIRES ou le nombre de questions maximum a été atteint.";
     }
 }
 ?>
@@ -288,9 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <!-- End of Topbar -->
                 
                 <!-- Begin Page Content -->
-                          
                 <div class="container-fluid">
-
                     <div class="container mt-5">
                         <h1 class="text-primary text-center">Ajouter Une Nouvelle Question</h1>
                         <?php if (!empty($error)): ?>
@@ -298,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
 
                         <!-- Form -->
-                        <form id="questionForm" action="addQuestion.php?id_quiz=<?= htmlspecialchars($id_quiz) ?>"  method="POST" class="form" onsubmit="return validateForm()">
+                        <form id="questionForm" action="addQuestion.php?id_quiz=<?= htmlspecialchars($id_quiz) ?>" method="POST" class="form" onsubmit="return validateForm()">
                             <div class="form-group">
                                 <label for="content" class="text-primary">Contenu de la Question:</label>
                                 <span id="contentError" class="text-danger"></span>
@@ -322,8 +343,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </select>
                             </div>
 
-                           
-
                             <button type="submit" class="btn btn-primary btn-block">Ajouter Question</button>
                             <a href="listQuestion.php?id_quiz=<?= htmlspecialchars($id_quiz) ?>" class="btn btn-secondary btn-block">Annuler</a>
                         </form>
@@ -331,8 +350,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <!-- /.container-fluid -->
 
-            </div>
-            <!-- End of Main Content -->
+                </div>
+                <!-- End of Main Content -->
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
@@ -385,73 +404,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Custom scripts for all pages-->
     <script src="template/js/sb-admin-2.min.js"></script>
     <script>
-        // JavaScript for Form Validation    //form id = quizForm
-        function validateForm() {
-        let isValid = true; // Tracks overall form validity
+    // JavaScript form validation
+    function validateForm() {
+        // Clear previous error messages
+        document.getElementById("contentError").textContent = '';
+        document.getElementById("pointsError").textContent = '';
+        document.getElementById("typeError").textContent = '';
 
-        // Reset error messages
-        document.getElementById('titleError').textContent = '';
-        document.getElementById('descriptionError').textContent = '';
-        document.getElementById('authorError').textContent = '';
-        document.getElementById('timeLimitError').textContent = '';
-        document.getElementById('difficultyError').textContent = '';
-        document.getElementById('categoryError').textContent = '';
-        document.getElementById('totalQuestionsError').textContent = '';
+        let valid = true;
 
-        // Get input values
-        const title = document.getElementById('title').value.trim();
-        const description = document.getElementById('description').value.trim();
-        const author = document.getElementById('author').value.trim();
-        const timeLimit = document.getElementById('time_limit').value.trim();
-        const difficulty = document.getElementById('difficulty').value.trim();
-        const category = document.getElementById('category').value.trim();
-        const totalQuestions = document.getElementById('total_questions').value.trim();
-
-        // Validate title
-        if (!title) {
-            document.getElementById('titleError').textContent = 'Le titre est requis.';
-            isValid = false;
+        // Validate content
+        const content = document.getElementById('content').value.trim();
+        if (content === '') {
+            document.getElementById("contentError").textContent = 'Le contenu de la question est requis.';
+            valid = false;
         }
 
-        // Validate description
-        if (!description) {
-            document.getElementById('descriptionError').textContent = 'La description est requise.';
-            isValid = false;
+        // Validate points
+        const points = document.getElementById('points').value.trim();
+        if (points === '') {
+            document.getElementById("pointsError").textContent = 'Les points sont requis.';
+            valid = false;
+        } else if (parseInt(points) <= 0) {
+            document.getElementById("pointsError").textContent = 'Les points doivent être un nombre positif supérieur à 0.';
+            valid = false;
+}
+        // Validate type
+        const type = document.getElementById('type').value.trim();
+        if (type === '') {
+            document.getElementById("typeError").textContent = 'Le type de la question est requis.';
+            valid = false;
         }
 
-        // Validate author
-        if (!author) {
-            document.getElementById('authorError').textContent = 'L\'auteur est requis.';
-            isValid = false;
-        }
-
-        // Validate time limit (must not be negative)
-        if (!timeLimit || timeLimit < 0) {
-            document.getElementById('timeLimitError').textContent = 'La durée doit être un nombre positif.';
-            isValid = false;
-        }
-
-        // Validate difficulty
-        if (!difficulty) {
-            document.getElementById('difficultyError').textContent = 'La difficulté est requise.';
-            isValid = false;
-        }
-
-        // Validate category
-        if (!category) {
-            document.getElementById('categoryError').textContent = 'La catégorie est requise.';
-            isValid = false;
-        }
-
-        // Validate total questions (must not be negative)
-        if (!totalQuestions || totalQuestions < 0) {
-            document.getElementById('totalQuestionsError').textContent = 'Le nombre de questions doit être un nombre positif.';
-            isValid = false;
-        }
-
-        return isValid; // Prevents form submission if any field is invalid
+        return valid; // If any field is invalid, the form will not submit
     }
-
     </script>
 
 </body>

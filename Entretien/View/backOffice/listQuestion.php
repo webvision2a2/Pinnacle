@@ -1,16 +1,15 @@
 <?php
 include '../../Controller/questionController.php';
 
-// Check if `id_quiz` is passed in the URL and is not empty
 if (isset($_GET['id_quiz']) && !empty($_GET['id_quiz'])) {
     $id_quiz = $_GET['id_quiz'];
 } else {
-    // Handle the error if `id_quiz` is not set
+    
     die("Error: Quiz ID non trouvé.");
 }
 
 $quizController = new QuestionController();
-$questions = $quizController->listQuestions($id_quiz); // Fetch all questions for the specific quiz
+$questions = $quizController->listQuestions($id_quiz); 
 ?>
 
 <!DOCTYPE html>
@@ -104,7 +103,7 @@ $questions = $quizController->listQuestions($id_quiz); // Fetch all questions fo
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item active" href="listQuiz.php">Quiz</a>
                 <a class="collapse-item" href="#">Scores</a>
-                <a class="collapse-item" href="#">Feedback</a>
+                <a class="collapse-item" href="listFeedback.php">Feedback</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">detail</h6>
                 <a class="collapse-item" href="#">Quiz</a>
@@ -287,6 +286,7 @@ $questions = $quizController->listQuestions($id_quiz); // Fetch all questions fo
                                                     <a href="deletequestion.php?id=<?= $question['id'] ?>&id_quiz=<?= $id_quiz ?>" 
                                                     class="btn btn-sm btn-danger"
                                                     onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette question?')">Supprimer</a>
+                                                    <a href="listReponse.php?id_question=<?= htmlspecialchars($question['id']) ?>&quiz_id=<?= htmlspecialchars($id_quiz) ?>&question_type=<?= htmlspecialchars($question['type']) ?>" class="btn btn-sm btn-info">Voir Réponses</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -302,6 +302,9 @@ $questions = $quizController->listQuestions($id_quiz); // Fetch all questions fo
                         <p class="text-center mt-4">
                             <a href="addquestion.php?id_quiz=<?= $id_quiz ?>" class="btn btn-success">Ajouter une nouvelle Question</a>
                             <a href="listQuiz.php" class="btn btn-secondary">Retour</a>
+                                
+
+                            </a>
                         </p>
                 </div>
                 <!-- /.container-fluid -->

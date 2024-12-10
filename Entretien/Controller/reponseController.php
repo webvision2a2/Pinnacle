@@ -82,5 +82,22 @@ class ReponseController {
             echo "Error: " . $e->getMessage();
         }
     }
+
+    // READ: Fetch all responses for a specific question ID
+    public function getResponsesByQuestionId($id_question) {
+        $sql = "SELECT * FROM reponse WHERE id_question = :id_question";
+        $db = config::getConnexion();
+        try {
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':id_question', $id_question, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+   
+
+
 }
 ?>

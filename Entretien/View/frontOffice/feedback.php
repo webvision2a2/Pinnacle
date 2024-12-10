@@ -25,6 +25,7 @@ $quizAttempts = array_filter($userAttempts, function ($attempt) use ($quizId) {
 });
 
 $totalAttempts = count($quizAttempts);
+echo "total att: ".$totalAttempts;
 
 if ($totalAttempts > 0) {
     $totalScore = array_sum(array_column($quizAttempts, 'score'));

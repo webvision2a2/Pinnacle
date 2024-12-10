@@ -4,37 +4,75 @@ include_once '../../Model/reponse.php';
 
 $error = '';
 
-$id_question = null;
+$id_question = $_GET['id_question'] ?? null;
+$question_type = $_GET['question_type'] ?? null;
+$quiz_id = $_GET['quiz_id'] ?? null;
 
-if (isset($_GET['id_question']) && !empty($_GET['id_question'])) {
-    $id_question = $_GET['id_question']; 
-} else {
-    die("Error: Question ID not found."); 
+if (!$id_question || !$question_type || !$quiz_id) {
+    // Handle the error: missing parameters
+    echo "Invalid request: Missing question ID or type.";
+    exit;
 }
 
 // Process form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['content'], $_POST['is_correct']) &&
-        !empty($_POST['content']) &&
-        isset($_POST['is_correct'])) {
+    $reponseController = new ReponseController();
 
-        $reponse = new Reponse(
-            NULL, 
-            $_POST['content'], 
-            $_POST['is_correct'], 
-            $id_question // Associate the response with the question
-        );
+    // Handle QCM
+    if ($question_type === 'QCM') {
+        if (isset($_POST['content'], $_POST['is_correct']) && !empty($_POST['content'])) {
+            $contents = $_POST['content']; // Array of options
+            $correctOption = $_POST['is_correct']; // Correct option index (1-based)
 
-        $reponseController = new ReponseController();
-        $reponseController->addReponse($reponse);
+            foreach ($contents as $index => $content) {
+                $is_correct = ($correctOption == $index + 1) ? 1 : 0;
+                $reponse = new Reponse(NULL, $content, $is_correct, $id_question);
+                $reponseController->addReponse($reponse);
+            }
+            header("Location: listReponse.php?quiz_id=$quiz_id&id_question=$id_question&question_type=$question_type");
+            exit;
+        } else {
+            $error = "Tous les champs sont OBLIGATOIRES.";
+        }
+    }
+    // Handle Réponse Courte
+    elseif ($question_type === 'Réponse Courte') {
+        if (isset($_POST['answer_text']) && !empty($_POST['answer_text'])) {
+            $reponse = new Reponse(NULL, $_POST['answer_text'], 1, $id_question);
+            $reponseController->addReponse($reponse);
 
-        header("Location: listReponse.php?id_question=$id_question");
-        exit;
-    } else {
-        $error = "Tous les champs sont OBLIGATOIRES.";
+            header("Location: listReponse.php?quiz_id=$quiz_id&id_question=$id_question&question_type=$question_type");
+            exit;
+        } else {
+            $error = "La réponse correcte est obligatoire.";
+        }
+    }
+    // Handle Vrai/Faux
+    elseif ($question_type === 'Vrai/Faux') {
+        if (isset($_POST['is_correct']) && ($_POST['is_correct'] === '1' || $_POST['is_correct'] === '0')) {
+            // Determine which answer is correct
+            $isCorrect = (int)$_POST['is_correct']; // 1 for Vrai, 0 for Faux
+    
+            // Add the correct answer
+            $correctAnswer = $isCorrect === 1 ? 'Vrai' : 'Faux';
+            $reponse = new Reponse(NULL, $correctAnswer, 1, $id_question);
+            $reponseController->addReponse($reponse);
+    
+            // Add the incorrect answer
+            $incorrectAnswer = $isCorrect === 1 ? 'Faux' : 'Vrai';
+            $reponse = new Reponse(NULL, $incorrectAnswer, 0, $id_question);
+            $reponseController->addReponse($reponse);
+    
+            // Redirect to the response list page
+            header("Location: listReponse.php?quiz_id=$quiz_id&id_question=$id_question&question_type=$question_type");
+            exit;
+        } else {
+            $error = "Veuillez sélectionner une réponse correcte (Vrai/Faux).";
+        }
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -198,8 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Rechercher..."
                                 aria-label="Search" aria-describedby="basic-addon2">
@@ -293,25 +330,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
 
                         <!-- Form -->
-                        <form id="reponseForm" action="addReponse.php?id_question=<?= htmlspecialchars($id_question) ?>" method="POST" class="form" onsubmit="return validateForm()">
-                            <div class="form-group">
-                                <label for="content" class="text-primary">Contenu de la Réponse:</label>
-                                <span id="contentError" class="text-danger"></span>
-                                <textarea name="content" id="content" rows="4" class="form-control"></textarea>
-                            </div>
+                        <form id="reponseForm" action="addReponse.php?id_question=<?= htmlspecialchars($id_question) ?>&question_type=<?= htmlspecialchars($question_type) ?>&quiz_id=<?= htmlspecialchars($quiz_id) ?>" method="POST">
 
-                            <div class="form-group">
-                                <label for="is_correct" class="text-primary">Est-ce Correcte ?</label>
-                                <span id="isCorrectError" class="text-danger"></span>
-                                <select name="is_correct" id="is_correct" class="form-control">
-                                    <option value="">Choisir...</option>
-                                    <option value="1">Oui</option>
-                                    <option value="0">Non</option>
-                                </select>
-                            </div>
+                            <!-- Common Fields -->
+                           
+
+                            <!-- Dynamic Fields -->
+                            <div id="additionalFields"></div>
 
                             <button type="submit" class="btn btn-primary btn-block">Ajouter Réponse</button>
-                            <a href="listReponse.php?id_question=<?= htmlspecialchars($id_question) ?>" class="btn btn-secondary btn-block">Annuler</a>
+                            <a href="listReponse.php?id_question=<?= htmlspecialchars($id_question) ?>&question_type=<?= htmlspecialchars($question_type) ?>&quiz_id=<?= htmlspecialchars($quiz_id) ?>" class="btn btn-secondary btn-block">Annuler</a>
                         </form>
                     </div>
                 </div>
@@ -371,73 +399,162 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Custom scripts for all pages-->
     <script src="template/js/sb-admin-2.min.js"></script>
     <script>
-        // JavaScript for Form Validation    //form id = quizForm
-        function validateForm() {
-        let isValid = true; // Tracks overall form validity
+        // Get the question type from PHP
+        const questionType = "<?= htmlspecialchars($question_type) ?>";
 
-        // Reset error messages
-        document.getElementById('titleError').textContent = '';
-        document.getElementById('descriptionError').textContent = '';
-        document.getElementById('authorError').textContent = '';
-        document.getElementById('timeLimitError').textContent = '';
-        document.getElementById('difficultyError').textContent = '';
-        document.getElementById('categoryError').textContent = '';
-        document.getElementById('totalQuestionsError').textContent = '';
+        // Reference to the dynamic fields container
+        const additionalFields = document.getElementById('additionalFields');
+        const form = document.querySelector('#reponseForm');
 
-        // Get input values
-        const title = document.getElementById('title').value.trim();
-        const description = document.getElementById('description').value.trim();
-        const author = document.getElementById('author').value.trim();
-        const timeLimit = document.getElementById('time_limit').value.trim();
-        const difficulty = document.getElementById('difficulty').value.trim();
-        const category = document.getElementById('category').value.trim();
-        const totalQuestions = document.getElementById('total_questions').value.trim();
+        let maxOptions = 4; // Maximum number of options for QCM
+        let optionCount = 0; // Track the current number of options
 
-        // Validate title
-        if (!title) {
-            document.getElementById('titleError').textContent = 'Le titre est requis.';
-            isValid = false;
+        // Render fields based on question type
+        function renderFields(type) {
+            let fields = '';
+
+            if (type === 'QCM') {
+                fields = `
+                    <div id="qcm-container">
+                        <button type="button" id="addOption" class="btn btn-primary mb-2">Ajouter une option</button>
+                        <p class="text-muted">Vous pouvez ajouter jusqu'à ${maxOptions} options. Une seule option peut être correcte.</p>
+                        <div id="qcm-options"></div>
+                    </div>
+                `;
+            } else if (type === 'Réponse Courte') {
+                fields = `
+                    <div class="form-group">
+                        <label for="answer_text" class="text-primary">Réponse Correcte :</label>
+                        <input type="text" id="answer_text" name="answer_text" class="form-control" placeholder="Entrez la réponse correcte">
+                    </div>
+                    <div class="form-group">
+                        <label for="requirements" class="text-primary">Exigences pour la réponse :</label>
+                        <input type="text" name="requirements" class="form-control" placeholder="Exigences spécifiques (facultatif)">
+                    </div>
+                `;
+            } 
+            else if (type === 'Vrai/Faux') {
+                fields = `
+                    <div class="form-group">
+                        <label for="is_correct" class="text-primary">Réponse Correcte :</label>
+                        <select name="is_correct" id="is_correct" class="form-control">
+                            <option value="">Choisir...</option>
+                            <option value="1">Vrai</option>
+                            <option value="0">Faux</option>
+                        </select>
+                    </div>
+                    <div id="oppositeAnswer" class="mt-2 text-muted">
+                        <p>L'autre réponse sera automatiquement marquée comme incorrecte.</p>
+                    </div>
+                `;
+
+                // Add event listener for dynamically showing the opposite answer
+                additionalFields.innerHTML = fields;
+
+                const selectElement = document.getElementById('is_correct');
+                const oppositeAnswerDiv = document.getElementById('oppositeAnswer');
+
+                selectElement.addEventListener('change', () => {
+                    const selectedValue = selectElement.value;
+                    if (selectedValue === '1') {
+                        oppositeAnswerDiv.innerHTML = `<p>Vrai est la bonne réponse, Faux sera incorrect.</p>`;
+                    } else if (selectedValue === '0') {
+                        oppositeAnswerDiv.innerHTML = `<p>Faux est la bonne réponse, Vrai sera incorrect.</p>`;
+                    } else {
+                        oppositeAnswerDiv.innerHTML = `<p>L'autre réponse sera automatiquement marquée comme incorrecte.</p>`;
+                    }
+                });
+            } 
+            else {
+                fields = `<p class="text-danger">Type de question inconnu.</p>`;
+            }
+
+            additionalFields.innerHTML = fields;
+
+            if (type === 'QCM') setupQCM();
         }
 
-        // Validate description
-        if (!description) {
-            document.getElementById('descriptionError').textContent = 'La description est requise.';
-            isValid = false;
+        // QCM Setup
+        function setupQCM() {
+            const addOptionButton = document.getElementById('addOption');
+            const qcmOptions = document.getElementById('qcm-options');
+
+            addOptionButton.addEventListener('click', () => {
+                if (optionCount >= maxOptions) {
+                    alert('Vous avez atteint le nombre maximum d\'options.');
+                    return;
+                }
+
+                optionCount++;
+                const optionDiv = document.createElement('div');
+                optionDiv.classList.add('form-group');
+                optionDiv.innerHTML = `
+                    <label for="option_${optionCount}" class="text-primary">Option ${optionCount} :</label>
+                    <input type="text" name="content[]" class="form-control mb-2" placeholder="Entrez l'option ${optionCount}">
+                    <label>
+                        <input type="radio" name="is_correct" value="${optionCount}" class="mr-1"> Correcte
+                    </label>
+                    <button type="button" class="btn btn-danger btn-sm removeOption">Supprimer</button>
+                `;
+
+                qcmOptions.appendChild(optionDiv);
+
+                optionDiv.querySelector('.removeOption').addEventListener('click', () => {
+                    qcmOptions.removeChild(optionDiv);
+                    optionCount--;
+                    updateCorrectOptionValues();
+                });
+            });
         }
 
-        // Validate author
-        if (!author) {
-            document.getElementById('authorError').textContent = 'L\'auteur est requis.';
-            isValid = false;
+        // Update radio values
+        function updateCorrectOptionValues() {
+            const radios = document.querySelectorAll('input[name="is_correct"]');
+            radios.forEach((radio, index) => {
+                radio.value = index + 1;
+            });
         }
 
-        // Validate time limit (must not be negative)
-        if (!timeLimit || timeLimit < 0) {
-            document.getElementById('timeLimitError').textContent = 'La durée doit être un nombre positif.';
-            isValid = false;
-        }
+        // Form Validation
+        form.addEventListener('submit', (e) => {
+            let isValid = true;
+            let errorMessage = '';
 
-        // Validate difficulty
-        if (!difficulty) {
-            document.getElementById('difficultyError').textContent = 'La difficulté est requise.';
-            isValid = false;
-        }
+            if (questionType === 'QCM') {
+                const options = document.querySelectorAll('input[name="content[]"]');
+                const isCorrect = document.querySelector('input[name="is_correct"]:checked');
 
-        // Validate category
-        if (!category) {
-            document.getElementById('categoryError').textContent = 'La catégorie est requise.';
-            isValid = false;
-        }
+                if (options.length < 2 || !isCorrect) {
+                    isValid = false;
+                    errorMessage = 'Ajoutez au moins 2 options et sélectionnez une réponse correcte.';
+                } else {
+                    options.forEach(opt => {
+                        if (opt.value.trim() === '') isValid = false;
+                    });
+                    if (!isValid) errorMessage = 'Toutes les options doivent être remplies.';
+                }
+            } else if (questionType === 'Réponse Courte') {
+                const answerText = document.getElementById('answer_text');
+                if (!answerText || answerText.value.trim() === '') {
+                    isValid = false;
+                    errorMessage = 'Fournissez une réponse correcte.';
+                }
+            } else if (questionType === 'Vrai/Faux') {
+                const isCorrect = document.getElementById('is_correct');
+                if (!isCorrect || isCorrect.value === '') {
+                    isValid = false;
+                    errorMessage = 'Sélectionnez une réponse correcte.';
+                }
+            }
 
-        // Validate total questions (must not be negative)
-        if (!totalQuestions || totalQuestions < 0) {
-            document.getElementById('totalQuestionsError').textContent = 'Le nombre de questions doit être un nombre positif.';
-            isValid = false;
-        }
+            if (!isValid) {
+                e.preventDefault();
+                alert(errorMessage);
+            }
+        });
 
-        return isValid; // Prevents form submission if any field is invalid
-    }
-
+        // Initial Rendering
+        renderFields(questionType);
     </script>
 
 </body>

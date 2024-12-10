@@ -7,6 +7,18 @@ $reponse = null;
 
 $reponseController = new ReponseController();
 
+// Retrieve required parameters
+$id_question = $_GET['id_question'] ?? null;
+$quiz_id = $_GET['quiz_id'] ?? null;
+
+$question_type = $_GET['question_type'] ?? null;
+// Check if required parameters are available
+if (!$id_question || !$quiz_id) {
+    echo "Invalid request: Missing question ID or quiz ID.";
+    exit;
+}
+
+// Retrieve response ID from query string
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $reponseId = $_GET['id'];
     $reponse = $reponseController->showReponse($reponseId);
@@ -14,9 +26,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     if (!$reponse) {
         $error = "Réponse non trouvée.";
     }
-} else {
-    header('Location: listReponse.php'); // Redirect if no ID is provided
-    exit;
 }
 
 // Handle form submission
@@ -24,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (
         isset($_POST['content'], $_POST['is_correct']) &&
         !empty($_POST['content']) &&
-        !empty($_POST['is_correct'])
+        isset($_POST['is_correct']) // Ensure is_correct is set (can be '0' or '1')
     ) {
         try {
             // Keep the existing question ID
@@ -32,11 +41,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $reponseId,              // Existing ID
                 $_POST['content'],        // Updated content
                 $_POST['is_correct'],     // Updated correct flag
-                $reponse['id_question']   // Keep the current id_question
+                $id_question              // Use provided id_question
             );
 
-            $reponseController->updateReponse($reponseId, $reponseToUpdate); 
-            header('Location: listReponse.php?id_question=' . $reponse['id_question']); 
+            // Update the response
+            $reponseController->updateReponse($reponseId, $reponseToUpdate);
+
+            // Redirect to the list of responses for this question
+            header("Location: listReponse.php?quiz_id=$quiz_id&id_question=$id_question&question_type=$question_type"); // Redirect with parameters
+
             exit;
         } catch (Exception $e) {
             $error = "Erreur lors de la mise à jour de la réponse: " . $e->getMessage();
@@ -46,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 
 
 <!DOCTYPE html>
@@ -307,7 +319,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <!-- Form -->
                             <?php if (!empty($reponse)): ?>
-                                <form id="updateReponseForm" action="updateReponse.php?id=<?= htmlspecialchars($reponse['id']) ?>" method="POST" class="form" onsubmit="return validateForm()">
+                                <form id="updateReponseForm" action="updateReponse.php?id=<?= htmlspecialchars($reponse['id']) ?>&quiz_id=<?= htmlspecialchars($quiz_id) ?>&id_question=<?= htmlspecialchars($id_question) ?>&question_type=<?= htmlspecialchars($question_type) ?>" method="POST" class="form" onsubmit="return validateForm()">
+
                                     <div class="form-group">
                                         <label for="content" class="text-primary">Contenu de la Réponse:</label>
                                         <span id="contentError" class="text-danger"></span>
@@ -326,7 +339,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <input type="hidden" name="id_question" value="<?= htmlspecialchars($reponse['id_question']) ?>">
 
                                     <button type="submit" class="btn btn-primary">Mettre à jour</button>
-                                    <a href="listReponse.php?id_question=<?= $reponse['id_question'] ?>" class="btn btn-secondary">Annuler</a>
+                                    <a href="listReponse.php?id_question=<?= htmlspecialchars($id_question) ?>&question_type=<?= htmlspecialchars($question_type) ?>&quiz_id=<?= htmlspecialchars($quiz_id) ?>" class="btn btn-secondary">Annuler</a>
                                 </form>
                             <?php endif; ?>
                     </div>

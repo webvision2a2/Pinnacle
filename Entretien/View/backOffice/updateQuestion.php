@@ -5,10 +5,8 @@ include_once '../../Model/question.php';
 $error = '';
 $question = null;
 
-// Initialize the controller
 $questionController = new QuestionController();
 
-// Fetch question details using the controller's showQuestion function
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $questionId = $_GET['id'];
     $question = $questionController->showQuestion($questionId);
@@ -32,15 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ) {
         try {
             $questionToUpdate = new Question(
-                $questionId,              // ID from the query parameter
-                $_POST['content'],        // Updated content
-                $_POST['points'],    // Updated points
-                $_POST['type'],           // Updated type
-                $_POST['id_quiz']    // Quiz ID (foreign key)
+                $questionId,             
+                $_POST['content'],        
+                $_POST['points'],    
+                $_POST['type'],          
+                $_POST['id_quiz']   
             );
 
-            $questionController->updateQuestion($questionId, $questionToUpdate); // Update the question
-            header('Location: listQuestion.php?id_quiz=' . $_POST['id_quiz']); // Redirect back to the list of questions
+            $questionController->updateQuestion($questionId, $questionToUpdate); 
+            header('Location: listQuestion.php?id_quiz=' . $_POST['id_quiz']); 
             exit;
         } catch (Exception $e) {
             $error = "Error updating question: " . $e->getMessage();
