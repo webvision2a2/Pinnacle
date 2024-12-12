@@ -12,11 +12,12 @@ class ProfileController
             $stmt = $db->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage(); 
+            echo "Error: " . $e->getMessage();
         }
     }
 
-    public function createProfile($userId) {
+    public function createProfile($userId)
+    {
         $sql = "INSERT INTO profiles (user_id, domaine, occupation, age, telephone, photo_profil) 
                 VALUES (:user_id, :domaine, :occupation, :age, :telephone, :photo_profil)";
         $db = config::getConnexion();
@@ -24,17 +25,17 @@ class ProfileController
         try {
             $stmt->execute([
                 'user_id' => $userId,
-                'domaine' => 'Non spécifié',      
-                'occupation' => 'Non spécifié',       
-                'age' => 0,                       
-                'telephone' => 'Non spécifié',    
-                'photo_profil' => 'uploads/blank-profile-picture-973460_1280.png' 
+                'domaine' => 'Non spécifié',
+                'occupation' => 'Non spécifié',
+                'age' => 0,
+                'telephone' => 'Non spécifié',
+                'photo_profil' => 'uploads/blank-profile-picture-973460_1280.png'
             ]);
         } catch (PDOException $e) {
             die('SQL Error: ' . $e->getMessage());
-        }        
+        }
     }
-    
+
 
     public function getProfileByUserId($userId)
     {
@@ -45,7 +46,7 @@ class ProfileController
             $stmt->execute(['user_id' => $userId]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage(); 
+            echo "Error: " . $e->getMessage();
         }
     }
 
@@ -72,11 +73,11 @@ class ProfileController
                 'photo_profil' => $profile->getProfilePicture()
             ]);
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage(); 
+            echo "Error: " . $e->getMessage();
         }
     }
 
-    
+
 
 
 
@@ -93,7 +94,7 @@ class ProfileController
             $profile = $query->fetch();
             return $profile;
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage(); 
+            echo "Error: " . $e->getMessage();
         }
     }
 
@@ -108,9 +109,27 @@ class ProfileController
             $stmt->execute();
             echo "Profile deleted successfully.";
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage(); 
+            echo "Error: " . $e->getMessage();
         }
     }
+
+    public function getProfilesWithPagination($limit, $offset)
+    {
+        $db = config::getConnexion(); // Assuming Config handles DB connection
+        $query = $db->prepare("SELECT * FROM profiles LIMIT :limit OFFSET :offset");
+        $query->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $query->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countProfiles()
+    {
+        $db = config::getConnexion();
+        $query = $db->query("SELECT COUNT(*) FROM profiles");
+        return $query->fetchColumn();
+    }
+
 
 }
 ?>

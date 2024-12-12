@@ -1,10 +1,16 @@
 <?php
-
 require_once '../../controller/UserController.php';
 require_once '../../controller/ProfileController.php';
+require_once '../../vendor/autoload.php';
+include_once '../../config_zeineb.php';
+
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 
 $error = "";
+$message = "";
 
 $user = null;
 $newUserId = null;
@@ -64,34 +70,62 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) &&
             $profileController->createProfile($newUserId);
         }
 
-
-        /* if ($newUserId) {
-            // Send confirmation email with token
-            $userController->envoyerEmailConfirmation($newUserId);
-            // Create a profile for the user
-            
-
-            echo "Inscription réussie. Veuillez vérifier votre e-mail.";
-        } else {
-            echo "Erreur lors de l'inscription.";
-        } */
-        header('Location: sent_verification_link.php');
-
     } else {
         $error = "Informations manquantes.";
     }
 }
 
-/* if (isset($_POST['id']) && isset($_POST['verification']) && $_POST['verification'] == '1') {
-    $userId = $_POST['id'];
-    
-    // Call the controller method to verify the email
-    if ($userController->verifyEmail($userId)) {
-        echo "Votre compte a été vérifié avec succès. Vous pouvez maintenant vous connecter.";
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
+    $email = $_POST['email'];
+
+    // Check if the email exists in the database using UserController
+    if ($userController->isEmailExists($email)) {
+        $token = bin2hex(random_bytes(32)); // Generate a secure random token
+        $expires = time() + 3600; // Token valid for 1 hour
+        $expires_at = date('Y-m-d H:i:s', $expires);
+
+        // Store the token in the database associated with the user
+        if ($userController->storePasswordResetToken($email, $token, $expires_at)) {
+            $mail = new PHPMailer(true);
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                )
+            );
+            try {
+                $mail->isSMTP();
+                $mail->SMTPDebug = 0;
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'doghri.zeineb24@gmail.com';  // SMTP username
+                $mail->Password = 'jqdi bkac bizg zktg';           // SMTP password
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
+                $mail->setFrom('doghri.zeineb24@gmail.com', 'Pinnacle');
+                $mail->addAddress($email);     // Add a recipient
+
+                $mail->isHTML(true);// Set email format to HTML
+                $mail->Subject = 'Registration Verification';
+                $resetLink = "http://localhost/Projet_web/View/frontOffice_zeineb/email_verification.php?token=" . $token;
+                $mail->Body = "
+                Please click on the following link to validate your registration: <a href='{$resetLink}'>Validate registration</a>
+                ";
+
+                $mail->send();
+                $message = "Vérifiez votre e-mail pour le lien de vérification.";
+                /* header('location:signup.php'); */
+            } catch (Exception $e) {
+                echo 'Mailer Error: ' . $mail->ErrorInfo;
+            }
+        } else {
+            echo 'Failed to store reset token.';
+        }
     } else {
-        echo "Ce lien de vérification est invalide ou votre compte est déjà vérifié.";
+        echo 'No account found with that email address.';
     }
-} */
+}
 
 ?>
 
@@ -211,6 +245,13 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) &&
             <video id="video" width="640" height="480" autoplay hidden></video>
             <canvas id="canvas" width="640" height="480" hidden></canvas>
 
+            <!-- Display message above the form -->
+            <?php if (!empty($message)): ?>
+                <div style="color: green; font-weight: bold;">
+                    <?php echo $message; ?>
+                </div>
+            <?php endif; ?>
+
             <form id="signupForm" action="" method="post">
 
                 <input type="hidden" name="role" value="2">
@@ -267,9 +308,6 @@ if (isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) &&
     <script src="../backOffice_zeineb/js/addUser.js"></script>
 
     <script src="face_recognition.js"></script>
-
-
-
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

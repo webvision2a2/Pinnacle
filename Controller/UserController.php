@@ -16,17 +16,6 @@ use PHPMailer\PHPMailer\Exception;
 
 class UserController
 {
-    /* public function listUser()
-    {
-        $sql = "SELECT * FROM users";
-        $db = config::getConnexion();
-        try {
-            $liste = $db->query($sql);
-            return $liste;
-        } catch (Exception $e) {
-            die('Error:' . $e->getMessage());
-        }
-    } */
 
     public function listUser()
     {
@@ -156,24 +145,6 @@ class UserController
         return $result ? $result['password'] : '';
     }
 
-    /* public function searchUsersByEmail($keyword)
-    {
-        $db = config::getConnexion();
-        try {
-            // Search users based on email containing the keyword
-            $sql = "SELECT * FROM users WHERE email LIKE :keyword";
-            $stmt = $db->prepare($sql);
-            $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
-            $stmt->execute();
-            
-            // Fetch all results
-            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            return $users; // Return the search results
-        } catch (PDOException $e) {
-            die("Error: " . $e->getMessage());
-        }
-    } */
 
     public function searchUsersByEmail($keyword, $limit, $offset)
     {
