@@ -1,6 +1,22 @@
 <?php
 
+<<<<<<< HEAD
 /* class Candidature
+=======
+<<<<<<< HEAD
+/* class Candidature
+=======
+<<<<<<< HEAD
+/* class Candidature
+=======
+<<<<<<< HEAD
+/* class Candidature
+=======
+class Candidature
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7
+>>>>>>> 3a91d57dee08a2e567788638ae118b4e4071076b
 {
     private $nom;
     private $prenom;
@@ -25,6 +41,16 @@
     public function getEmail() { return $this->email; }
     public function getCv() { return $this->cv; }
     public function getIdStage() { return $this->id_stage; }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7
+>>>>>>> 3a91d57dee08a2e567788638ae118b4e4071076b
 } */
 
 class Candidature
@@ -65,4 +91,17 @@ class Candidature
 }
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+}
+
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7
+>>>>>>> 3a91d57dee08a2e567788638ae118b4e4071076b
 ?>

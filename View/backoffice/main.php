@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 /* // Inclure le fichier pour ajouter une société
 
@@ -7,8 +6,6 @@ include 'addstage.php';
 // Inclure le fichier pour lister les sociétés
 include 'stageList.php'; */
 ?>
-=======
->>>>>>> 3a91d57dee08a2e567788638ae118b4e4071076b
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,7 +42,7 @@ include 'stageList.php'; */
            <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center">
             <div class="sidebar-brand-icon">
-                <img class="logo" src="../backofficeahmed/img/logo.png" alt="Pinnacle Logo" style="max-width: 30px;">
+                <img class="logo" src="../backoffice/img/logo.png" alt="Pinnacle Logo" style="max-width: 30px;">
             </div>
             <div class="sidebar-brand-text mx-3" style="font-size: 1.5rem; font-weight: bold;">Pinnacle</div>
         </a>
@@ -125,37 +122,19 @@ include 'stageList.php'; */
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Reseaux:</h6>
 <<<<<<< HEAD
-<<<<<<<< HEAD:View/backofficeahmed/main2.php
-                        <a class="collapse-item" href="main.php" >Stages</a>
-                        <a class="collapse-item active" href="main2.php">Societes</a>
-========
                         <a class="collapse-item active" href="main.php">Stages</a>
-                        <a class="collapse-item" href="main2.php">Societes</a>
->>>>>>>> 3a91d57dee08a2e567788638ae118b4e4071076b:View/backofficeahmed/main.php
-=======
-<<<<<<< HEAD:View/backofficeahmed/main2.php
-                        <a class="collapse-item" href="main.php" >Stages</a>
-                        <a class="collapse-item active" href="main2.php">Societes</a>
 =======
 <<<<<<< HEAD
-                        <a class="collapse-item" href="main.php" >Stages</a>
-                        <a class="collapse-item active" href="main2.php">Societes</a>
+                        <a class="collapse-item active" href="main.php">Stages</a>
 =======
 <<<<<<< HEAD
-                        <a class="collapse-item" href="main.php" >Stages</a>
-                        <a class="collapse-item active" href="main2.php">Societes</a>
-=======
-<<<<<<< HEAD
-                        <a class="collapse-item" href="main.php" >Stages</a>
-                        <a class="collapse-item active" href="main2.php">Societes</a>
+                        <a class="collapse-item active" href="main.php">Stages</a>
 =======
                         <a class="collapse-item" href="main.php">Stages</a>
-                        <a class="collapse-item" href="main2.php">Societes</a>
 >>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
 >>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
 >>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
->>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/main2.php
->>>>>>> 3a91d57dee08a2e567788638ae118b4e4071076b
+                        <a class="collapse-item" href="main2.php">Societes</a>
                     </div>
                 </div>
             </li>
@@ -397,53 +376,68 @@ include 'stageList.php'; */
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                <?php
+    require_once '../../controller/SocieteController.php';
+    $societeController = new SocieteController();
+    $error = "";
+    $success = false;
+
+    if (isset($_POST["submit"])) {
+        if (empty($_POST["nom_soc"]) || empty($_POST["adresse"]) || empty($_POST["numero"]) || empty($_POST["email"])) {
+            $error = "Please fill in all required fields.";
+        } elseif (!preg_match('/^[0-9]{8}$/', $_POST["numero"])) {
+            $error = "Le numéro doit comporter exactement 8 chiffres.";
+        } else {
+            // Assurez-vous que $_POST['speciality'] est toujours un tableau
+            $specialities = is_array($_POST['speciality']) ? $_POST['speciality'] : [$_POST['speciality']];
             
+            // Create a Societe object
+            $societe = new Societe(
+                null,
+                $_POST['nom_soc'],
+                $_POST['adresse'],
+                $_POST['numero'],
+                $_POST['email'],
+                $specialities
+            );
+
+            // Add the society to the database
+            if ($societeController->addSociete($societe)) {
+                $success = true;
+            } else {
+                $error = "An error occurred while adding the society.";
+            }
+        }
+    }
+    ?>
     
                     <!-- Page Heading -->
                     <?php
 <<<<<<< HEAD
-<<<<<<<< HEAD:View/backofficeahmed/main2.php
-                    
-                    require_once 'addsociete.php';
-                    require_once 'societeList.php';
-========
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                     require_once 'addstage.php';
                     require_once 'stageList.php'; 
                    
                     
->>>>>>>> 3a91d57dee08a2e567788638ae118b4e4071076b:View/backofficeahmed/main.php
+                    ?>
+                    
+<<<<<<< HEAD
+=======
+=======
+                    
+                    require_once 'addstage.php';
+<<<<<<< HEAD
+                    require_once 'stageList.php'; 
                     ?>
                     
 =======
-<<<<<<< HEAD:View/backofficeahmed/main2.php
-                    
-                    require_once 'addsociete.php';
-=======
-<<<<<<< HEAD
-                    
-                    require_once 'addsociete.php';
-=======
-<<<<<<< HEAD
-                    
-                    require_once 'addsociete.php';
-=======
-<<<<<<< HEAD
-                    
-                    require_once 'addsociete.php';
-=======
-<<<<<<< HEAD
-                    
-                    require_once 'addsociete.php';
-=======
-                    // Inclure le fichier pour lister les sociétés
->>>>>>> origin/Ahmed
+                    require_once 'stageList.php';
+                    ?>
 >>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
 >>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
 >>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
->>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/main2.php
-                    require_once 'societeList.php';
-                    ?>
->>>>>>> 3a91d57dee08a2e567788638ae118b4e4071076b
 
                 </div>
                 <!-- /.container-fluid -->
@@ -501,33 +495,7 @@ include 'stageList.php'; */
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-<<<<<<< HEAD
     
-=======
-<<<<<<< HEAD:View/backofficeahmed/main2.php
-    
-=======
-<<<<<<< HEAD
-    
-=======
-<<<<<<< HEAD
-    
-=======
-<<<<<<< HEAD
-    
-=======
-<<<<<<< HEAD
-    
-=======
-
-    <!-- <script src="condition1.js"></script> -->
-
->>>>>>> origin/Ahmed
->>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
->>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
->>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
->>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/main2.php
->>>>>>> 3a91d57dee08a2e567788638ae118b4e4071076b
 </body>
 
 </html>
