@@ -112,13 +112,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         Internet of Things (IoT)
                     </label>
                 </div>
-                <div class="checkbox-item">
-                    <label class="custom-checkbox">
-                        <input type="checkbox" id="option11" name="options[]" value=" Augmented Reality (AR) & Virtual Reality (VR)">
-                        <span class="checkmark"></span>
-                        Autre Categories
-                    </label>
-                </div>
+               
                
                 <div class="checkbox-item">
                     <label class="custom-checkbox">
@@ -177,6 +171,13 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </label>
                 </div>
             </div>
+             <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option11" name="options[]" value=" Augmented Reality (AR) & Virtual Reality (VR)">
+                        <span class="checkmark"></span>
+                        Autre Categories
+                    </label>
+                </div>
 
 
 
