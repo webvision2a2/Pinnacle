@@ -1,6 +1,5 @@
 <?php
     require_once '../Controller/topicController.php';
-<<<<<<< HEAD
     require_once '../Controller/commentController.php'; // Ajouter le contrôle des commentaires
     require_once '../Model/topic.php';
     
@@ -22,17 +21,10 @@
     usort($topics, function($a, $b) {
         return $b['num_comments'] - $a['num_comments']; // Trie décroissant, plus de commentaires en premier
     });
-=======
-    require_once '../Model/topic.php';
-
-    $topicController = new TopicController();
-    $topics = $topicController->getTopic();
->>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<<<<<<< HEAD
 
     <head>
         <meta charset="utf-8">
@@ -43,15 +35,6 @@
 
         <!-- Favicon -->
         <link href="img/favicon.ico" rel="icon">
-=======
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Topic</title>
-
-        <!-- Favicon -->
-        <link href="./frontoffice/img/favicon.ico" rel="icon">
->>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
 
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,7 +55,6 @@
 
         <!-- Template Stylesheet -->
         <link href="./frontoffice/css/style.css" rel="stylesheet">
-<<<<<<< HEAD
 
 
         <link rel="stylesheet" href="styletopicsPage.css">
@@ -82,12 +64,7 @@
 
     <body>
         <div class="container-xxl bg-white p-0">
-            <!-- Spinner Start -->
-            <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-                <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
+         
             <!-- Spinner End -->
 
             <!-- Navbar & Hero Start -->
@@ -174,34 +151,11 @@
 
             <!-- Back to Top -->
             <a href="#" class="btn btn-lg btn-secondary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>        
-=======
-    </head>
-    <body>
-        <div class="container-xxl p-0">
-        <div class="container mt-4">
-            <h2 class="text-center">Topics</h2>
-
-            <div class="row container">
-                <?php foreach($topics as $topic) { ?>
-                    <div class="card col-4">
-                        <div class="card-body">
-                            <h4 class="card-title"><?php echo $topic['title']; ?></h4>
-                            <div class="card-image"><img src="<?php echo $topic['image'];?>" alt="Topic image" ></div>
-                            <p><?php echo $topic['description'];?></p>
-                            <a href="readTopic.php?id=<?php echo $topic['id']; ?>" class="btn btn-primary">See more</a>
-                        </div>
-                    </div>
-                <?php } ?>
-            </div>
-
-        </div>
->>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
         </div>
 
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<<<<<<< HEAD
         <script src="./frontoffice/lib/wow/wow.min.js"></script>
         <script src="./frontoffice/lib/easing/easing.min.js"></script>
         <script src="./frontoffice/lib/waypoints/waypoints.min.js"></script>
@@ -212,17 +166,5 @@
 
         <!-- Template Javascript -->
         <script src="./frontoffice/js/main.js"></script>
-=======
-        <script src="lib/wow/wow.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/counterup/counterup.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="lib/isotope/isotope.pkgd.min.js"></script>
-        <script src="lib/lightbox/js/lightbox.min.js"></script>
-
-        <!-- Template Javascript -->
-        <script src="js/main.js"></script>
->>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
     </body>
 </html>

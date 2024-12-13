@@ -4,7 +4,6 @@
 
     class TopicController {
 
-<<<<<<< HEAD
         private $pdo;
 
         public function __construct() {
@@ -12,8 +11,6 @@
         $this->pdo = new PDO('mysql:host=localhost;dbname=moemendb', 'root', '');
     }
 
-=======
->>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
         public function getTopic() {
             $conn = config::getConnexion();
             $sql = "SELECT * FROM topic";
@@ -90,7 +87,6 @@
             }
         }
 
-<<<<<<< HEAD
         public function getTopicsWithPagination($offset, $limit) {
             $conn = config::getConnexion();
             $sql = "SELECT * FROM topic LIMIT :offset, :limit";
@@ -164,8 +160,6 @@
     
 
     }
-=======
 
-    }
+    
 ?>
->>>>>>> dcb6d4c2ce784200db028ed4c59de45853ac9ff1
