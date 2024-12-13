@@ -41,28 +41,32 @@ try {
 
             // Process participants and send emails
             foreach ($participants as $participant) {
-                // Insert participant into the events_participants table
-                $insertQuery = "INSERT INTO events_participants (event_id, nom, prenom, email) 
-                                VALUES (:event_id, :nom, :prenom, :email)";
+                // Insert participant into the events_participants table including event date and user_id
+                $insertQuery = "INSERT INTO events_participants (event_id, nom, prenom, email, event_date, user_id) 
+                                VALUES (:event_id, :nom, :prenom, :email, :event_date, :user_id)";
                 $insertStmt = $db->prepare($insertQuery);
                 $insertStmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
                 $insertStmt->bindParam(':nom', $participant['nom'], PDO::PARAM_STR);
                 $insertStmt->bindParam(':prenom', $participant['prenom'], PDO::PARAM_STR);
                 $insertStmt->bindParam(':email', $participant['email'], PDO::PARAM_STR);
+                $insertStmt->bindParam(':event_date', $event['date'], PDO::PARAM_STR);  // Add event date here
+                $insertStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);  // Add user_id here
                 $insertStmt->execute();
-
+            
                 // Send confirmation email
                 $userName = $participant['prenom'] . ' ' . $participant['nom'];
                 $emailSent = sendConfirmationEmail($participant['email'], $userName, $event);
-
+            
                 if (!$emailSent) {
                     error_log("Failed to send email to {$participant['email']}");
                 }
             }
-
+            
             // Redirect after processing
             header('Location: ../view/FrontOffice/eventdispo.php');
             exit;
+            
+
         } catch (Exception $e) {
             error_log("Error: " . $e->getMessage());
             header('Location:?error=server_error');
