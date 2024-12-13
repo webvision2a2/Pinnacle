@@ -10,6 +10,9 @@
 
     <!-- Favicon -->
     <link href="view/FrontOffice/img/LOGO white.png" rel="icon">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,10 +35,12 @@
     <link href="css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="css/eventdispo.css">
 
-    
+
 </head>
 
 <body>
+    <audio id="hoverSound" src="../FrontOffice/sound/hover-sound.wav"></audio>
+
     <div class="container-xxl bg-white p-0">
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
@@ -52,7 +57,7 @@
                     <a href="about.php" class="nav-item nav-link">à Propos</a>
                     <a href="service.php" class="nav-item nav-link">Services</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Evenement</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Evenement </a>
                         <div class="dropdown-menu">
                             <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addEventModal">Ajouter un événement</a>
                         </div>
@@ -87,7 +92,24 @@
             </div>
         </div>
     </div>
-    <div class="filters-section">
+
+
+
+    </div>
+    <div class="filters-section" class="center-container">
+
+        <h3 style="text-align: center; color:blue;">Filtrer et Trier les Événements</h3><br>
+        <!-- Sound toggle switch -->
+        <h4>Hover sound</h4>
+
+        <div >
+  <label>
+    <input type="checkbox" id="sound-toggle" />
+    <div class="toggle">
+      <div class="thumb"></div>
+    </div>
+  </label>
+</div>
 
         <!-- <h2>Filtrer et Trier les Événements</h2> -->
         Recherche:
@@ -113,88 +135,115 @@
         </select><br>
         <label for="participantSlider">Nombre minimale de participants:</label><br>
         <input type="range" id="participantSlider" class="participant-slider" min="1" max="500" step="1" value="0">
-        <div class="slider-value" id="sliderValue" data-toggle="counter-up" ></div>
+        <div class="slider-value" id="sliderValue" data-toggle="counter-up"></div>
 
 
 
         <button class="event-button3" id="clearFilters" onclick="clearFilters()">Clear Filters</button><br>
         <div id="noResults" style="display: none;">Aucun résultat trouvé.</div>
     </div>
+    <form id="registrationForm" method="POST" action="../../controller/register_event.php">
+        <input type="hidden" id="eventId" name="event_id">
+        <input type="hidden" id="userId" name="user_id" value="1">
+        <?php
+        // Include the config class for database connection
+        include '../../config.php';
 
-    </div>
-    <div class="filters-section">
-    <?php
-    // Include the config class for database connection
-    include '../../config.php';
+        // Get the database connection
+        $db = config::getConnexion();
 
-    // Get the database connection
-    $db = config::getConnexion();
+        // Pagination settings
+        $itemsPerPage = 8; // Number of events per page
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($currentPage - 1) * $itemsPerPage;
 
-    // Pagination settings
-    $itemsPerPage = 8; // Number of events per page
-    $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-    $offset = ($currentPage - 1) * $itemsPerPage;
+        // Query to get total count of accepted events
+        $countQuery = "SELECT COUNT(*) as total FROM events WHERE status = 'accepted'";
+        $stmt = $db->prepare($countQuery);
+        $stmt->execute();
+        $totalEvents = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+        $totalPages = ceil($totalEvents / $itemsPerPage);
 
-    // Query to get total count of accepted events
-    $countQuery = "SELECT COUNT(*) as total FROM events WHERE status = 'accepted'";
-    $stmt = $db->prepare($countQuery);
-    $stmt->execute();
-    $totalEvents = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-    $totalPages = ceil($totalEvents / $itemsPerPage);
+        // Query to get accepted events with pagination
+        $query = "SELECT * FROM events WHERE status = 'accepted' LIMIT :offset, :itemsPerPage";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
+        $stmt->execute();
+        $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Query to get accepted events with pagination
-    $query = "SELECT * FROM events WHERE status = 'accepted' LIMIT :offset, :itemsPerPage";
-    $stmt = $db->prepare($query);
-    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-    $stmt->bindParam(':itemsPerPage', $itemsPerPage, PDO::PARAM_INT);
-    $stmt->execute();
-    $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($events) > 0): ?>
+            <div class="events-container">
+                <div id="noResultsMessage" style="display: none;">
+                    Aucun événement trouvé avec ce titre.
+                </div>
+                <?php foreach ($events as $event): ?>
+                    <div class="event-card" data-event-id="<?= htmlspecialchars($event['id']) ?>" data-category="<?= htmlspecialchars($event['categories']) ?>" data-participants="<?= htmlspecialchars($event['participants']) ?>">
+                        <div class="event-title" style="color: #333;"><?= htmlspecialchars($event['title']) ?></div>
+                        <img src="../../uploads/<?= htmlspecialchars($event['image'] ?? 'default.jpg') ?>" alt="Event Image">
+                        <div class="event-details" data-date="<?= htmlspecialchars($event['date']) ?>">
+                            <p><strong>Categories:</strong> <?= htmlspecialchars($event['categories']) ?></p>
+                        </div>
+                        <div class="event-actions">
+                            <button type="button" onclick="showEventDetails(<?= htmlspecialchars(json_encode($event)) ?>)" class="event-button1"><span>Détails</span><span></span></button>
+                            <button type="button" class="event-button" data-event-id="<?= htmlspecialchars($event['id']) ?>" onclick="showParticipationModal('<?= htmlspecialchars($event['title']) ?>', <?= htmlspecialchars($event['id']) ?>)">
+                                <span>Participer</span><span></span>
+                            </button>
 
-    if (count($events) > 0): ?>
-        <div class="events-container">
-            <div id="noResultsMessage" style="display: none;">
-                Aucun événement trouvé avec ce titre.
-            </div>
-            <?php foreach ($events as $event): ?>
-                <div class="event-card"  data-event-id="<?= htmlspecialchars($event['id']) ?>" data-category="<?= htmlspecialchars($event['categories']) ?>" data-participants="<?= htmlspecialchars($event['participants']) ?>">
-                    <div class="event-title" style="color: #333;"><?= htmlspecialchars($event['title']) ?></div>
-                    <img src="../../uploads/<?= htmlspecialchars($event['image'] ?? 'default.jpg') ?>" alt="Event Image">
-                    <div class="event-details" data-date="<?= htmlspecialchars($event['date']) ?>">
-                        <p><strong>Categories:</strong> <?= htmlspecialchars($event['categories']) ?></p>
+                        </div>
                     </div>
-                    <div class="event-actions">
-                        <button onclick="showEventDetails(<?= htmlspecialchars(json_encode($event)) ?>)" class="event-button1"><span>Détails</span><span></span></button>
-                        <button  class="event-button">
-    <span>Participer</span><span></span>
-</button>
+                <?php endforeach; ?>
+            </div>
 
+            <!-- Pagination Controls -->
+            <div class="pagination-controls">
+                <?php if ($currentPage > 1): ?>
+                    <a href="?page=<?= $currentPage - 1 ?>" class="pagination-button">Previous</a>
+                <?php endif; ?>
+
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <a href="?page=<?= $i ?>" class="pagination-button <?= $i === $currentPage ? 'active' : '' ?>"><?= $i ?></a>
+                <?php endfor; ?>
+
+                <?php if ($currentPage < $totalPages): ?>
+                    <a href="?page=<?= $currentPage + 1 ?>" class="pagination-button">Next</a>
+                <?php endif; ?>
+            </div><br>
+
+
+        <?php else: ?>
+            <p class="no-events text-center">Pas d'événements disponibles pour le moment.</p>
+        <?php endif; ?>
+        <!-- Events Section End -->
+        </div>
+        <!-- Modal for event registration confirmation -->
+        <div class="modal fade" id="participationModal" tabindex="-1" aria-labelledby="participationModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <div id="emailStatus" style="margin-top: 10px; color: green;"></div>
+                        <h5 class="modal-title" id="participationModalLabel">Confirmer votre participation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Êtes-vous sûr de vouloir participer à cet événement ?</p>
+                        <p id="eventNameConfirmation" class="fw-bold"></p>
+                        <div id="confirmationMessage" class="mt-3" style="display: none;">
+                            <p id="messageText" class="fw-bold"></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="event-button2" data-bs-dismiss="modal">Annuler</button>
+                        <button type="button" class="event-button" id="confirmParticipationButton" onclick="registerForEvent()">
+                            Confirmer
+                        </button>
                     </div>
                 </div>
-            <?php endforeach; ?>
+            </div>
         </div>
 
-        <!-- Pagination Controls -->
-        <div class="pagination-controls">
-            <?php if ($currentPage > 1): ?>
-                <a href="?page=<?= $currentPage - 1 ?>" class="pagination-button">Previous</a>
-            <?php endif; ?>
-
-            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                <a href="?page=<?= $i ?>" class="pagination-button <?= $i === $currentPage ? 'active' : '' ?>"><?= $i ?></a>
-            <?php endfor; ?>
-
-            <?php if ($currentPage < $totalPages): ?>
-                <a href="?page=<?= $currentPage + 1 ?>" class="pagination-button">Next</a>
-            <?php endif; ?>
-        </div><br>
-
-        <button type="button" class="event-button3" onclick="history.back()">Retour</button>
-    <?php else: ?>
-        <p class="no-events text-center">Pas d'événements disponibles pour le moment.</p>
-    <?php endif; ?>
-    <!-- Events Section End -->
-</div>
-
+    </form>
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-secondary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -231,128 +280,227 @@
             </div>
         </div>
     </div>
-   <!-- Modal for event registration confirmation -->
-<div class="modal fade" id="participationModal" tabindex="-1" aria-labelledby="participationModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div id="emailStatus" style="margin-top: 10px; color: green;"></div>
-            <div class="modal-header">
-                <h5 class="modal-title" id="participationModalLabel">Confirmer votre participation</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Êtes-vous sûr de vouloir participer à cet événement ?</p>
-                <p id="eventNameConfirmation" class="fw-bold"></p>
-                <div id="confirmationMessage" class="mt-3" style="display: none;">
-                    <p id="messageText" class="fw-bold"></p>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <style>
+        /* Container for the map */
+        .map-container {
+            width: 100%;
+            max-width: 1400px;
+            /* Maximum width */
+            margin: 0 auto;
+            /* Center the map */
+            padding: 20px;
+            border: 1px solid;
+            /* Optional border */
+            border-radius: 8px;
+            /* Optional rounded corners */
+            border-color: blue;
+        }
+
+        /* Ensure the map takes up the full height of the container */
+        #map {
+            width: 100%;
+            height: 400px;
+            /* You can adjust the height */
+        }
+    </style>
+    <br>
+    <h1 style="text-align: center; color:blue;">Notre adresse</h1>
+    <h3 style="text-align: center; color:blue;">Pour vous inscrire en personne, nous serons ravis de vous accueillir à notre adresse :</h3>
+    <div class="map-container">
+        <div id="map"></div><br>
+        <div style="display: flex; justify-content: center; text-align: center;">
+            <a href="https://www.google.com/maps?q=36.8506,10.2107&hl=en" target="_blank" class="event-button3" style="display: inline-flex; align-items: center; text-decoration: none; color: inherit; border: 1px solid #ccc; padding: 10px 20px; border-radius: 5px;">
+                <i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i> <!-- Google Maps icon -->
+                Open in Google Maps
+            </a>
+        </div>
+
+    </div><br>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get the toggle input element
+            const soundToggle = document.getElementById('sound-toggle');
+
+            // Select the audio element
+            const hoverSound = document.getElementById('hoverSound');
+
+            // Ensure the audio element exists
+            if (!hoverSound) {
+                console.error("Audio element not found!");
+                return;
+            }
+
+            // Buttons that trigger the hover sound
+            const soundButtons = document.querySelectorAll('.event-button1, .event-button, .event-button2, .event-button3');
+
+            // Function to play the hover sound
+            const playHoverSound = () => {
+                if (soundToggle.checked) {
+                    hoverSound.currentTime = 0; // Reset sound to the start
+                    hoverSound.play().catch(error => {
+                        console.warn("Error playing hover sound:", error);
+                    });
+                }
+            };
+
+            // Add hover event listeners to buttons
+            soundButtons.forEach(button => {
+                button.addEventListener('mouseenter', playHoverSound);
+            });
+
+            // Initialize toggle state
+            soundToggle.checked = false; // Sound is off by default
+        });
+    </script>
+
+
+
+    <script>
+        // Initialize the map and set the view to ESB's coordinates (latitude: 36.8506, longitude: 10.2107)
+        var map = L.map('map').setView([36.8506, 10.2107], 15); // Coordinates for ESB (Esprit School of Business)
+
+        // Set up the tile layer (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+        }).addTo(map);
+
+        // Add a marker at ESB's location and bind a popup with the address
+        L.marker([36.8506, 10.2107]).addTo(map)
+            .bindPopup("<b>Pinnacle</b><br />Zone Industrielle Chotrana II, B.P. 160 Pôle Technologique El Ghazela 2083 Ariana, Tunis")
+            .openPopup();
+    </script>
+
+    <div style="display: flex; justify-content: center; text-align: center;">
+        <a href="mailto:pinnacleofficiel@gmail.com"
+            class="event-button3"
+            style="display: inline-flex; align-items: center; text-decoration: none; color: inherit; border: 1px solid #ccc; padding: 10px 20px; border-radius: 5px;">
+            <i class="fas fa-envelope" style="margin-right: 8px;"></i> <!-- Mail icon from Font Awesome -->
+            Contacter nous pour plus d'information
+        </a>
+    </div>
+
+
+    <!-- Form that will be used to POST data -->
+    <!-- Set the correct user ID dynamically -->
+
+
+</body>
+<!-- Footer Start -->
+<div class="container-fluid bg-primary text-light footer wow fadeIn" data-wow-delay="0.1s">
+    <div class="container py-5 px-lg-5">
+        <div class="row g-5">
+            <div class="col-md-6 col-lg-3">
+                <p class="section-title text-white h5 mb-4">Address<span></span></p>
+                <p><i class="fa fa-map-marker-alt me-3"></i>160 Pôle Technologique El Ghazela 2083 Ariana, Tunis</p>
+                <p><i class="fa fa-phone-alt me-3"></i>+216 20 804 721</p>
+                <p><i class="fa fa-envelope me-3"></i>pinnacleofficiel@gmail.com</p>
+                <div class="d-flex pt-2">
+                    <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                    <a class="btn btn-outline-light btn-social" href="https://www.facebook.com/kallagui/"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-outline-light btn-social" href="https://www.instagram.com/dhiaallagui.pdf/"><i class="fab fa-instagram"></i></a>
+                    <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                <button type="button" class="btn btn-primary" id="confirmParticipationButton" data-event-id="<?= htmlspecialchars($event['id']) ?>" onclick="registerForEvent(<?= htmlspecialchars($event['id']) ?>)">Confirmer</button>
+            <div class="col-md-6 col-lg-3">
+                <p class="section-title text-white h5 mb-4">Quick Link<span></span></p>
+                <a class="btn btn-link" href="">About Us</a>
+                <a class="btn btn-link" href="mailto:pinnacleofficiel@gmail.com">Contact Us</a>
+                <a class="btn btn-link" href="">Privacy Policy</a>
+                <a class="btn btn-link" href="">Terms & Condition</a>
+                <a class="btn btn-link" href="">Career</a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <p class="section-title text-white h5 mb-4">Gallery<span></span></p>
+                <div class="row g-2">
+                    <div class="col-4">
+                        <img class="img-fluid" src="img/002-rg-2021-full-lockup-offwhite.jpg" alt="Image">
+                    </div>
+                    <div class="col-4">
+                        <img class="img-fluid" src="img/Skills-needed-to-be-a-good-game-developer-University-of-Bolton.webp" alt="Image">
+                    </div>
+                    <div class="col-4">
+                        <img class="img-fluid" src="img/media_124631e4062698c444e9a7724c90a6b5f3531d6d6.png" alt="Image">
+                    </div>
+                    <div class="col-4">
+                        <img class="img-fluid" src="img/black-hat-logo_0.jpg" alt="Image">
+                    </div>
+                    <div class="col-4">
+                        <img class="img-fluid" src="img/ATOM-Hacker-House-Barcelona-2024.jpg" alt="Image">
+                    </div>
+                    <div class="col-4">
+                        <img class="img-fluid" src="img/portfolio-6.jpg" alt="Image">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <p class="section-title text-white h5 mb-4">Newsletter<span></span></p>
+                <p>Lorem ipsum dolor sit amet elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulpu</p>
+                <div class="position-relative w-100 mt-3">
+                    <input class="form-control border-0 rounded-pill w-100 ps-4 pe-5" type="text" placeholder="Your Email" style="height: 48px;">
+                    <button type="button" class="btn shadow-none position-absolute top-0 end-0 mt-1 me-2"><i class="fa fa-paper-plane text-primary fs-4"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container px-lg-5">
+        <div class="copyright">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    &copy; <a class="border-bottom" href="#">Pinnacle</a>, All Right Reserved.
+
+                    <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                    Designed By <a class="border-bottom" href="https://www.instagram.com/dhiaallagui.pdf/">Dhia allagui</a>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="footer-menu">
+                        <a href="">Home</a>
+                        <a href="">Cookies</a>
+                        <a href="">Help</a>
+                        <a href="">FQAs</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<!-- Footer End -->
 
-<!-- Form that will be used to POST data -->
-<form id="registrationForm" method="POST" style="display: none;"action="../../controller/register_event.php">
-    <input type="hidden" id="eventId" name="event_id">
-    <input type="hidden" id="userId" name="user_id" value="1"> <!-- Set the correct user ID dynamically -->
-</form>
-
-    </div>
-    <!-- Footer Start -->
-    <div class="container-fluid bg-primary text-light footer wow fadeIn" data-wow-delay="0.1s">
-        <div class="container py-5 px-lg-5">
-            <div class="row g-5">
-                <div class="col-md-6 col-lg-3">
-                    <p class="section-title text-white h5 mb-4">Address<span></span></p>
-                    <p><i class="fa fa-map-marker-alt me-3"></i>12 rue mehdia Bab El Khadhra</p>
-                    <p><i class="fa fa-phone-alt me-3"></i>+216 20 804 721</p>
-                    <p><i class="fa fa-envelope me-3"></i>allagui.dhiaa20@gmail.com</p>
-                    <div class="d-flex pt-2">
-                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-outline-light btn-social" href="https://www.facebook.com/kallagui/"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-outline-light btn-social" href="https://www.instagram.com/dhiaallagui.pdf/"><i class="fab fa-instagram"></i></a>
-                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <p class="section-title text-white h5 mb-4">Quick Link<span></span></p>
-                    <a class="btn btn-link" href="">About Us</a>
-                    <a class="btn btn-link" href="">Contact Us</a>
-                    <a class="btn btn-link" href="">Privacy Policy</a>
-                    <a class="btn btn-link" href="">Terms & Condition</a>
-                    <a class="btn btn-link" href="">Career</a>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <p class="section-title text-white h5 mb-4">Gallery<span></span></p>
-                    <div class="row g-2">
-                        <div class="col-4">
-                            <img class="img-fluid" src="img/002-rg-2021-full-lockup-offwhite.jpg" alt="Image">
-                        </div>
-                        <div class="col-4">
-                            <img class="img-fluid" src="img/Skills-needed-to-be-a-good-game-developer-University-of-Bolton.webp" alt="Image">
-                        </div>
-                        <div class="col-4">
-                            <img class="img-fluid" src="img/media_124631e4062698c444e9a7724c90a6b5f3531d6d6.png" alt="Image">
-                        </div>
-                        <div class="col-4">
-                            <img class="img-fluid" src="img/black-hat-logo_0.jpg" alt="Image">
-                        </div>
-                        <div class="col-4">
-                            <img class="img-fluid" src="img/ATOM-Hacker-House-Barcelona-2024.jpg" alt="Image">
-                        </div>
-                        <div class="col-4">
-                            <img class="img-fluid" src="img/portfolio-6.jpg" alt="Image">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <p class="section-title text-white h5 mb-4">Newsletter<span></span></p>
-                    <p>Lorem ipsum dolor sit amet elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulpu</p>
-                    <div class="position-relative w-100 mt-3">
-                        <input class="form-control border-0 rounded-pill w-100 ps-4 pe-5" type="text" placeholder="Your Email" style="height: 48px;">
-                        <button type="button" class="btn shadow-none position-absolute top-0 end-0 mt-1 me-2"><i class="fa fa-paper-plane text-primary fs-4"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container px-lg-5">
-            <div class="copyright">
-                <div class="row">
-                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        &copy; <a class="border-bottom" href="#">Pinnacle</a>, All Right Reserved.
-
-                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                        Designed By <a class="border-bottom" href="https://www.instagram.com/dhiaallagui.pdf/">Dhia allagui</a>
-                    </div>
-                    <div class="col-md-6 text-center text-md-end">
-                        <div class="footer-menu">
-                            <a href="">Home</a>
-                            <a href="">Cookies</a>
-                            <a href="">Help</a>
-                            <a href="">FQAs</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Footer End -->
-        
-    <!-- Custom JavaScript -->
+<!-- Custom JavaScript -->
 <script>
+    function validateForm() {
+        const eventId = document.getElementById('eventId').value;
+        const userId = document.getElementById('userId').value;
+
+        if (!eventId || !userId) {
+            alert("Missing event or user information");
+            return false;
+        }
+        return true;
+    }
+
+    document.getElementById('registrationForm').onsubmit = validateForm;
+
     // Show participation confirmation modal with the event title
-    function showParticipationModal(eventTitle) {
-        // Set the event title in the confirmation modal
+    function showParticipationModal(eventTitle, eventId) {
+        // Set the event title in the modal
         document.getElementById('eventNameConfirmation').textContent = eventTitle;
 
-        // Show the confirmation modal
+        // Set the event ID in the hidden input field
+        document.getElementById('eventId').value = eventId;
+
+        // Show the modal
         const participationModal = new bootstrap.Modal(document.getElementById('participationModal'));
         participationModal.show();
     }
+
 
     // Handle the confirm button click in the participation modal
     document.getElementById('confirmParticipationButton').addEventListener('click', function() {
@@ -388,6 +536,7 @@
             <p><strong>Date:</strong> ${eventData.date}</p>
             <p><strong>Participants:</strong> ${eventData.participants}</p>
             <p><strong>Categories:</strong> ${eventData.categories}</p>
+            <p><strong>Adresse:</strong> ${eventData.location}</p>
             <p><strong>Temps Restant:</strong> <span id="countdown"></span></p>
         `;
 
@@ -442,7 +591,7 @@
 
             if (distance <= 0) {
                 clearInterval(window.countdownInterval);
-                countdownElement.innerHTML = "Event has started!";
+                countdownElement.innerHTML = "Event finished!";
             } else {
                 const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -555,7 +704,7 @@
 
         // Set the event ID and user ID in the hidden form fields
         document.getElementById('eventId').value = eventId;
-        document.getElementById('userId').value = 1;  // Set this dynamically based on the logged-in user
+        document.getElementById('userId').value = 1; // Set this dynamically based on the logged-in user
 
         // Store the event ID globally (optional if needed for later)
         selectedEventId = eventId;
@@ -565,53 +714,80 @@
     }
 
     // Register for event
-    function registerForEvent(eventId) {
+    function registerForEvent() {
+        // Get the form element
         const form = document.getElementById('registrationForm');
-        document.getElementById('eventId').value = eventId; // Set event ID
-        form.submit(); // Submit the hidden form
+
+        // Submit the form
+        form.submit();
     }
-document.getElementById('sendEmailButton').addEventListener('click', function () {
-    const eventId = 123; // Replace with the dynamic event ID
-    const requestData = {
-        event_id: eventId
-    };
 
-    // Disable the button to prevent multiple submissions
-    const sendEmailButton = document.getElementById('sendEmailButton');
-    sendEmailButton.disabled = true;
+    document.getElementById('sendEmailButton').addEventListener('click', function() {
+        const eventId = 123; // Replace with the dynamic event ID
+        const requestData = {
+            event_id: eventId
+        };
 
-    // Display a loading message
-    const statusDiv = document.getElementById('emailStatus');
-    statusDiv.innerHTML = 'Sending email...';
+        // Disable the button to prevent multiple submissions
+        const sendEmailButton = document.getElementById('sendEmailButton');
+        sendEmailButton.disabled = true;
 
-    // Send an AJAX POST request to the server
-    fetch('register_event.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestData)
-    })
-        .then(response => response.json()) // Parse JSON response
-        .then(data => {
-            // Handle the response
-            if (data.status === 'success') {
-                statusDiv.style.color = 'green';
-                statusDiv.innerHTML = 'Email sent successfully!';
-            } else {
+        // Display a loading message
+        const statusDiv = document.getElementById('emailStatus');
+        statusDiv.innerHTML = 'Sending email...';
+
+        // Send an AJAX POST request to the server
+        fetch('register_event.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json()) // Parse JSON response
+            .then(data => {
+                // Handle the response
+                if (data.status === 'success') {
+                    statusDiv.style.color = 'green';
+                    statusDiv.innerHTML = 'Email sent successfully!';
+                } else {
+                    statusDiv.style.color = 'red';
+                    statusDiv.innerHTML = `Failed to send email: ${data.message}`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
                 statusDiv.style.color = 'red';
-                statusDiv.innerHTML = `Failed to send email: ${data.message}`;
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            statusDiv.style.color = 'red';
-            statusDiv.innerHTML = 'An error occurred while sending the email.';
-        })
-        .finally(() => {
-            // Re-enable the button
-            sendEmailButton.disabled = false;
-        });
-});
-   
+                statusDiv.innerHTML = 'An error occurred while sending the email.';
+            })
+            .finally(() => {
+                // Re-enable the button
+                sendEmailButton.disabled = false;
+            });
+    });
+
+    function handleEventRegistration() {
+        let longitude = document.getElementById('longitude').value;
+        let latitude = document.getElementById('latitude').value;
+
+        if (!longitude) {
+            longitude = null; // Set to null if not available
+        }
+
+        if (!latitude) {
+            latitude = null; // Set to null if not available
+        }
+
+        // Submit the form or make an AJAX request with the longitude and latitude values
+        document.getElementById('longitude').value = longitude;
+        document.getElementById('latitude').value = latitude;
+    }
+
+    function validateForm() {
+        let dateField = document.getElementById('date'); // The date input field
+        if (!dateField.value) {
+            // If the date is missing, set it to the current date or leave it empty
+            dateField.value = null; // Allow NULL date if not required
+        }
+    }
 </script>

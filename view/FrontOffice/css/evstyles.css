@@ -68,7 +68,7 @@ textarea:focus {
 
 /* Categories section styling */
 .categories-container {
-    border: 2px solid #6e6e6e;
+    border: 2px solid #39336a;
     border-radius: 10px;
     padding: 20px; /* Adjusted padding */
     margin-top: 0px;
@@ -78,7 +78,7 @@ textarea:focus {
     overflow-y: auto; /* Allows scrolling */
     display: grid; /* Grid layout */
     grid-template-columns: repeat(4, 1fr); /* 3 equal columns */
-    gap: 5px; /* Space between categories */
+    gap: 3px; /* Space between categories */
 }
 
 /* Checkbox items styling */
@@ -96,6 +96,14 @@ textarea:focus {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s, box-shadow 0.3s;
 }
+.categories-container .checkbox-item {
+    margin-bottom: 10px;
+}
+.categories-container .checkbox-item:hover {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
 
 .checkbox-item:hover {
     background-color: #e6e6e6;
@@ -119,8 +127,8 @@ textarea:focus {
 
 .checkmark {
     position: relative;
-    height: 16px; /* Reduced size */
-    width: 16px; /* Reduced size */
+    height: 0px; /* Reduced size */
+    width: 0px; /* Reduced size */
     background-color: #ffffff;
     border-radius: 3px;
     transition: background-color 0.3s, transform 0.3s;
@@ -141,12 +149,12 @@ textarea:focus {
 }
 
 .checkmark::after {
-    left: 4px;
-    top: 1px;
-    width: 6px;
-    height: 10px;
+    left: 60px;
+    top: 15px;
+    width: 10px;
+    height: 20px;
     border: solid rgb(51, 0, 255);
-    border-width: 0 2px 2px 0;
+    border-width: 0 5px 5px 0;
     transform: rotate(45deg);
 }
 
@@ -209,6 +217,55 @@ textarea:focus {
 }
 
 .event-button2:hover span:last-child {
+    width: 150px;
+    height: 150px;
+    opacity: 0.5;
+}
+.event-button3 {
+    position: relative;
+    display: inline-block;
+    padding: 12px 24px;
+    border-width: 2px;
+    border-color:#ffffff;
+    font-size: 16px;
+    background-color: inherit;
+    border-radius: 100px;
+    font-weight: 600;
+    color: #ffffff;
+    box-shadow: 0 0 0 2px #ffffff20;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.event-button3 span:last-child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.event-button3 span:first-child {
+    position: relative;
+    z-index: 1;
+}
+
+.event-button3:hover {
+    box-shadow: 0 0 0 5px #ffffff;
+    color: #ffffff;
+}
+
+.event-button3:active {
+    scale: 0.95;
+}
+
+.event-button3:hover span:last-child {
     width: 150px;
     height: 150px;
     opacity: 0.5;

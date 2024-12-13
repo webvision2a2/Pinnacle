@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title'])) {
     $description = htmlspecialchars($_POST['description']);
     $date = $_POST['date'];
     $participants = $_POST['participants'];
+    $location = htmlspecialchars($_POST['location']);  // New location input
 
     // Handle categories (checkboxes)
     $categories = isset($_POST['options']) ? implode(', ', $_POST['options']) : '';
@@ -67,9 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title'])) {
     // If file upload is successful, proceed with database insertion
     if ($uploadOk === 1) {
         try {
-            // Prepare the SQL statement for event insertion
-            $sql = "INSERT INTO events (title, description, image, date, participants, categories) 
-                    VALUES (:title, :description, :image, :date, :participants, :categories)";
+            // Prepare the SQL statement for event insertion, including the location
+            $sql = "INSERT INTO events (title, description, image, date, participants, categories, location) 
+                    VALUES (:title, :description, :image, :date, :participants, :categories, :location)";
 
             // Prepare the query
             $stmt = $db->prepare($sql);
@@ -81,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title'])) {
             $stmt->bindParam(':date', $date);
             $stmt->bindParam(':participants', $participants);
             $stmt->bindParam(':categories', $categories);
+            $stmt->bindParam(':location', $location);  // Bind the location parameter
 
             // Execute the query
             $stmt->execute();

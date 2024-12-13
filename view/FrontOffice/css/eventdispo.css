@@ -204,6 +204,97 @@
     opacity: 0;
     transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
 }
+/* Root variables for customization */
+:root {
+    
+    --toggle-width: 69px;
+    --toggle-height: 30px;
+    --toggle-bg-off: #d3d3d3;
+    --toggle-bg-on: #2848d7;
+    --thumb-size: 24px;
+    --transition-speed: 0.3s;
+    --icon-color: #ffffff;
+  }
+  
+  /* Toggle container */
+  .toggle {
+    
+    position: relative;
+    width: var(--toggle-width);
+    height: var(--toggle-height);
+    background: var(--toggle-bg-off);
+    border-radius: var(--toggle-height);
+    cursor: pointer;
+    transition: background var(--transition-speed);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Hidden checkbox */
+  input[type="checkbox"] {
+    display: none;
+    
+  }
+  
+  /* Toggle thumb (circle) */
+  .thumb {
+    
+    position: absolute;
+    top: 50%;
+    left: 3px;
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    background: #ffffff;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    transition: left var(--transition-speed), background var(--transition-speed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--icon-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Background and thumb changes when checked */
+  input[type="checkbox"]:checked + .toggle {
+    background: var(--toggle-bg-on);
+  }
+  
+  input[type="checkbox"]:checked + .toggle .thumb {
+    left: calc(100% - var(--thumb-size) - 3px);
+    
+
+  }
+  
+  /* Adding icons for sound */
+  .thumb::after {
+    content: "🔇"; /* Default to sound off icon */
+    transition: opacity var(--transition-speed), transform var(--transition-speed);
+  }
+  
+  input[type="checkbox"]:checked + .toggle .thumb::after {
+    content: "🔊"; /* Change to sound on icon */
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  /* Container for centering */
+.center-container {
+    display: flex; /* Enable flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full height of the viewport */
+    width: 100vw; /* Full width of the viewport */
+    margin: 0; /* Remove any default margin */
+    padding: 0; /* Remove any default padding */
+    box-sizing: border-box; /* Ensure padding and borders are included in dimensions */
+    background-color: #f0f0f0; /* Optional: Add a background for better visibility */
+  }
+  
+  
 
 .event-button2 span:first-child {
     position: relative;
@@ -497,13 +588,13 @@
 }
 /* General styling for the filter section */
 .filters-section {
-    border: 1.5px solid #007bff; /* Blue border */
+    border: 1.9px solid #007bff; /* Blue border */
     border-radius: 10px;
     padding: 20px;
     max-width: max-content;
     margin: 10px auto; /* Center section horizontally */
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: #eefeff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -513,6 +604,10 @@
     color: #007bff;
     font-size: 1.8rem;
     font-weight: bold;
+}
+.event-card:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in-out;
 }
 
 /* Styling for the search input field */

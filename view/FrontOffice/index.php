@@ -55,21 +55,22 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav mx-auto py-0">
-            <a href="index.html" class="nav-item nav-link active">Acceuil</a>
+            <a href="index.php" class="nav-item nav-link active">Acceuil</a>
             <a href="about.html" class="nav-item nav-link">à Propos</a>
             <a href="service.html" class="nav-item nav-link">Services</a>
 
             <!-- Dropdown for Evenement -->
             <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Evenement</a>
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Evenement<span class="arrow">&#9660;</span></a>
                             <div class="dropdown-menu">
                                 <a href="../FrontOffice/eventdispo.php" class="dropdown-item">Nos événements</a>
                                 <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addEventModal">Ajouter un événement</a>
                             </div>
                         </div>
                     </div>
-                    <a href="" class="btn btn-primary py-2 px-4">Contactez-Nous</a>
-                </div>
+                   
+            </div>
+                <a href="" class="btn btn-primary py-2 px-4">Contactez-Nous</a>
             </nav>
 
             <!-- Modal -->
@@ -88,6 +89,21 @@
                 </div>
             </div>
 <style>
+    
+    .arrow {
+    margin-left: 8px; /* Space between text and arrow */
+    display: inline-block;
+    transition: transform 0.3s ease, color 0.3s ease; /* Smooth flip and color transition */
+    font-size: 16px; /* Adjust the size of the arrow */
+    color: #fff; /* Default arrow color */
+  }
+  
+  /* When the dropdown is open (hover or active state) */
+  .nav-link.dropdown-toggle:hover .arrow,
+  .nav-item.show .nav-link.dropdown-toggle .arrow {
+    transform: rotate(180deg); /* Flip the arrow to indicate it's expanded */
+    color: #FBA504; /* Change the color on hover */
+  }
     .modal {
         z-index: 1050; /* Ensure modal appears above other elements */
         display: none; /* Hidden by default */

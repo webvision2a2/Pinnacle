@@ -54,12 +54,12 @@ $events = GetAllevents();
                 <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
-            </li> 
+            </li>
             <hr class="sidebar-divider"> <!-- Heading -->
             <div class="sidebar-heading">
                 FrontOffice
-</div>
-            
+            </div>
+
 
 
             <!-- Nav Item - Tables -->
@@ -71,8 +71,8 @@ $events = GetAllevents();
             <hr class="sidebar-divider"> <!-- Heading -->
             <div class="sidebar-heading">
                 Tables
-</div>
-            
+            </div>
+
 
 
             <!-- Nav Item - Tables -->
@@ -86,7 +86,7 @@ $events = GetAllevents();
                 <a class="nav-link" href="events_participants.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Tables des participants</span></a>
-            </li> 
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -319,113 +319,116 @@ $events = GetAllevents();
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Tables des evennements</h6>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Titre</th>
-                        <th style="width: 250px;">Description</th>
-                        <th >Date</th>
-                        <th>Participants</th>
-                        <th>Categories</th>
-                        <th>Images</th>
-                        <th>Status</th> 
-                        <th style="width: 180px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($events as $event): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($event['id'] ?? 'N/A') ?></td>
-                            <td><?= htmlspecialchars($event['title'] ?? 'N/A') ?></td>
-                            <td><?= htmlspecialchars($event['description'] ?? 'N/A') ?></td>
-                            <td><?= htmlspecialchars($event['date'] ?? 'N/A') ?></td>
-                            <td><?= htmlspecialchars($event['participants'] ?? 'N/A') ?></td>
-                            <td><?= htmlspecialchars($event['categories'] ?? 'N/A') ?></td>
-                            <td>
-                                <img src="../../uploads/<?= htmlspecialchars($event['image']) ?>" alt="Event Image" style="width: 50px; height: auto;">
-                            </td>
-                            <td><?= htmlspecialchars($event['status'] ?? 'Pending') ?></td> <!-- Display Status -->
-                            <td>
-                                <a href="../../controller/delete_event.php?action=delete&id=<?= $event['id'] ?>"
-                                    style="color: red;"
-                                    onclick="return confirm('Are you sure?')">
-                                    <i class="fas fa-trash-alt"></i> Delete
-                                </a> |
-
-                                <a href="../../controller/controllerevent.php?action=accept&eventId=<?= $event['id'] ?>" style="color: green;">
-                                    <i class="fas fa-check"></i> Accept
-                                </a><br>
-
-                                <a href="../../controller/editevent.php?id=<?= $event['id'] ?>"
-                                    style="color: blue;">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Tables des evennements</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Titre</th>
+                                            <th style="width: 250px;">Description</th>
+                                            <th>Date</th>
+                                            <th>Participants</th>
+                                            <th>Categories</th>
+                                            <th>Location</th>
+                                            <th>Images</th>
+                                            <th>Status</th>
+                                            <th style="width: 180px;">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($events as $event): ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($event['id'] ?? 'N/A') ?></td>
+                                                <td><?= htmlspecialchars($event['title'] ?? 'N/A') ?></td>
+                                                <td><?= htmlspecialchars($event['description'] ?? 'N/A') ?></td>
+                                                <td><?= htmlspecialchars($event['date'] ?? 'N/A') ?></td>
+                                                <td><?= htmlspecialchars($event['participants'] ?? 'N/A') ?></td>
+                                                <td><?= htmlspecialchars($event['categories'] ?? 'N/A') ?></td>
+                                                <td><?= htmlspecialchars($event['location'] ?? 'N/A') ?></td>
+                                                <td>
+                                                    <img src="../../uploads/<?= htmlspecialchars($event['image']) ?>" alt="Event Image" style="width: 50px; height: auto;">
+                                                </td>
+                                                <td><?= htmlspecialchars($event['status'] ?? 'Pending') ?></td> <!-- Display Status -->
+                                                <td>
+                                                    <a href="../../controller/delete_event.php?action=delete&id=<?= $event['id'] ?>"
+                                                        style="color: red;"
+                                                        onclick="return confirm('Are you sure?')">
+                                                        <i class="fas fa-trash-alt"></i> Delete
+                                                    </a><br>
+                                                    <a href="../../controller/editevent.php?id=<?= $event['id'] ?>" 
+                                   style="background-color: transparent; border: none; color: blue;">
                                     <i class="fas fa-edit"></i> Edit&nbsp;&nbsp;&nbsp;&nbsp;
-                                </a>|
-                                <a href="../../controller/reject_event.php?action=reject&id=<?= $event['id'] ?>"
-                                    style="color: orange;">
-                                    <i class="fas fa-times"></i> Reject
-                                </a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-                                    <style>
-                                        .fas.fa-trash-alt {
-                                            margin-right: 5px;
-                                            /* Space between trash icon and text */
-                                            color: red;
-                                            /* Trash icon color */
-                                            font-size: 16px;
-                                            /* Adjust trash icon size */
-                                            vertical-align: middle;
-                                            /* Aligns icon with text */
-                                        }
-
-                                        .fas.fa-edit {
-                                            margin-right: 5px;
-                                            /* Space between pencil icon and text */
-                                            color: blue;
-                                            /* Pencil icon color */
-                                            font-size: 16px;
-                                            /* Adjust pencil icon size */
-                                            vertical-align: middle;
-                                            /* Aligns icon with text */
-                                        }
-
-                                        a {
-                                            text-decoration: none;
-                                            /* Removes underline from links */
-                                            font-weight: bold;
-                                            /* Makes text bold for better visibility */
-                                        }
-                                    </style>
+                                </a><br>
+                                                    <hr class="sidebar-divider d-none d-md-block">
 
 
-
+                                                    <a href="../../controller/controllerevent.php?action=accept&eventId=<?= $event['id'] ?>" style="color: green;">
+                                                        <i class="fas fa-check"></i> Accept
+                                                    </a><br>
+                                                    <a href="../../controller/reject_event.php?action=reject&id=<?= $event['id'] ?>"
+                                                        style="color: orange;">
+                                                        <i class="fas fa-times"></i> Reject
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
 
+                    <style>
+                        .fas.fa-trash-alt {
+                            margin-right: 5px;
+                            /* Space between trash icon and text */
+                            color: red;
+                            /* Trash icon color */
+                            font-size: 16px;
+                            /* Adjust trash icon size */
+                            vertical-align: middle;
+                            /* Aligns icon with text */
+                        }
+
+                        .fas.fa-edit {
+                            margin-right: 5px;
+                            /* Space between pencil icon and text */
+                            color: blue;
+                            /* Pencil icon color */
+                            font-size: 16px;
+                            /* Adjust pencil icon size */
+                            vertical-align: middle;
+                            /* Aligns icon with text */
+                        }
+
+                        a {
+                            text-decoration: none;
+                            /* Removes underline from links */
+                            font-weight: bold;
+                            /* Makes text bold for better visibility */
+                        }
+                    </style>
+
+
+
                 </div>
-                <!-- /.container-fluid -->
-
             </div>
-            <!-- End of Main Content -->
-
-
-
         </div>
-        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+
+
+    </div>
+    <!-- End of Content Wrapper -->
 
     </div>
     <!-- End of Page Wrapper -->

@@ -20,10 +20,21 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Events</title>
     <link rel="stylesheet" href="css/evstyles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<!-- Include Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 
 <body>
     <style>
+         #map {
+            height: 400px;
+            width: 100%;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
         /* Custom Alert Box */
         #customAlert {
             position: fixed;
@@ -72,7 +83,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <!-- Form for adding new event -->
         <form id="addEventForm" action="../../controller/controllerevent.php?action=insertion" method="POST" enctype="multipart/form-data">
-            <!-- Event Title -->
+        <!-- Event Title -->
             <div class="form-group">
                 <label for="eventTitle">Titre d'événement:</label>
                 <input type="text" id="eventTitle" name="title" placeholder="Enter event title">
@@ -82,21 +93,43 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="categories-container">
                 <div class="checkbox-item">
                     <label class="custom-checkbox">
-                        <input type="checkbox" id="option1" name="options[]" value="Artificial Intelligence">
+                        <input type="checkbox" id="option" name="options[]" value="Artificial Intelligence">
                         <span class="checkmark"></span>
                         Artificial Intelligence
                     </label>
                 </div>
                 <div class="checkbox-item">
                     <label class="custom-checkbox">
-                        <input type="checkbox" id="option1" name="options[]" value=" Web Development">
+                        <input type="checkbox" id="option9" name="options[]" value=" Data Science & Analytics">
+                        <span class="checkmark"></span>
+                        Data Science & Analytics
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option10" name="options[]" value=" Internet of Things (IoT)">
+                        <span class="checkmark"></span>
+                        Internet of Things (IoT)
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option11" name="options[]" value=" Augmented Reality (AR) & Virtual Reality (VR)">
+                        <span class="checkmark"></span>
+                        Autre Categories
+                    </label>
+                </div>
+               
+                <div class="checkbox-item">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="option8" name="options[]" value=" Web Development">
                         <span class="checkmark"></span>
                         Web Development
                     </label>
                 </div>
                 <div class="checkbox-item">
                     <label class="custom-checkbox">
-                        <input type="checkbox" id="option1" name="options[]" value="Software Engineering">
+                        <input type="checkbox" id="option7" name="options[]" value="Software Engineering">
                         <span class="checkmark"></span>
                         Software Engineering
                     </label>
@@ -170,7 +203,79 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <label for="participants">Nombre de Participants:</label>
                 <input type="number" id="participants" name="participants" min="1" placeholder="nombre participants">
             </div>
+ <!-- Location -->
+ <div class="form-group">
+            <label for="location">Event Location:</label>
+            <input type="text" id="location" name="location" placeholder="Click on the map to select the location" readonly required>
+        </div>
 
+        <!-- Latitude -->
+        <div class="form-group">
+           
+            <input type="text" id="latitude" name="latitude" hidden readonly required>
+        </div>
+
+        <!-- Longitude -->
+        <div class="form-group">
+           
+            <input type="text" id="longitude" name="longitude" hidden readonly required>
+        </div>
+
+       
+
+    
+
+    <!-- Map Container -->
+    <div id="map"></div>
+</div>
+
+<script>
+    var map = L.map('map').setView([36.8981, 10.1897], 12); // Default view to Tunisia
+
+    // Set up OpenStreetMap layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var marker;
+
+    // When the map is clicked, add a marker and update latitude, longitude, and location
+    map.on('click', function(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        // If marker already exists, update it, otherwise add a new one
+        if (marker) {
+            marker.setLatLng(e.latlng);
+        } else {
+            marker = L.marker(e.latlng).addTo(map);
+        }
+
+        // Update the latitude and longitude input fields
+        document.getElementById('latitude').value = lat;
+        document.getElementById('longitude').value = lng;
+
+        // Reverse geocoding to get the address from the latitude and longitude
+        getAddress(lat, lng);
+    });
+
+    // Function to get the address using OpenStreetMap Nominatim API
+    function getAddress(lat, lng) {
+        var xhr = new XMLHttpRequest();
+        var url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
+
+        xhr.open("GET", url, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response && response.display_name) {
+                    document.getElementById('location').value = response.display_name;
+                }
+            }
+        };
+        xhr.send();
+    }
+</script>
             <!-- Submit and Cancel Buttons -->
          
                 <button class="event-button2" type="submit">Ajouter</button>
@@ -179,9 +284,9 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </body>
 <div id="customAlert" class="message-box error" style="display: none;">
     <span id="errorMessages"></span>
-    <button id="closeAlert" class="btn-close">Close</button>
+    <button id="closeAlert" class="event-button3">Close</button>
 </div>
-
+</form>
 
 </html>
 <script>

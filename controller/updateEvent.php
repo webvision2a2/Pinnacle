@@ -49,6 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':participants', $participants);
         $stmt->bindParam(':categories', $categories);
         $stmt->bindParam(':eventId', $eventId);
+        $stmt->bindParam(':location', $location);
+
 
         // If a new image is uploaded, handle the file upload and bind the image
         if (!empty($image)) {
