@@ -43,93 +43,49 @@ class SocieteController
         }
     }
 
-    // Ajout d'une société
-    /*function addSociete($societe)
+  
+    
+    public function addSociete($societe)
     {
-        $sql = "INSERT INTO societe VALUES (NULL,:nom_soc, :adresse, :numero, :email, :speciality)";
         $db = config::getConnexion();
+    
+        // Vérification si le nom de la société existe déjà dans la base de données
+        $query = $db->prepare("SELECT COUNT(*) FROM societe WHERE nom_soc = :nom_soc");
+        $query->execute(['nom_soc' => $societe->getNomSoc()]);
+        $count = $query->fetchColumn();
+    
+        // Si le nom de la société existe déjà, on retourne 'duplicate'
+        if ($count > 0) {
+            $error = "Une société avec ce nom existe déjà. Veuillez en choisir un autre.";
+            return 'duplicate'; 
+        }
         
-
-        try {
-            $stmt = $db->prepare($sql);
-            // Assurez-vous que les données sont bien transmises à la requête
-            $speciality = implode(",", $societe->getSpeciality()); // Imploser le tableau des spécialités en une chaîne
-            $stmt->execute([
-                'nom_soc' => $societe->getNomSoc(),
-                'adresse' => $societe->getAdresse(),
-                'numero' => $societe->getNumero(),
-                'email' => $societe->getEmail(),
-                'speciality' => $speciality // Les spécialités sont maintenant une chaîne
-            ]);
-            echo "Société ajoutée avec succès!";
-        } catch (PDOException $e) {
-            error_log('Error adding society: ' . $e->getMessage());
-            echo "Erreur: " . $e->getMessage();
-        }
-    }*/
-    public function addSociete($societe) {
+    
+        // Préparer la requête d'insertion dans la base de données
         $sql = "INSERT INTO societe (nom_soc, adresse, numero, email, speciality) VALUES (:nom_soc, :adresse, :numero, :email, :speciality)";
-        $db = config::getConnexion();
-
+        
         try {
+            // Préparer la requête
             $stmt = $db->prepare($sql);
-            $speciality = implode(",", $societe->getSpeciality());
+            
+            // Exécuter la requête d'insertion avec les données de la société
             $stmt->execute([
                 'nom_soc' => $societe->getNomSoc(),
                 'adresse' => $societe->getAdresse(),
                 'numero' => $societe->getNumero(),
                 'email' => $societe->getEmail(),
-                'speciality' => $speciality
+                'speciality' => implode(", ", $societe->getSpeciality()) // Convertir le tableau des spécialités en chaîne de caractères
             ]);
-            return true;
+            
+            // Si l'insertion est réussie, retourner 'success'
+            return 'success';
         } catch (PDOException $e) {
-            error_log('Error adding society: ' . $e->getMessage());
-            echo "Erreur: " . $e->getMessage();
-            return false;
+            // Si une exception se produit (erreur lors de l'insertion), on l'enregistre dans les logs et retourne 'error'
+            error_log("Erreur lors de l'ajout de la société: " . $e->getMessage());
+            return 'error';
         }
-    }
+    }  
 
-
-
-
-    // Mise à jour d'une société
-  /*  public function updateSociete($societe, $id)
-    {
-        if (!is_numeric($id) || $id <= 0) {
-            echo "Invalid ID.";
-            return;
-        }
-
-        try {
-            $db = config::getConnexion();
-
-            // Prepare the update statement
-            $query = $db->prepare(
-                'UPDATE societe SET 
-                    nom_soc = :nom_soc,
-                    adresse = :adresse,
-                    numero = :numero,
-                    email = :email,
-                    speciality = :speciality
-                WHERE id = :id'
-            );
-
-            // Execute the statement with parameters
-            $query->execute([
-                'id' => $id,
-                'nom_soc' => $societe->getNomSoc(),
-                'adresse' => $societe->getAdresse(),
-                'numero' => $societe->getNumero(),
-                'email' => $societe->getEmail(),
-                'speciality' => implode(", ", $societe->getSpeciality()) // Imploding the array of specialties
-            ]);
-
-            echo "Société mise à jour avec succès.";
-        } catch (PDOException $e) {
-            error_log('Error updating society: ' . $e->getMessage());
-            echo "Erreur lors de la mise à jour de la société.";
-        }
-    }*/
     public function updateSociete($societe, $id)
     {
         if (!is_numeric($id) || $id <= 0) {
@@ -178,29 +134,6 @@ class SocieteController
         }
     }
 
-    // Affichage d'une société
-   /* public function showSociete($id)
-    {
-        if (!is_numeric($id) || $id <= 0) {
-            echo "Invalid ID.";
-            return null;
-        }
-
-        $sql = "SELECT * FROM societe WHERE id = :id";
-        $db = config::getConnexion();
-        
-        try {
-            // Prepare and execute the statement
-            $query = $db->prepare($sql);
-            $query->bindValue(':id', $id, PDO::PARAM_INT); // Binding the ID correctly
-            $query->execute();
-            
-            return $query->fetch(PDO::FETCH_ASSOC); // Returning a single record as an associative array
-        } catch (Exception $e) {
-            error_log('Error fetching society: ' . $e->getMessage());
-            return null; // Return null on error
-        }
-    }*/
     public function showSociete($id)
     {
         if (!is_numeric($id) || $id <= 0) {
@@ -224,6 +157,71 @@ class SocieteController
         }
     }
 
+
+
+    // Liste des sociétés
+    public function listSocietes() {
+        $sql = "SELECT * FROM societe";
+        $db = config::getConnexion();
+        try {
+            $stmt = $db->query($sql);
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Erreur: " . $e->getMessage();
+            return [];
+        }
+    }
+
+        // Ajouter cette méthode pour gérer la recherche et la pagination
+        public function searchAndPaginate($searchTerm = '', $limit, $offset) {
+            $db = config::getConnexion();
+            $sql = "SELECT * FROM societe WHERE nom_soc LIKE :searchTerm LIMIT :limit OFFSET :offset";
+            try {
+                $stmt = $db->prepare($sql);
+                $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
+                $stmt->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
+                $stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+                $stmt->execute();
+                return $stmt->fetchAll();
+            } catch (PDOException $e) {
+                echo "Erreur: " . $e->getMessage();
+                return [];
+            }
+        }
+    
+        // Compter le nombre de résultats pour la recherche
+        public function countSearchResults($searchTerm = '') {
+            $db = config::getConnexion();
+            $sql = "SELECT COUNT(*) as count FROM societe WHERE nom_soc LIKE :searchTerm";
+            try {
+                $stmt = $db->prepare($sql);
+                $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
+                $stmt->execute();
+                $result = $stmt->fetch();
+                return $result['count'];
+            } catch (PDOException $e) {
+                echo "Erreur: " . $e->getMessage();
+                return 0;
+            }
+        
+        }
+    
+    public function getSocieteById($id) {
+        $db = config::getConnexion();
+        $sql = "SELECT * FROM societe WHERE id = :id";
+        try {
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Erreur: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    
 }
+
 
 ?>

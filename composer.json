@@ -1,0 +1,17 @@
+{
+    "name": "ahmed/projet-web",
+    "autoload": {
+        "psr-4": {
+            "Ahmed\\ProjetWeb\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ahmedhbaieb",
+            "email": "ahmed.hebaieb@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    }
+}
