@@ -170,14 +170,15 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         Cyber Security
                     </label>
                 </div>
-            </div>
-             <div class="checkbox-item">
+                 <div class="checkbox-item">
                     <label class="custom-checkbox">
                         <input type="checkbox" id="option11" name="options[]" value=" Augmented Reality (AR) & Virtual Reality (VR)">
                         <span class="checkmark"></span>
                         Autre Categories
                     </label>
                 </div>
+            </div>
+            
 
 
 
