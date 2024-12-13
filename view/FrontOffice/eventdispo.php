@@ -100,7 +100,7 @@
 
         <h3 style="text-align: center; color:blue;">Filtrer et Trier les Événements</h3><br>
         <!-- Sound toggle switch -->
-        <h3>Hover sound</h3>
+        Hover sound
 
         <div >
   <label>
