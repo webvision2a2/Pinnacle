@@ -2,6 +2,10 @@
 require_once '../../controller/StageController.php';
 require_once '../../controller/SocieteController.php';
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 // Instanciation des contrôleurs
 $stageController = new StageController();
 $societeController = new SocieteController();
@@ -19,15 +23,49 @@ if ($societe_id) {
     $totalStages = $stageController->countStagesBySociete($societe_id);
 } else {
     // Récupération des stages sans filtrage par société
+<<<<<<< HEAD
+=======
+=======
+$stageController = new StageController();
+<<<<<<< HEAD
+$societeController = new SocieteController();
+
+$limit = 6; // Nombre de stages par page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
+$societe_id = isset($_GET['societe']) ? (int)$_GET['societe'] : null;
+
+if ($societe_id) {
+    $stages = $stageController->listStagesBySociete($societe_id, $limit, $offset);
+    $totalStages = $stageController->countStagesBySociete($societe_id);
+} else {
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
     $stages = $stageController->listStagesWithPagination($limit, $offset);
     $totalStages = $stageController->countStages();
 }
 
 $totalPages = ceil($totalStages / $limit);
 
+<<<<<<< HEAD
 // Récupération des sociétés pour le filtre
 $societes = $societeController->listSociete();
 $latestStage = $stageController->getLatestStage();
+=======
+<<<<<<< HEAD
+// Récupération des sociétés pour le filtre
+$societes = $societeController->listSociete();
+$latestStage = $stageController->getLatestStage();
+=======
+=======
+$stages = $stageController->listStage();
+
+$societeController = new SocieteController();
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+$societes = $societeController->listSociete();
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 ?>
 
 <!DOCTYPE html>
@@ -62,6 +100,10 @@ $latestStage = $stageController->getLatestStage();
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 
     <style>
         /* Styles de notification carrée */
@@ -123,16 +165,30 @@ $latestStage = $stageController->getLatestStage();
             background-color: #ffc107; /* Jaune pour avertissement */
         }
     </style>
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 </head>
 
 <body>
     <div class="container-xxl bg-white p-0">
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
         <!-- Notification Area -->
         <div id="notification-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
             <!-- Notifications seront affichées ici -->
         </div>
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
         <!-- Navbar & Hero Start -->
         <div class="container-xxl position-relative p-0">
             <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
@@ -145,7 +201,19 @@ $latestStage = $stageController->getLatestStage();
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav mx-auto py-0">
                         <a href="index.php" class="nav-item nav-link">Home</a>
+<<<<<<< HEAD
                         <a href="main.php" class="nav-item nav-link">Societes</a>
+=======
+<<<<<<< HEAD
+                        <a href="main.php" class="nav-item nav-link">Societes</a>
+=======
+<<<<<<< HEAD
+                        <a href="main.php" class="nav-item nav-link ">Societes</a>
+=======
+                        <a href="main.php" class="nav-item nav-link">Societes</a>
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                         <a href="main2.php" class="nav-item nav-link active">Stages</a>
                         <a href="project.html" class="nav-item nav-link">Project</a>
                         <div class="nav-item dropdown">
@@ -180,6 +248,10 @@ $latestStage = $stageController->getLatestStage();
             </div>
         </div>
         <!-- Navbar & Hero End -->
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
          
         <!-- Notification carrée -->
         
@@ -191,6 +263,11 @@ $latestStage = $stageController->getLatestStage();
 
         <script>
             // Fonction pour afficher la notification
+<<<<<<< HEAD
+=======
+            
+            // Fonction pour afficher la notification
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
             function showNotification(message, type = 'success', stageId = null) {
                 var notification = document.getElementById('notificationSquare');
                 var notificationText = document.getElementById('notificationText');
@@ -256,14 +333,65 @@ $latestStage = $stageController->getLatestStage();
 
                 <div class="row g-4">
                     <?php foreach ($stages as $stage): ?>
+<<<<<<< HEAD
+=======
+=======
+
+<<<<<<< HEAD
+        <!-- Barre de Recherche -->
+        <div class="container py-5">
+            <form method="GET" action="main2.php">
+                <div class="input-group mb-3">
+                    <select class="form-select" name="societe">
+                        <option value="">Select Society</option>
+                        <?php foreach ($societes as $societe): ?>
+                            <option value="<?= htmlspecialchars($societe['id']); ?>" <?= isset($_GET['societe']) && $_GET['societe'] == $societe['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($societe['nom_soc']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+
+=======
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+        <!-- Service Start -->
+        <div class="container-xxl py-5">
+            <div class="container py-5 px-lg-5">
+                <h1 class="text-center mb-5">List of Our Stages</h1>
+                <div class="row g-4">
+                    <?php foreach ($stages as $stage) : ?>
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="service-item d-flex flex-column text-center rounded">
                                 <div class="service-icon flex-shrink-0">
                                     <i class="fas fa-briefcase fa-2x"></i>
                                 </div>
+<<<<<<< HEAD
                                 
                                 <?php 
                                     $societeName = 'Unknown'; // Valeur par défaut
+=======
+<<<<<<< HEAD
+                                
+                                <?php 
+                                    $societeName = 'Unknown'; // Valeur par défaut
+=======
+<<<<<<< HEAD
+                                <?php 
+                                    $stageName = htmlspecialchars($stage['nom_stage']); // Stage name
+                                    $societeName = 'Unknown'; // Default society name
+                                    
+=======
+                                <!-- Affichage du nom de la société en fonction de l'ID de la société -->
+                                <?php 
+                                    $societeName = 'Unknown';
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                                     foreach ($societes as $societe) {
                                         if ($societe['id'] == $stage['id_societe']) {
                                             $societeName = htmlspecialchars($societe['nom_soc']);
@@ -271,16 +399,45 @@ $latestStage = $stageController->getLatestStage();
                                         }
                                     }
                                 ?>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 
                                 <h5 class="mb-3"><?= htmlspecialchars($stage['nom_stage']); ?> - <?= $societeName; ?></h5>
                                 <p class="m-0"><?= htmlspecialchars($stage['speciality']); ?></p>
                                 <p class="m-0"><?= htmlspecialchars($stage['duration']); ?></p>
                                 <p class="m-0"><?= htmlspecialchars($stage['email']); ?></p>
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+
+                                <h5 class="mb-3"><?= $stageName; ?> - <?= $societeName; ?></h5> 
+                                <p class="m-0"><?= htmlspecialchars($stage['speciality']); ?></p>
+                                <p class="m-0"><?= htmlspecialchars($stage['duration']); ?></p>
+                                <p class="m-0"><?= htmlspecialchars($stage['email']); ?></p>
+=======
+                                <h5 class="mb-3"><?= $societeName; ?></h5>
+                                <!-- Affichage des spécialités -->
+                                <p class="m-0"><?= htmlspecialchars($stage['speciality']); ?></p>
+                                <!-- Affichage de la durée -->
+                                <p class="m-0"><?= htmlspecialchars($stage['duration']); ?></p>
+                                <!-- Affichage de l'email -->
+                                <p class="m-0"><?= htmlspecialchars($stage['email']); ?></p>
+                                <!-- Lien vers la page de détails du stage -->
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                                 <a class="btn btn-square" href="stageDetails.php?id=<?= $stage['id_stage']; ?>"><i class="fa fa-arrow-right"></i></a>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 
                 <!-- Pagination -->
                 <div class="pagination mt-5 text-center">
@@ -300,6 +457,44 @@ $latestStage = $stageController->getLatestStage();
         </div>
         <!-- Stages Section End -->
 
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+                <br><br><br>
+                <!-- Pagination Start -->
+                <div class="d-flex justify-content-center">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <?php if ($page > 1): ?>
+                                <li class="page-item"><a class="page-link" href="?page=<?= $page - 1; ?><?= $societe_id ? '&societe=' . $societe_id : ''; ?>">Previous</a></li>
+                            <?php endif; ?>
+                            
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <li class="page-item <?= $i == $page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?= $i; ?><?= $societe_id ? '&societe=' . $societe_id : ''; ?>"><?= $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <?php if ($page < $totalPages): ?>
+                                <li class="page-item"><a class="page-link" href="?page=<?= $page + 1; ?><?= $societe_id ? '&societe=' . $societe_id : ''; ?>">Next</a></li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- Pagination End -->
+
+            </div>
+        </div>
+        
+=======
+            </div>
+        </div>
+        <!-- Service End -->
+
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
         <!-- Footer Start -->
         <div class="container-fluid bg-primary text-light footer wow fadeIn" data-wow-delay="0.1s">
             <div class="container py-5 px-lg-5">
@@ -320,13 +515,37 @@ $latestStage = $stageController->getLatestStage();
             </div>
         </div>
         <!-- Footer End -->
+<<<<<<< HEAD
 
         <!-- Back to Top -->
+=======
+<<<<<<< HEAD
+
+        <!-- Back to Top -->
+=======
+<<<<<<< HEAD
+        
+=======
+
+        <!-- Back to Top -->
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
         <a href="#" class="btn btn-lg btn-secondary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>
@@ -340,4 +559,12 @@ $latestStage = $stageController->getLatestStage();
     <script src="js/main.js"></script>
 </body>
 
+<<<<<<< HEAD
 </html>
+=======
+<<<<<<< HEAD
+</html>
+=======
+</html>
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d

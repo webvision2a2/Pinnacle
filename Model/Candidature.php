@@ -1,6 +1,14 @@
 <?php
 
+<<<<<<< HEAD
 /* class Candidature
+=======
+<<<<<<< HEAD
+/* class Candidature
+=======
+class Candidature
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 {
     private $nom;
     private $prenom;
@@ -25,6 +33,10 @@
     public function getEmail() { return $this->email; }
     public function getCv() { return $this->cv; }
     public function getIdStage() { return $this->id_stage; }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 } */
 
 class Candidature
@@ -65,4 +77,11 @@ class Candidature
 }
 
 
+<<<<<<< HEAD
+=======
+=======
+}
+
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 ?>

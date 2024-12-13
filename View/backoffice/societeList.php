@@ -43,7 +43,18 @@ $totalPages = ceil($totalResults / $limit); // Calculate the total number of pag
 
     <!-- Page Wrapper -->
     <div id="wrapper">
+<<<<<<< HEAD
         
+=======
+<<<<<<< HEAD
+        
+=======
+
+        
+        <!-- End of Sidebar -->
+
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -106,13 +117,22 @@ $totalPages = ceil($totalResults / $limit); // Calculate the total number of pag
                                                     <td align="center">
                                                         <form method="POST" action="updateSociete.php">
                                                             <input class="btn btn-primary" type="submit" name="update" value="Update">
+<<<<<<< HEAD
                                                             <input type="hidden" value="<?= $societe['id']; ?>" name="id">
+=======
+<<<<<<< HEAD
+                                                            <input type="hidden" value="<?= $societe['id']; ?>" name="id">
+=======
+                                                            <input type="hidden" value=<?= $societe['id']; ?> name="id">
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                                                         </form>
                                                     </td>
                                                     <td>
                                                         <a class="btn btn-danger" href="deleteSociete.php?id=<?= $societe['id']; ?>" role="button">Delete</a>
                                                     </td>
                                                 </tr>
+<<<<<<< HEAD
                                                 <?php endforeach; ?>
                                             </table>
 
@@ -139,6 +159,43 @@ $totalPages = ceil($totalResults / $limit); // Calculate the total number of pag
                                                 </ul>
                                             </nav>
 
+=======
+<<<<<<< HEAD
+                                                <?php endforeach; ?>
+                                            </table>
+
+                                            <!-- Pagination Links -->
+                                            <nav aria-label="Page navigation">
+                                                <ul class="pagination">
+                                                    <li class="page-item <?= ($page == 1) ? 'disabled' : ''; ?>">
+                                                        <a class="page-link" href="?page=1&search=<?= htmlspecialchars($searchTerm); ?>">First</a>
+                                                    </li>
+                                                    <li class="page-item <?= ($page == 1) ? 'disabled' : ''; ?>">
+                                                        <a class="page-link" href="?page=<?= $page - 1; ?>&search=<?= htmlspecialchars($searchTerm); ?>">Previous</a>
+                                                    </li>
+                                                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                                    <li class="page-item <?= ($page == $i) ? 'active' : ''; ?>">
+                                                        <a class="page-link" href="?page=<?= $i; ?>&search=<?= htmlspecialchars($searchTerm); ?>"><?= $i; ?></a>
+                                                    </li>
+                                                    <?php endfor; ?>
+                                                    <li class="page-item <?= ($page == $totalPages) ? 'disabled' : ''; ?>">
+                                                        <a class="page-link" href="?page=<?= $page + 1; ?>&search=<?= htmlspecialchars($searchTerm); ?>">Next</a>
+                                                    </li>
+                                                    <li class="page-item <?= ($page == $totalPages) ? 'disabled' : ''; ?>">
+                                                        <a class="page-link" href="?page=<?= $totalPages; ?>&search=<?= htmlspecialchars($searchTerm); ?>">Last</a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+
+=======
+                                                
+                                                
+                                                <?php
+                                                    }
+                                                ?>
+                                            </table>
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                                             <a class="btn btn-primary" href="main2.php" role="button">Add Company</a>
                                         </div>
                                     </div>
@@ -170,5 +227,19 @@ $totalPages = ceil($totalResults / $limit); // Calculate the total number of pag
         <!-- Custom scripts for all pages-->
         <script src="js/sb-admin-2.min.js"></script>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+        <!-- Page level plugins -->
+        <script src="vendor/chart.js/Chart.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="js/demo/chart-area-demo.js"></script>
+        <script src="js/demo/chart-pie-demo.js"></script>
+        <script src="index.js"></script>
+
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
     </body>
 </html>

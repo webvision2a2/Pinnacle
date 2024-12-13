@@ -43,6 +43,10 @@ class SocieteController
         }
     }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
    /*  public function addSociete($societe) {
         $db = config::getConnexion();
 
@@ -59,6 +63,12 @@ class SocieteController
         }
 
         // Ajouter la société à la base de données
+<<<<<<< HEAD
+=======
+=======
+    public function addSociete($societe) {
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
         $sql = "INSERT INTO societe (nom_soc, adresse, numero, email, speciality) VALUES (:nom_soc, :adresse, :numero, :email, :speciality)";
         try {
             $stmt = $db->prepare($sql);
@@ -76,6 +86,7 @@ class SocieteController
         }
     } */
 
+<<<<<<< HEAD
 
     
     public function addSociete($societe)
@@ -119,6 +130,11 @@ class SocieteController
         }
     }  
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
     public function updateSociete($societe, $id)
     {
         if (!is_numeric($id) || $id <= 0) {
@@ -205,6 +221,10 @@ class SocieteController
         }
     }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
         // Ajouter cette méthode pour gérer la recherche et la pagination
         public function searchAndPaginate($searchTerm = '', $limit, $offset) {
             $db = config::getConnexion();
@@ -254,6 +274,12 @@ class SocieteController
     }
 
     
+<<<<<<< HEAD
+=======
+=======
+    // Afficher une société spécifique
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 }
 
 

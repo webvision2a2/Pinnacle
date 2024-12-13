@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 <?php
 require_once '../../controller/SocieteController.php';
 $societeController = new SocieteController();
@@ -21,6 +28,10 @@ if (isset($_POST["submit"])) {
         );
 
         // Ajouter la société à la base de données
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
         $result = $societeController->addSociete($societe);
         
         // Debug: Afficher le résultat du contrôleur
@@ -30,6 +41,13 @@ if (isset($_POST["submit"])) {
             $success = true;
         } elseif ($result === 'duplicate') {
             $error = "A society with this name already exists.";
+<<<<<<< HEAD
+=======
+=======
+        if ($societeController->addSociete($societe)) {
+            $success = true;
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
         } else {
             $error = "An error occurred while adding the society.";
         }
@@ -47,12 +65,21 @@ if (isset($_POST["submit"])) {
 </head>
 <body>
     <h1 class="text-center">Coordonnées de la société</h1>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
     <?php if (!empty($error)): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($error); ?></div>
     <?php endif; ?>
     <?php if ($success): ?>
         <div class="alert alert-success">Société ajoutée avec succès!</div>
     <?php endif; ?>
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
     <form align="center" action="" method="POST" id="societeForm">
         <div class="mb-3">
             <label for="nom_soc" class="form-label">Nom de la Société :</label>

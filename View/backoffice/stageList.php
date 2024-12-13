@@ -1,5 +1,9 @@
 <?php
 require_once '../../controller/StageController.php';
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 require_once '../../controller/SocieteController.php';
 
 // Instancier le contrôleur de stages pour récupérer les données
@@ -16,6 +20,21 @@ $list = $stageController->searchAndPaginate($searchTerm, $limit, $offset);
 $totalResults = $stageController->countSearchResults($searchTerm);
 $totalPages = ceil($totalResults / $limit);
 
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+require_once '../../controller/SocieteController.php';
+=======
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+
+// Instancier le contrôleur de stages pour récupérer les données
+$stageController = new StageController();
+$list = $stageController->listStage(); // Liste des stages récupérée
+
+<<<<<<< HEAD
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 // Instancier le contrôleur de sociétés pour récupérer les données
 $societeController = new SocieteController();
 $societes = $societeController->listSocietes(); // Liste des sociétés récupérée
@@ -25,6 +44,14 @@ $societeNames = [];
 foreach ($societes as $societe) {
     $societeNames[$societe['id']] = $societe['nom_soc'];
 }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 ?>
 
 <!DOCTYPE html>
@@ -61,6 +88,10 @@ foreach ($societes as $societe) {
                         <h1 class="h3 mb-0 text-gray-800">Liste des Stages</h1>
                     </div>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                     <!-- Formulaire de recherche -->
                     <form method="GET" action="" class="form-inline mb-4">
                         <div class="input-group">
@@ -73,6 +104,11 @@ foreach ($societes as $societe) {
                         </div>
                     </form>
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                     <div class="row">
                         <div class="col-xl-12 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
@@ -83,14 +119,36 @@ foreach ($societes as $societe) {
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
+<<<<<<< HEAD
                                                         <th>Nom du stage</th>
+=======
+<<<<<<< HEAD
+                                                        <th>Nom du stage</th>
+=======
+<<<<<<< HEAD
+                                                        <th>Nom du stage</th>
+=======
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                                                         <th>Société</th>
                                                         <th>Type</th>
                                                         <th>Durée</th>
                                                         <th>Email</th>
                                                         <th>Spécialité</th>
                                                         <th>Documents</th>
+<<<<<<< HEAD
                                                         <th>Candidatures</th>
+=======
+<<<<<<< HEAD
+                                                        <th>Candidatures</th>
+=======
+<<<<<<< HEAD
+                                                        <th>Candidatures</th>
+=======
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -100,6 +158,13 @@ foreach ($societes as $societe) {
                                                     foreach ($list as $stage) {
                                                         // Vérifiez que speciality est un tableau avant d'utiliser implode()
                                                         $specialities = is_array($stage['speciality']) ? implode(", ", $stage['speciality']) : $stage['speciality'];
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                                                         
                                                         // Récupérer les candidatures pour ce stage
                                                         $candidatures = $stageController->getCandidaturesForStage($stage['id_stage']);
@@ -123,14 +188,50 @@ foreach ($societes as $societe) {
                                                                 <?= $candidatureCount ?> Candidature(s)
                                                             </a>
                                                         </td>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+                                                    ?>
+                                                    <tr>
+                                                        <td><?= $stage['id_stage']; ?></td>
+                                                        <td><?= $stage['id_societe']; ?></td>
+                                                        <td><?= $stage['type']; ?></td>
+                                                        <td><?= $stage['duration']; ?></td>
+                                                        <td><?= $stage['email']; ?></td>
+                                                        <td><?= $specialities; ?></td>
+                                                        <td><?= $stage['documents']; ?></td>
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                                                         <td>
                                                             <!-- Formulaire pour mettre à jour un stage -->
                                                             <form method="POST" action="updateStage.php">
                                                                 <input class="btn btn-primary" type="submit" name="update" value="Modifier">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                                                                 <input type="hidden" value="<?= htmlspecialchars($stage['id_stage']); ?>" name="id_stage">
                                                             </form>
                                                             <!-- Lien pour supprimer un stage -->
                                                             <a href="deleteStage.php?id_stage=<?= htmlspecialchars($stage['id_stage']); ?>" class="btn btn-danger">Supprimer</a>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+                                                                <input type="hidden" value="<?= $stage['id_stage']; ?>" name="id_stage">
+                                                            </form>
+                                                            <!-- Lien pour supprimer un stage -->
+                                                            <a href="deleteStage.php?id_stage=<?= $stage['id_stage']; ?>" class="btn btn-danger">Supprimer</a>
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                                                         </td>
                                                     </tr>
                                                     <?php
@@ -138,6 +239,10 @@ foreach ($societes as $societe) {
                                                     ?>
                                                 </tbody>
                                             </table>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 
                                             <!-- Liens de pagination -->
                                             <nav aria-label="Page navigation">
@@ -148,6 +253,11 @@ foreach ($societes as $societe) {
                                                 </ul>
                                             </nav>
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
                                             <!-- Lien pour ajouter un stage -->
                                             <a class="btn btn-primary" href="main.php" role="button">Ajouter un Stage</a>
                                         </div>
@@ -156,9 +266,20 @@ foreach ($societes as $societe) {
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
 
                 </div>
                 <!-- End of Main Content -->
+=======
+<<<<<<< HEAD
+
+                </div>
+                <!-- End of Main Content -->
+=======
+                </div>
+
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
             </div>
         </div>
     </div>

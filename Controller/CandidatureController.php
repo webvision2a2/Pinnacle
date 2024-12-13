@@ -1,4 +1,8 @@
 <?php
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 /* require_once(__DIR__ . '/../config.php');
 
 class CandidatureController
@@ -150,6 +154,11 @@ class CandidatureController
         }
     }
 } */
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 
 require_once(__DIR__ . '/../config.php');
 
@@ -171,7 +180,16 @@ class CandidatureController
     }
 
     // Suppression d'une candidature
+<<<<<<< HEAD
     public function deleteCandidature($id) {
+=======
+<<<<<<< HEAD
+    public function deleteCandidature($id) {
+=======
+    public function deleteCandidature($id)
+    {
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
         if (!is_numeric($id) || $id <= 0) {
             echo "ID invalide.";
             return;
@@ -193,6 +211,10 @@ class CandidatureController
 
     // Ajouter une candidature
     public function addCandidature($candidature) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
         // Récupérer le fichier CV et le déplacer dans le répertoire souhaité
         if (isset($_FILES['cv']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
             $cvDir = "C:/xampp/htdocs/projet web/View/frontoffice/cv/";  // Le répertoire où stocker les CV
@@ -247,12 +269,94 @@ class CandidatureController
         if ($stmt->execute()) {
             return true;
         } else {
+<<<<<<< HEAD
+=======
+=======
+        $sql = "INSERT INTO candidatures (nom, prenom, numero, email, cv, id_stage) VALUES (:nom, :prenom, :numero, :email, :cv, :id_stage)";
+        $db = config::getConnexion();
+
+        try {
+            $stmt = $db->prepare($sql);
+            $stmt->execute([
+                'nom' => $candidature->getNom(),
+                'prenom' => $candidature->getPrenom(),
+                'numero' => $candidature->getNumero(),
+                'email' => $candidature->getEmail(),
+                'cv' => $candidature->getCv(),  // Chemin du CV téléchargé
+                'id_stage' => $candidature->getIdStage()
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            error_log('Erreur lors de l\'ajout de la candidature: ' . $e->getMessage());
+            echo "Erreur: " . $e->getMessage();
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
             return false;
         }
     }
 
+<<<<<<< HEAD
     // Afficher une candidature spécifique (incluant l'état)
     public function showCandidature($id) {
+=======
+    // Mettre à jour une candidature
+    public function updateCandidature($candidature, $id)
+    {
+        if (!is_numeric($id) || $id <= 0) {
+            echo "ID invalide.";
+            return false;
+        }
+
+        try {
+            $db = config::getConnexion();
+
+            // Vérifier si la candidature existe
+            $checkQuery = $db->prepare('SELECT id FROM candidatures WHERE id = :id');
+            $checkQuery->execute(['id' => $id]);
+            if ($checkQuery->rowCount() == 0) {
+                echo "Candidature introuvable.";
+                return false;
+            }
+
+            // Préparer la déclaration de mise à jour
+            $query = $db->prepare(
+                'UPDATE candidatures SET 
+                    nom = :nom,
+                    prenom = :prenom,
+                    numero = :numero,
+                    email = :email,
+                    cv = :cv
+                WHERE id = :id'
+            );
+
+            // Exécuter la requête avec les paramètres
+            $query->execute([
+                'id' => $id,
+                'nom' => $candidature->getNom(),
+                'prenom' => $candidature->getPrenom(),
+                'numero' => $candidature->getNumero(),
+                'email' => $candidature->getEmail(),
+                'cv' => $candidature->getCv()  // Le CV mis à jour
+            ]);
+
+            echo "Candidature mise à jour avec succès.";
+            return true;
+        } catch (PDOException $e) {
+            error_log('Erreur lors de la mise à jour de la candidature: ' . $e->getMessage());
+            echo "Erreur lors de la mise à jour de la candidature.";
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+            return false;
+        }
+    }
+
+<<<<<<< HEAD
+    // Afficher une candidature spécifique (incluant l'état)
+    public function showCandidature($id) {
+=======
+    // Afficher une candidature spécifique
+    public function showCandidature($id)
+    {
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
         if (!is_numeric($id) || $id <= 0) {
             echo "ID invalide.";
             return null;
@@ -262,6 +366,10 @@ class CandidatureController
         $db = config::getConnexion();
 
         try {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
             $query = $db->prepare($sql);
             $query->bindValue(':id', $id, PDO::PARAM_INT);
             $query->execute();
@@ -320,4 +428,22 @@ class CandidatureController
         }
     }
 }
+<<<<<<< HEAD
+=======
+=======
+            // Préparer et exécuter la requête
+            $query = $db->prepare($sql);
+            $query->bindValue(':id', $id, PDO::PARAM_INT); // Liaison de l'ID correctement
+            $query->execute();
+
+            return $query->fetch(PDO::FETCH_ASSOC); // Retourner un seul enregistrement sous forme de tableau associatif
+        } catch (Exception $e) {
+            error_log('Erreur lors de la récupération de la candidature: ' . $e->getMessage());
+            return null; // Retourner null en cas d'erreur
+        }
+    }
+}
+
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
 ?>
