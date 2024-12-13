@@ -13,7 +13,22 @@ if (isset($_POST["update"])) {
     $specialities = isset($_POST['speciality']) ? implode(",", $_POST['speciality']) : '';
     $stage = new Stage(
         $id_stage,
+<<<<<<< HEAD:View/backofficeahmed/updatestage.php
         $_POST['nom_stage'], // Ajout du nom du stage
+=======
+<<<<<<< HEAD
+        $_POST['nom_stage'], // Ajout du nom du stage
+=======
+<<<<<<< HEAD
+        $_POST['nom_stage'], // Ajout du nom du stage
+=======
+<<<<<<< HEAD
+        $_POST['nom_stage'], // Ajout du nom du stage
+=======
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/updatestage.php
         $_POST['type'],
         $_POST['duration'],
         $_POST['email'],
@@ -23,7 +38,23 @@ if (isset($_POST["update"])) {
     );
 
     if ($stageController->updateStage($stage, $id_stage)) {
+<<<<<<< HEAD:View/backofficeahmed/updatestage.php
         header("Location: main.php");
+=======
+<<<<<<< HEAD
+        header("Location: main.php");
+=======
+<<<<<<< HEAD
+        header("Location: main.php");
+=======
+<<<<<<< HEAD
+        header("Location: main.php");
+=======
+        header("Location: stageList.php");
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/updatestage.php
         exit();
     } else {
         echo "Erreur lors de la mise à jour du stage.";
@@ -45,6 +76,16 @@ if (isset($_POST["update"])) {
 <body>
     <h1 class="text-center">Mettre à jour un Stage</h1>
     <form align="center" action="" method="POST" id="stageForm">
+<<<<<<< HEAD:View/backofficeahmed/updatestage.php
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/updatestage.php
         <input type="hidden" name="id_stage" value="<?= htmlspecialchars($stage['id_stage']); ?>">
         
         <div class="mb-3">
@@ -52,6 +93,18 @@ if (isset($_POST["update"])) {
             <input type="text" class="form-control" id="nom_stage" name="nom_stage" value="<?= htmlspecialchars($stage['nom_stage']); ?>" required>
             <div id="nom_stage_message" class="invalid-feedback"></div>
         </div>
+<<<<<<< HEAD:View/backofficeahmed/updatestage.php
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+        <input type="hidden" name="id_stage" value="<?= $stage['id_stage']; ?>">
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/updatestage.php
         
         <div class="mb-3">
             <label for="id_societe" class="form-label">Sélectionner une société :</label>
@@ -109,19 +162,67 @@ if (isset($_POST["update"])) {
         
         <div class="mb-3">
             <label for="duration" class="form-label">Durée du stage :</label>
+<<<<<<< HEAD:View/backofficeahmed/updatestage.php
             <input type="text" class="form-control" id="duration" name="duration" value="<?= htmlspecialchars($stage['duration']); ?>">
+=======
+<<<<<<< HEAD
+            <input type="text" class="form-control" id="duration" name="duration" value="<?= htmlspecialchars($stage['duration']); ?>">
+=======
+<<<<<<< HEAD
+            <input type="text" class="form-control" id="duration" name="duration" value="<?= htmlspecialchars($stage['duration']); ?>">
+=======
+<<<<<<< HEAD
+            <input type="text" class="form-control" id="duration" name="duration" value="<?= htmlspecialchars($stage['duration']); ?>">
+=======
+            <input type="text" class="form-control" id="duration" name="duration" value="<?= $stage['duration']; ?>">
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/updatestage.php
             <div id="duration_message" class="invalid-feedback"></div>
         </div>
         
         <div class="mb-3">
             <label for="email" class="form-label">Adresse Email :</label>
+<<<<<<< HEAD:View/backofficeahmed/updatestage.php
             <input type="text" class="form-control" id="email" name="email" value="<?= htmlspecialchars($stage['email']); ?>">
+=======
+<<<<<<< HEAD
+            <input type="text" class="form-control" id="email" name="email" value="<?= htmlspecialchars($stage['email']); ?>">
+=======
+<<<<<<< HEAD
+            <input type="text" class="form-control" id="email" name="email" value="<?= htmlspecialchars($stage['email']); ?>">
+=======
+<<<<<<< HEAD
+            <input type="text" class="form-control" id="email" name="email" value="<?= htmlspecialchars($stage['email']); ?>">
+=======
+            <input type="text" class="form-control" id="email" name="email" value="<?= $stage['email']; ?>">
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/updatestage.php
             <div id="email_message" class="invalid-feedback"></div>
         </div>
         
         <div class="mb-3">
             <label for="documents" class="form-label">Documents requis :</label>
+<<<<<<< HEAD:View/backofficeahmed/updatestage.php
             <input type="text" class="form-control" id="documents" name="documents" value="<?= htmlspecialchars($stage['documents']); ?>">
+=======
+<<<<<<< HEAD
+            <input type="text" class="form-control" id="documents" name="documents" value="<?= htmlspecialchars($stage['documents']); ?>">
+=======
+<<<<<<< HEAD
+            <input type="text" class="form-control" id="documents" name="documents" value="<?= htmlspecialchars($stage['documents']); ?>">
+=======
+<<<<<<< HEAD
+            <input type="text" class="form-control" id="documents" name="documents" value="<?= htmlspecialchars($stage['documents']); ?>">
+=======
+            <input type="text" class="form-control" id="documents" name="documents" value="<?= $stage['documents']; ?>">
+>>>>>>> bdf924f206f39f0052cdb7e993e0f5176ade5091
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/updatestage.php
             <div id="documents_message" class="invalid-feedback"></div>
         </div>
         

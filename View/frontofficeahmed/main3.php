@@ -37,7 +37,11 @@ if (isset($_POST['submit'])) {
         // Insertion des informations dans la base de données
         $stmt = $db->prepare("INSERT INTO candidatures (nom, prenom, numero, email, cv, id_stage) VALUES (?, ?, ?, ?, ?, ?)");
         if ($stmt->execute([$nom, $prenom, $numero, $email, $cv_path, $id_stage])) {
+<<<<<<< HEAD:View/frontofficeahmed/main3.php
             
+=======
+            echo "<p>Candidature soumise avec succès !</p>";
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/frontoffice/main3.php
         } else {
             echo "<p>Erreur lors de la soumission de la candidature.</p>";
         }

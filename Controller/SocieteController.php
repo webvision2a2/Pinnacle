@@ -43,7 +43,95 @@ class SocieteController
         }
     }
 
+<<<<<<< HEAD
   
+    
+    public function addSociete($societe)
+    {
+        $db = config::getConnexion();
+    
+        // Vérification si le nom de la société existe déjà dans la base de données
+        $query = $db->prepare("SELECT COUNT(*) FROM societe WHERE nom_soc = :nom_soc");
+        $query->execute(['nom_soc' => $societe->getNomSoc()]);
+        $count = $query->fetchColumn();
+    
+        // Si le nom de la société existe déjà, on retourne 'duplicate'
+        if ($count > 0) {
+            $error = "Une société avec ce nom existe déjà. Veuillez en choisir un autre.";
+            return 'duplicate'; 
+        }
+        
+    
+        // Préparer la requête d'insertion dans la base de données
+        $sql = "INSERT INTO societe (nom_soc, adresse, numero, email, speciality) VALUES (:nom_soc, :adresse, :numero, :email, :speciality)";
+        
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+   /*  public function addSociete($societe) {
+        $db = config::getConnexion();
+
+        // Vérifier si le nom de la société existe déjà
+        $query = $db->prepare("SELECT COUNT(*) FROM societe WHERE nom_soc = :nom_soc");
+        $query->execute(['nom_soc' => $societe->getNomSoc()]);
+        $count = $query->fetchColumn();
+        
+        // Debug: Afficher le nombre de sociétés avec ce nom
+        error_log("Nombre de sociétés avec ce nom : " . $count);
+        
+        if ($count > 0) {
+            return 'duplicate'; // Nom de société déjà existant
+        }
+
+        // Ajouter la société à la base de données
+<<<<<<< HEAD
+=======
+=======
+    public function addSociete($societe) {
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+        $sql = "INSERT INTO societe (nom_soc, adresse, numero, email, speciality) VALUES (:nom_soc, :adresse, :numero, :email, :speciality)";
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7
+        try {
+            // Préparer la requête
+            $stmt = $db->prepare($sql);
+<<<<<<< HEAD
+            
+            // Exécuter la requête d'insertion avec les données de la société
+=======
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7
+            $stmt->execute([
+                'nom_soc' => $societe->getNomSoc(),
+                'adresse' => $societe->getAdresse(),
+                'numero' => $societe->getNumero(),
+                'email' => $societe->getEmail(),
+<<<<<<< HEAD
+                'speciality' => implode(", ", $societe->getSpeciality()) // Convertir le tableau des spécialités en chaîne de caractères
+            ]);
+            
+            // Si l'insertion est réussie, retourner 'success'
+            return 'success';
+        } catch (PDOException $e) {
+            // Si une exception se produit (erreur lors de l'insertion), on l'enregistre dans les logs et retourne 'error'
+            error_log("Erreur lors de l'ajout de la société: " . $e->getMessage());
+            return 'error';
+        }
+    }  
+
+=======
+                'speciality' => implode(", ", $societe->getSpeciality())
+            ]);
+            return 'success';
+        } catch (PDOException $e) {
+            error_log("Erreur lors de l'ajout de la société: " . $e->getMessage());
+            return 'error';
+        }
+    } */
+
+<<<<<<< HEAD
+
     
     public function addSociete($societe)
     {
@@ -86,6 +174,12 @@ class SocieteController
         }
     }  
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7
     public function updateSociete($societe, $id)
     {
         if (!is_numeric($id) || $id <= 0) {
@@ -172,6 +266,13 @@ class SocieteController
         }
     }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7
         // Ajouter cette méthode pour gérer la recherche et la pagination
         public function searchAndPaginate($searchTerm = '', $limit, $offset) {
             $db = config::getConnexion();
@@ -221,6 +322,15 @@ class SocieteController
     }
 
     
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+    // Afficher une société spécifique
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7
 }
 
 

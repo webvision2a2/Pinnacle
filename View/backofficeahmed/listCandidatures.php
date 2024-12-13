@@ -2,6 +2,7 @@
 require_once '../../controller/CandidatureController.php';
 require_once '../../controller/StageController.php';
 
+<<<<<<< HEAD:View/backofficeahmed/listCandidatures.php
 
 $candidatureController = new CandidatureController();
 $stageController = new StageController();
@@ -16,16 +17,46 @@ if (isset($_GET['id_stage'])) {
     $offset = ($page - 1) * $limit;
 
     // List candidacies with pagination and search
+=======
+$candidatureController = new CandidatureController();
+$stageController = new StageController();
+
+if (isset($_GET['id_stage'])) {
+    $id_stage = $_GET['id_stage'];
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+    // Récupérer les termes de recherche et la pagination
+    $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+    $limit = 3; // Nombre de candidatures par page
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
+
+    // Liste des candidatures avec pagination et recherche
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/listCandidatures.php
     $candidatures = $candidatureController->searchAndPaginate($id_stage, $searchTerm, $limit, $offset);
     $totalResults = $candidatureController->countSearchResults($id_stage, $searchTerm);
     $totalPages = ceil($totalResults / $limit);
 
+<<<<<<< HEAD:View/backofficeahmed/listCandidatures.php
+=======
+<<<<<<< HEAD
+=======
+=======
+    $candidatures = $candidatureController->listCandidaturesForStage($id_stage);
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/listCandidatures.php
     $stage = $stageController->showStage($id_stage);
 } else {
     echo "<p>ID de stage manquant.</p>";
     exit();
 }
+<<<<<<< HEAD:View/backofficeahmed/listCandidatures.php
 
+=======
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/listCandidatures.php
 ?>
 
 <!DOCTYPE html>
@@ -61,6 +92,13 @@ if (isset($_GET['id_stage'])) {
                         <h1 class="h3 mb-0 text-gray-800">Liste des Candidatures pour le Stage: <?= htmlspecialchars($stage['nom_stage']); ?></h1>
                     </div>
 
+<<<<<<< HEAD:View/backofficeahmed/listCandidatures.php
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/listCandidatures.php
                     <!-- Formulaire de recherche -->
                     <form method="GET" action="" class="form-inline mb-4">
                         <div class="input-group">
@@ -74,6 +112,14 @@ if (isset($_GET['id_stage'])) {
                         <input type="hidden" name="id_stage" value="<?= htmlspecialchars($id_stage); ?>">
                     </form>
 
+<<<<<<< HEAD:View/backofficeahmed/listCandidatures.php
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/listCandidatures.php
                     <div class="row">
                         <div class="col-xl-12 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
@@ -89,15 +135,39 @@ if (isset($_GET['id_stage'])) {
                                                         <th>Numéro</th>
                                                         <th>Email</th>
                                                         <th>CV</th>
+<<<<<<< HEAD:View/backofficeahmed/listCandidatures.php
                                                         <th>État</th>
+=======
+<<<<<<< HEAD
+                                                        <th>État</th>
+=======
+<<<<<<< HEAD
+                                                        <th>État</th>
+=======
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/listCandidatures.php
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php
                                                     foreach ($candidatures as $candidature) {
+<<<<<<< HEAD:View/backofficeahmed/listCandidatures.php
                                                         // Mettre à jour le chemin du CV pour s'assurer qu'il est accessible
                                                         $cvPath = '../frontofficeahmed/' . $candidature['cv'];
+=======
+<<<<<<< HEAD
+                                                        // Mettre à jour le chemin du CV pour s'assurer qu'il est accessible
+                                                        $cvPath = '../frontoffice/' . $candidature['cv'];
+=======
+<<<<<<< HEAD
+                                                        // Mettre à jour le chemin du CV pour s'assurer qu'il est accessible
+                                                        $cvPath = '../frontoffice/' . $candidature['cv'];
+=======
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/listCandidatures.php
                                                     ?>
                                                     <tr>
                                                         <td><?= $candidature['id']; ?></td>
@@ -105,6 +175,13 @@ if (isset($_GET['id_stage'])) {
                                                         <td><?= htmlspecialchars($candidature['prenom']); ?></td>
                                                         <td><?= htmlspecialchars($candidature['numero']); ?></td>
                                                         <td><?= htmlspecialchars($candidature['email']); ?></td>
+<<<<<<< HEAD:View/backofficeahmed/listCandidatures.php
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/listCandidatures.php
                                                         <td><a href="<?= htmlspecialchars($cvPath); ?>" target="_blank">Voir le CV</a></td>
                                                         <td><?= htmlspecialchars($candidature['etat']); ?></td> <!-- Affichage de l'état de la candidature -->
                                                         <td>
@@ -119,10 +196,32 @@ if (isset($_GET['id_stage'])) {
                                                             <?php } ?>
                                                             <!-- Formulaire pour supprimer une candidature -->
                                                             <form method="POST" action="deleteCandidature.php" style="margin-top: 5px;">
+<<<<<<< HEAD:View/backofficeahmed/listCandidatures.php
+=======
+<<<<<<< HEAD
+=======
+=======
+                                                        <td><a href="<?= htmlspecialchars($candidature['cv']); ?>" target="_blank">Voir le CV</a></td>
+                                                        <td>
+                                                            <!-- Formulaire pour supprimer une candidature -->
+                                                            <form method="POST" action="deleteCandidature.php">
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/listCandidatures.php
                                                                 <input type="hidden" name="id" value="<?= htmlspecialchars($candidature['id']); ?>">
                                                                 <input type="hidden" name="id_stage" value="<?= htmlspecialchars($id_stage); ?>">
                                                                 <input class="btn btn-danger" type="submit" name="delete" value="Supprimer">
                                                             </form>
+<<<<<<< HEAD:View/backofficeahmed/listCandidatures.php
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/listCandidatures.php
                                                         </td>
                                                     </tr>
                                                     <?php
@@ -130,6 +229,13 @@ if (isset($_GET['id_stage'])) {
                                                     ?>
                                                 </tbody>
                                             </table>
+<<<<<<< HEAD:View/backofficeahmed/listCandidatures.php
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/listCandidatures.php
 
                                             <!-- Liens de pagination -->
                                             <nav aria-label="Page navigation">
@@ -140,6 +246,14 @@ if (isset($_GET['id_stage'])) {
                                                 </ul>
                                             </nav>
 
+<<<<<<< HEAD:View/backofficeahmed/listCandidatures.php
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 9a548a0f2e33eeeca8558231a4df113c476541b6
+>>>>>>> 9b68f2222f40985bd4afe91fc6758d1f8609557d
+>>>>>>> b4a7ddee5f45959b2e0369349cbe89e271e53df7:View/backoffice/listCandidatures.php
                                             <a class="btn btn-primary" href="main.php" role="button">Retour à la liste des stages</a>
                                         </div>
                                     </div>
