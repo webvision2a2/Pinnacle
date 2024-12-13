@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Get the Domaine ID from the query string
-$domaine_id = isset($_GET['Domaine_id']) ? intval($_GET['Domaine_id']) : 0;
+$domaine_id = isset($_GET['domaine_id']) ? intval($_GET['domaine_id']) : 0;
 
 // Fetch courses for the selected domaine
 $cours = getCoursByDomaineId($domaine_id);
@@ -30,55 +30,55 @@ $domaine = getDomaineById($domaine_id); // Get domain details for display
     <link href="css/style.css" rel="stylesheet">
 
     <style>
-    body {
-        font-family: 'Heebo', sans-serif;
-        background-color: #f8f9fa;
-    }
-    h1 {
-        color: #2C24CE;
-        margin: 50px 0 20px; /* Increased margin at the top for spacing */
-        text-align: center;
-    }
-    .container {
-        margin: 20px;
-    }
-    .card {
-        margin: 15px 0; /* Space between cards */
-        border: 2px solid #007bff; /* Blue border */
-        border-radius: 10px; /* Rounded corners */
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        background-color: white; /* White background for cards */
-    }
-    .card-header {
-        background-color: white; /* Change header color to white */
-        color: #2C24CE; /* Change text color to blue for course name */
-        font-size: 1.5rem;
-        text-align: center;
-        padding: 10px;
-    }
-    .card-body {
-        padding: 15px;
-    }
-    .btn-cours {
-        background: linear-gradient(45deg, #007bff, #0056b3); /* Blue gradient */
-        color: white;
-        border-radius: 25px; /* Rounded corners */
-        padding: 10px 20px; /* Comfortable padding */
-        font-size: 0.9rem; /* Smaller font size */
-        text-decoration: none;
-        transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
-    }
-    .btn-cours:hover {
-        background-color: orange; /* Change to orange on hover */
-        transform: translateY(-2px); /* Slight lift effect on hover */
-    }
-    .footer {
-        background-color: #2C24CE; /* Same color as cards */
-        color: white; /* White text for contrast */
-        padding: 30px 0;
-        text-align: center;
-    }
-</style>
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            color: #2C24CE;
+            margin: 50px 0 20px; /* Increased margin at the top for spacing */
+            text-align: center;
+        }
+        .container {
+            margin: 20px;
+        }
+        .card {
+            margin: 15px 0; /* Space between cards */
+            border: 2px solid #007bff; /* Blue border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            background-color: white; /* White background for cards */
+        }
+        .card-header {
+            background-color: white; /* Change header color to white */
+            color: #2C24CE; /* Change text color to blue for course name */
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 10px;
+        }
+        .card-body {
+            padding: 15px;
+        }
+        .btn-cours {
+            background: linear-gradient(45deg, #007bff, #0056b3); /* Blue gradient */
+            color: white;
+            border-radius: 25px; /* Rounded corners */
+            padding: 10px 20px; /* Comfortable padding */
+            font-size: 0.9rem; /* Smaller font size */
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+        }
+        .btn-cours:hover {
+            background-color: orange; /* Change to orange on hover */
+            transform: translateY(-2px); /* Slight lift effect on hover */
+        }
+        .footer {
+            background-color: #2C24CE; /* Same color as cards */
+            color: white; /* White text for contrast */
+            padding: 30px 0;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
@@ -109,21 +109,20 @@ $domaine = getDomaineById($domaine_id); // Get domain details for display
 
 <!-- Catalogue Content Start -->
 <div class="container">
-<h1>''</h1>
-
-    <h1>Liste des Cours pour <?php echo htmlspecialchars($domaine['name']); ?></h1>
+    <h1>''</h1>
+    <h1>Liste des Cours pour <?php echo htmlspecialchars($domaine['nom']); ?></h1>
 
     <div class="row">
         <?php if (!empty($cours)): ?>
             <?php foreach ($cours as $course): ?>
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
-                        <div class="card-header text-center ">
-                            <h5><?php echo htmlspecialchars($course['nom']) ; ?></h5> <!-- Course name styled -->
+                        <div class="card-header text-center">
+                            <h5><?php echo htmlspecialchars($course['nom']); ?></h5> <!-- Course name styled -->
                         </div>
-                        <div class="card-body text-center"> <!-- Add text-center here -->
-                            <p><strong>Domaine:</strong> <?php echo htmlspecialchars($domaine['name']); ?></p>
-                            <a href="<?php echo htmlspecialchars($course['fichier']); ?>" target="_blank" class="btn btn-cours">Télécharger</a> <!-- Button styled -->
+                        <div class="card-body text-center">
+                            <p><strong>Domaine:</strong> <?php echo htmlspecialchars($domaine['nom']); ?></p>
+                            <a href="<?php echo htmlspecialchars($course['fichier']); ?>" target="_blank" class="btn btn-cours">Télécharger</a>
                         </div>
                     </div>
                 </div>
@@ -132,13 +131,14 @@ $domaine = getDomaineById($domaine_id); // Get domain details for display
             <p>Aucun cours disponible pour ce domaine.</p>
         <?php endif; ?>
     </div>
+    
 </div>
 
 <!-- Footer Start -->
 <footer class="footer">
     <div class="container">
-       <p>© 2023 Pinnacle. Tous droits réservés.</p>
-   </div>
+        <p>© 2023 Pinnacle. Tous droits réservés.</p>
+    </div>
 </footer>
 <!-- Footer End -->
 
