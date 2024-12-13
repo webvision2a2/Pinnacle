@@ -1,12 +1,20 @@
 <?php
 require_once '../../controller/SocieteController.php';
+
 $societeController = new SocieteController();
-$list = $societeController->listSociete();
+
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$limit = 6; // Nombre de sociétés par page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
+$list = $societeController->searchAndPaginate($search, $limit, $offset);
+$totalSocietes = $societeController->countSearchResults($search);
+$totalPages = ceil($totalSocietes / $limit);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <title>DGital - Digital Agency HTML Template</title>
@@ -37,7 +45,6 @@ $list = $societeController->listSociete();
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 </head>
-
 <body>
     <div class="container-xxl bg-white p-0">
 
@@ -53,8 +60,8 @@ $list = $societeController->listSociete();
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav mx-auto py-0">
                         <a href="index.php" class="nav-item nav-link">Home</a>
-                        <a href="about.html" class="nav-item nav-link">About</a>
-                        <a href="main.php" class="nav-item nav-link active">societe</a>
+                        <a href="main.php" class="nav-item nav-link active">Societes</a>
+                        <a href="main2.php" class="nav-item nav-link ">Stages</a>
                         <a href="project.html" class="nav-item nav-link">Project</a>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -89,6 +96,17 @@ $list = $societeController->listSociete();
         </div>
         <!-- Navbar & Hero End -->
 
+        <!-- Search and Filter Start -->
+        <div class="container py-5">
+            <form method="GET" action="main.php">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="search" placeholder="Search by name" value="<?= htmlspecialchars($search); ?>">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+        <!-- Search and Filter End -->
+
         <!-- Service Start -->
         <div class="container-xxl py-5">
             <div class="container py-5 px-lg-5">
@@ -101,15 +119,29 @@ $list = $societeController->listSociete();
                                     <i class="fas fa-building fa-2x"></i>
                                 </div>
                                 <h5 class="mb-3"><?= htmlspecialchars($societe['nom_soc']); ?></h5>
-                                <p class="m-0"><?= htmlspecialchars($societe['speciality']); ?></p>
-                                <p class="m-0"><?= htmlspecialchars($societe['adresse']); ?></p>
-                                <p class="m-0"><?= htmlspecialchars($societe['numero']); ?></p>
-                                <p class="m-0"><?= htmlspecialchars($societe['email']); ?></p>
-                                <a class="btn btn-square" href="companyDetails.php?id=<?= $societe['id']; ?>"><i class="fa fa-arrow-right"></i></a>
+                                <p class="m-0"><strong>Speciality:</strong> <?= htmlspecialchars($societe['speciality']); ?></p>
+                                <p class="m-0"><strong>Address:</strong> <?= htmlspecialchars($societe['adresse']); ?></p>
+                                <p class="m-0"><strong>Phone:</strong> <?= htmlspecialchars($societe['numero']); ?></p>
+                                <p class="m-0"><strong>Email:</strong> <?= htmlspecialchars($societe['email']); ?></p>
+                                <div class="mt-3">
+                                    <a class="btn btn-outline-primary" href="companyDetails.php?id=<?= $societe['id']; ?>">See Details</a>
+                                </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
+
+                <!-- Pagination Start -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center mt-4">
+                        <?php for ($i = 1; $i <= $totalPages; $i++) { ?>
+                            <li class="page-item <?= ($page == $i) ? 'active' : ''; ?>">
+                                <a class="page-link" href="?page=<?= $i; ?>&search=<?= htmlspecialchars($search); ?>"><?= $i; ?></a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </nav>
+                <!-- Pagination End -->
             </div>
         </div>
         <!-- Service End -->
@@ -155,3 +187,5 @@ $list = $societeController->listSociete();
 </body>
 
 </html>
+
+        

@@ -27,7 +27,7 @@ if (
 
     if ($updateResult) {
       // Redirect to societe list on successful update
-      header('Location: societeList.php');
+      header('Location: main2.php');
     } else {
       // Handle update failure (e.g., database error)
       $error = "Error updating company information";
@@ -154,43 +154,28 @@ if (isset($_POST['id'])) {
                                             <h6 id="8" class="text-success"></h6>
 
                                             <!-- Specialities -->
-                                            <div class="form-group" id="checkbox">
+                                            <div class="form-group">
                                                 <label for="speciality" class="form-label">Les domaines de la Société :</label>
-                                                <table class="table table-borderless">
-                                                    <tr>
-                                                        <td><input type="checkbox" class="btn-check" id="web" name="speciality[]" value="web" <?php echo (strpos($societe['speciality'], 'web') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="web">Développement Web</label></td>
-                                                        <td><input type="checkbox" class="btn-check" id="design" name="speciality[]" value="design" <?php echo (strpos($societe['speciality'], 'design') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="design">Design</label></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="checkbox" class="btn-check" id="dev_log" name="speciality[]" value="dev_log" <?php echo (strpos($societe['speciality'], 'dev_log') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="dev_log">Développement de Logiciels</label></td>
-                                                        <td><input type="checkbox" class="btn-check" id="sec" name="speciality[]" value="sec" <?php echo (strpos($societe['speciality'], 'sec') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="sec">Sécurité Informatique</label></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="checkbox" class="btn-check" id="reseau" name="speciality[]" value="reseau" <?php echo (strpos($societe['speciality'], 'reseau') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="reseau">Réseaux et Télécommunications</label></td>
-                                                        <td><input type="checkbox" class="btn-check" id="ai" name="speciality[]" value="ai" <?php echo (strpos($societe['speciality'], 'ai') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="ai">Intelligence Artificielle (IA)</label></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="checkbox" class="btn-check" id="data_science" name="speciality[]" value="data_science" <?php echo (strpos($societe['speciality'], 'data_science') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="data_science">Data Science</label></td>
-                                                        <td><input type="checkbox" class="btn-check" id="cloud" name="speciality[]" value="cloud" <?php echo (strpos($societe['speciality'], 'cloud') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="cloud">Informatique en Nuage (Cloud Computing)</label></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="checkbox" class="btn-check" id="vr_ar" name="speciality[]" value="vr_ar" <?php echo (strpos($societe['speciality'], 'vr_ar') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="vr_ar">Réalité Virtuelle (VR) et Réalité Augmentée (AR)</label></td>
-                                                        <td><input type="checkbox" class="btn-check" id="ad_sys" name="speciality[]" value="ad_sys" <?php echo (strpos($societe['speciality'], 'ad_sys') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="ad_sys">Administration des Systèmes</label></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="checkbox" class="btn-check" id="bigdata" name="speciality[]" value="bigdata" <?php echo (strpos($societe['speciality'], 'bigdata') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="bigdata">Big Data</label></td>
-                                                        <td><input type="checkbox" class="btn-check" id="dev_mobile" name="speciality[]" value="dev_mobile" <?php echo (strpos($societe['speciality'], 'dev_mobile') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="dev_mobile">Développement Mobile</label></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><input type="checkbox" class="btn-check" id="robotics" name="speciality[]" value="robotics" <?php echo (strpos($societe['speciality'], 'robotics') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="robotics">Robotics</label></td>
-                                                        <td><input type="checkbox" class="btn-check" id="iot" name="speciality[]" value="iot" <?php echo (strpos($societe['speciality'], 'iot') !== false) ? 'checked' : ''; ?>> <label class="btn btn-outline-primary w-100" for="iot">Internet des Objets (IoT)</label></td>
-                                                    </tr>
-
-                                                    <!-- Add more specialities as needed -->
-                                                </table>
+                                                <select class="form-control" id="speciality" name="speciality[]" multiple>
+                                                    <option value="web" <?php echo (strpos($societe['speciality'], 'web') !== false) ? 'selected' : ''; ?>>Développement Web</option>
+                                                    <option value="design" <?php echo (strpos($societe['speciality'], 'design') !== false) ? 'selected' : ''; ?>>Design</option>
+                                                    <option value="dev_log" <?php echo (strpos($societe['speciality'], 'dev_log') !== false) ? 'selected' : ''; ?>>Développement de Logiciels</option>
+                                                    <option value="sec" <?php echo (strpos($societe['speciality'], 'sec') !== false) ? 'selected' : ''; ?>>Sécurité Informatique</option>
+                                                    <option value="reseau" <?php echo (strpos($societe['speciality'], 'reseau') !== false) ? 'selected' : ''; ?>>Réseaux et Télécommunications</option>
+                                                    <option value="ai" <?php echo (strpos($societe['speciality'], 'ai') !== false) ? 'selected' : ''; ?>>Intelligence Artificielle (IA)</option>
+                                                    <option value="data_science" <?php echo (strpos($societe['speciality'], 'data_science') !== false) ? 'selected' : ''; ?>>Data Science</option>
+                                                    <option value="cloud" <?php echo (strpos($societe['speciality'], 'cloud') !== false) ? 'selected' : ''; ?>>Informatique en Nuage (Cloud Computing)</option>
+                                                    <option value="vr_ar" <?php echo (strpos($societe['speciality'], 'vr_ar') !== false) ? 'selected' : ''; ?>>Réalité Virtuelle (VR) et Réalité Augmentée (AR)</option>
+                                                    <option value="ad_sys" <?php echo (strpos($societe['speciality'], 'ad_sys') !== false) ? 'selected' : ''; ?>>Administration des Systèmes</option>
+                                                    <option value="bigdata" <?php echo (strpos($societe['speciality'], 'bigdata') !== false) ? 'selected' : ''; ?>>Big Data</option>
+                                                    <option value="dev_mobile" <?php echo (strpos($societe['speciality'], 'dev_mobile') !== false) ? 'selected' : ''; ?>>Développement Mobile</option>
+                                                    <option value="robotics" <?php echo (strpos($societe['speciality'], 'robotics') !== false) ? 'selected' : ''; ?>>Robotics</option>
+                                                    <option value="iot" <?php echo (strpos($societe['speciality'], 'iot') !== false) ? 'selected' : ''; ?>>Internet des Objets (IoT)</option>
+                                                </select>
                                             </div>
                                             <h6 id="9" class="text-danger"></h6>
                                             <h6 id="10" class="text-success"></h6>
+
 
                                             <!-- Submit Button -->
                                             <button type="submit" class="btn btn-primary" id="button" name="submit">Update</button>

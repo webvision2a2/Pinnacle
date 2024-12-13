@@ -1,8 +1,25 @@
 <?php
 require_once '../../controller/SocieteController.php';
+
 $societeController = new SocieteController();
-$list = $societeController->listSociete();
+
+// Get the search term and page number
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+// Define pagination limit and calculate offset
+$limit = 6; // Number of companies per page
+$offset = ($page - 1) * $limit; // Calculate the offset for the query
+
+// Fetch the list of companies with pagination and search term
+$list = $societeController->searchAndPaginate($searchTerm, $limit, $offset);
+
+// Get the total number of results for pagination calculation
+$totalResults = $societeController->countSearchResults($searchTerm);
+$totalPages = ceil($totalResults / $limit); // Calculate the total number of pages
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,23 +43,7 @@ $list = $societeController->listSociete();
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="main2.php">
-                    <i class="fas fa-fw fa-plus-circle"></i>
-                    <span>Add Company</span>
-                </a>
-            </li>
-        </ul>
-        <!-- End of Sidebar -->
-
+        
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -51,12 +52,9 @@ $list = $societeController->listSociete();
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-
                 </nav>
                 <!-- End of Topbar -->
 
@@ -68,10 +66,20 @@ $list = $societeController->listSociete();
                         <h1 class="h3 mb-0 text-gray-800">Company List</h1>
                     </div>
 
+                    <!-- Search Form -->
+                    <form method="GET" action="" class="form-inline mb-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search" placeholder="Rechercher" value="<?= htmlspecialchars($searchTerm); ?>" aria-label="Rechercher" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
                     <!-- Content Row -->
                     <div class="row">
-
-                        <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-12 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
@@ -87,9 +95,7 @@ $list = $societeController->listSociete();
                                                     <th>Domaine</th>
                                                     <th colspan="2">Actions</th>
                                                 </tr>
-                                                <?php
-                                                    foreach ($list as $societe) {
-                                                ?> 
+                                                <?php foreach ($list as $societe): ?>
                                                 <tr>
                                                     <td><?= $societe['id']; ?></td>
                                                     <td><?= $societe['nom_soc']; ?></td>
@@ -99,50 +105,60 @@ $list = $societeController->listSociete();
                                                     <td><?= $societe['speciality']; ?></td>
                                                     <td align="center">
                                                         <form method="POST" action="updateSociete.php">
-                                                            <input type="submit" name="update" value="Update">
-                                                            <input type="hidden" value=<?= $societe['id']; ?> name="id">
+                                                            <input class="btn btn-primary" type="submit" name="update" value="Update">
+                                                            <input type="hidden" value="<?= $societe['id']; ?>" name="id">
                                                         </form>
                                                     </td>
                                                     <td>
-                                                        <a href="deleteSociete.php?id=<?= $societe['id']; ?>">Delete</a>
+                                                        <a class="btn btn-danger" href="deleteSociete.php?id=<?= $societe['id']; ?>" role="button">Delete</a>
                                                     </td>
                                                 </tr>
-                                                <?php
-                                                    }
-                                                ?>
+                                                <?php endforeach; ?>
                                             </table>
+
+                                            <!-- Pagination Links -->
+                                            <nav aria-label="Page navigation">
+                                                <ul class="pagination">
+                                                    <li class="page-item <?= ($page == 1) ? 'disabled' : ''; ?>">
+                                                        <a class="page-link" href="?page=1&search=<?= htmlspecialchars($searchTerm); ?>">First</a>
+                                                    </li>
+                                                    <li class="page-item <?= ($page == 1) ? 'disabled' : ''; ?>">
+                                                        <a class="page-link" href="?page=<?= $page - 1; ?>&search=<?= htmlspecialchars($searchTerm); ?>">Previous</a>
+                                                    </li>
+                                                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                                    <li class="page-item <?= ($page == $i) ? 'active' : ''; ?>">
+                                                        <a class="page-link" href="?page=<?= $i; ?>&search=<?= htmlspecialchars($searchTerm); ?>"><?= $i; ?></a>
+                                                    </li>
+                                                    <?php endfor; ?>
+                                                    <li class="page-item <?= ($page == $totalPages) ? 'disabled' : ''; ?>">
+                                                        <a class="page-link" href="?page=<?= $page + 1; ?>&search=<?= htmlspecialchars($searchTerm); ?>">Next</a>
+                                                    </li>
+                                                    <li class="page-item <?= ($page == $totalPages) ? 'disabled' : ''; ?>">
+                                                        <a class="page-link" href="?page=<?= $totalPages; ?>&search=<?= htmlspecialchars($searchTerm); ?>">Last</a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+
+                                            <a class="btn btn-primary" href="main2.php" role="button">Add Company</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
 
                 </div>
                 <!-- End of Main Content -->
-
-                <!-- Footer 
-                <footer class="sticky-footer bg-white">
-                    <div class="container my-auto">
-                        <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; Business Directory 2024</span>
-                        </div>
-                    </div>
-                </footer>
-                 End of Footer -->
 
             </div>
             <!-- End of Content Wrapper -->
 
         </div>
         <!-- End of Page Wrapper -->
-       
+
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
-        <script src="js/addSociete.js"></script>
 
         <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>
@@ -153,13 +169,6 @@ $list = $societeController->listSociete();
 
         <!-- Custom scripts for all pages-->
         <script src="js/sb-admin-2.min.js"></script>
-
-        <!-- Page level plugins -->
-        <script src="vendor/chart.js/Chart.min.js"></script>
-
-        <!-- Page level custom scripts -->
-        <script src="js/demo/chart-area-demo.js"></script>
-        <script src="js/demo/chart-pie-demo.js"></script>
 
     </body>
 </html>
