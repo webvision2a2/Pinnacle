@@ -104,7 +104,7 @@ function sendConfirmationEmail($userEmail, $userName, $event) {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'pinnacleofficiel@gmail.com';
-        $mail->Password = 'your_app_password'; // Use your actual app password
+        $mail->Password = 'eiji wfde spsg nnna'; // Use your actual app password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
