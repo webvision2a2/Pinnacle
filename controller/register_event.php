@@ -14,50 +14,62 @@ use chillerlan\QRCode\QROptions;
 // Get the database connection
 $db = config::getConnexion();
 try {
-// Get the event_id from the request
-$event_id = isset($_POST['event_id']) ? (int)$_POST['event_id'] : 0;
+    // Get the event_id from the request
+    $event_id = isset($_POST['event_id']) ? (int)$_POST['event_id'] : 0;
 
-if ($event_id > 0) {
-    try {
-        // Check if the event exists
-        $eventQuery = "SELECT * FROM events WHERE id = :event_id";
-        $eventStmt = $db->prepare($eventQuery);
-        $eventStmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
-        $eventStmt->execute();
-        $event = $eventStmt->fetch(PDO::FETCH_ASSOC);
+    if ($event_id > 0) {
+        try {
+            // Check if the event exists
+            $eventQuery = "SELECT * FROM events WHERE id = :event_id";
+            $eventStmt = $db->prepare($eventQuery);
+            $eventStmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
+            $eventStmt->execute();
+            $event = $eventStmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$event) {
-            error_log("Event not found for event_id: $event_id");
-            header('Location:?error=event_not_found');
+            if (!$event) {
+                error_log("Event not found for event_id: $event_id");
+                header('Location:?error=event_not_found');
+                exit;
+            }
+
+            // Fetch participants for the event
+            $participantQuery = "SELECT nom, prenom, email FROM events_participants WHERE event_id = :event_id";
+            $participantStmt = $db->prepare($participantQuery);
+            $participantStmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
+            $participantStmt->execute();
+            $participants = $participantStmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Process participants and send emails
+            foreach ($participants as $participant) {
+                // Insert participant into the events_participants table
+                $insertQuery = "INSERT INTO events_participants (event_id, nom, prenom, email) 
+                                VALUES (:event_id, :nom, :prenom, :email)";
+                $insertStmt = $db->prepare($insertQuery);
+                $insertStmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
+                $insertStmt->bindParam(':nom', $participant['nom'], PDO::PARAM_STR);
+                $insertStmt->bindParam(':prenom', $participant['prenom'], PDO::PARAM_STR);
+                $insertStmt->bindParam(':email', $participant['email'], PDO::PARAM_STR);
+                $insertStmt->execute();
+
+                // Send confirmation email
+                $userName = $participant['prenom'] . ' ' . $participant['nom'];
+                $emailSent = sendConfirmationEmail($participant['email'], $userName, $event);
+
+                if (!$emailSent) {
+                    error_log("Failed to send email to {$participant['email']}");
+                }
+            }
+
+            // Redirect after processing
+            header('Location: ../view/FrontOffice/eventdispo.php');
+            exit;
+        } catch (Exception $e) {
+            error_log("Error: " . $e->getMessage());
+            header('Location:?error=server_error');
             exit;
         }
-
-        // Fetch participants for the event
-        $participantQuery = "SELECT nom, prenom, email FROM events_participants WHERE event_id = :event_id";
-        $participantStmt = $db->prepare($participantQuery);
-        $participantStmt->bindParam(':event_id', $event_id, PDO::PARAM_INT);
-        $participantStmt->execute();
-        $participants = $participantStmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Process participants and send emails
-        foreach ($participants as $participant) {
-            $userName = $participant['prenom'] . ' ' . $participant['nom'];
-            $emailSent = sendConfirmationEmail($participant['email'], $userName, $event);
-
-            if (!$emailSent) {
-                error_log("Failed to send email to {$participant['email']}");
-            }
-        }
-
-        // Redirect after processing
-        header('Location: ../view/FrontOffice/eventdispo.php');
-        exit;
-    } catch (Exception $e) {
-        error_log("Error: " . $e->getMessage());
-        header('Location:?error=server_error');
-        exit;
     }
-}} catch (Exception $e) {
+} catch (Exception $e) {
     // Handle other general exceptions (logic, mail errors, etc.)
     error_log("General Error: " . $e->getMessage());
     // User-friendly message for general errors
@@ -65,11 +77,14 @@ if ($event_id > 0) {
     exit;
 }
 
-
 function sendConfirmationEmail($userEmail, $userName, $event) {
     $mail = new PHPMailer(true);
 
     try {
+        // Debugging: Enable verbose SMTP debugging
+        $mail->SMTPDebug = 2;  // Enable debug output
+        $mail->Debugoutput = 'html'; // Show output in HTML format
+
         // Generate the QR code
         $ticket_code = strtoupper(uniqid('TICKET_')); // Unique ticket code
         $qrData = "Event: {$event['title']}\nDate: {$event['date']}\nTicket Code: {$ticket_code}";
@@ -89,7 +104,7 @@ function sendConfirmationEmail($userEmail, $userName, $event) {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'pinnacleofficiel@gmail.com';
-        $mail->Password = 'eiji wfde spsg nnna'; // Use your actual app password
+        $mail->Password = 'your_app_password'; // Use your actual app password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
@@ -139,9 +154,15 @@ function sendConfirmationEmail($userEmail, $userName, $event) {
         </html>";
 
         // Send email
+        if (!$mail->send()) {
+            error_log("Mailer Error: " . $mail->ErrorInfo);
+        } else {
+            error_log("Message sent successfully to $userEmail");
+        }
+
         return $mail->send();
     } catch (Exception $e) {
-        error_log("Email Error: {$mail->ErrorInfo}");
+        error_log("Email Error: {$e->getMessage()}");
         return false;
     }
 }
