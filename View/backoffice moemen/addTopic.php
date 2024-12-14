@@ -1,6 +1,6 @@
 <?php
-    require_once '../Controller/topicController.php';
-    require_once '../Model/topic.php';
+    require_once '../../Controller/topicController.php';
+    require_once '../../Model/topic.php';
 
     $topicController = new TopicController();
 
@@ -14,7 +14,7 @@
 
     $topicController->addTopic($topic);
 
-    header("Location: topicsPage.php");
+    header("Location: topicsList.php");
 
     exit;
 ?>

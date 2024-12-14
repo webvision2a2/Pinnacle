@@ -1,5 +1,5 @@
 <?php
-    require_once '../Controller/commentController.php';
+    require_once '../../Controller/commentController.php';
 
     $commentController = new CommentController();
 

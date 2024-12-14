@@ -1,6 +1,6 @@
 <?php
-require_once '../Model/comment.php';
-require_once '../Config.php';
+require_once(__DIR__ . '/../Model/comment.php');
+require_once(__DIR__ . '/../Config.php');
 
 class CommentController {
     public function getComments($idtopic) {

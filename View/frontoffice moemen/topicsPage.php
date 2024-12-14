@@ -1,7 +1,7 @@
 <?php
-    require_once '../Controller/topicController.php';
-    require_once '../Controller/commentController.php'; // Ajouter le contrôle des commentaires
-    require_once '../Model/topic.php';
+    require_once '../../Controller/topicController.php';
+    require_once '../../Controller/commentController.php'; // Ajouter le contrôle des commentaires
+    require_once '../../Model/topic.php';
     
 
     $topicController = new TopicController();

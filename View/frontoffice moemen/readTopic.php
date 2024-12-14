@@ -1,5 +1,5 @@
 <?php
-    include_once '../Controller/topicController.php';
+    include_once '../../Controller/topicController.php';
     $topicController = new TopicController();
     $topic = $topicController->getTopicById($_GET['id']);
 ?>
@@ -106,7 +106,7 @@
 
                                     <div class="comments-section mt-5">
                                         <?php
-                                        require_once '../Controller/commentController.php';	
+                                        require_once '../../Controller/commentController.php';	
 
                                         $topid = $_GET['id'] ?? null;
 

@@ -86,7 +86,7 @@
                                             <div>
                                                 <h3>Edit Comment</h3>
                                                 <?php 
-                                                    require_once '../Controller/commentController.php';
+                                                    require_once '../../Controller/commentController.php';
                                                     $commentController = new CommentController();
 
                                                     $comment = $commentController->getCommentById($_GET['id'],$_GET['topid']);

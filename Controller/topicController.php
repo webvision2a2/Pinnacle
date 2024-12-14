@@ -1,6 +1,6 @@
 <?php
-    require_once '../Config.php';
-    require_once '../Model/topic.php';
+    require_once(__DIR__ . '/../Config.php');
+    require_once(__DIR__ . '/../Model/topic.php');
 
     class TopicController {
 

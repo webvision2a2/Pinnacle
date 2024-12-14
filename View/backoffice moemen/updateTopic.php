@@ -1,5 +1,5 @@
 <?php
-    require_once '../Controller/topicController.php';
+    require_once '../../Controller/topicController.php';
     $topicController = new TopicController();
     $topic = $topicController->getTopicById($_GET['id']);
 ?>

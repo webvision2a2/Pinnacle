@@ -1,6 +1,6 @@
 <?php
-    require_once '../Controller/commentController.php';
-    require_once '../Model/comment.php';
+    require_once '../../Controller/commentController.php';
+    require_once '../../Model/comment.php';
 
     $comment = new Comment($_GET['topid'],$_POST['content']);
 
