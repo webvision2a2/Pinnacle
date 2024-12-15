@@ -1,0 +1,838 @@
+.events-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.event-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 300px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Ensures button stays at the bottom */
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.event-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.event-card img:hover {
+    transform: scale(0.99);
+}
+
+.event-card .event-title {
+    position: absolute;
+    top: 15px;
+    left: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.event-card .event-description {
+    font-size: 1rem;
+    color: #555;
+    margin: 10px 0;
+}
+
+.event-card .event-details {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
+.event-actions {
+    display: flex;
+    /* Align items side by side */
+    justify-content: space-between;
+    /* Add space between buttons */
+    gap: 10px;
+    /* Add spacing between buttons */
+    margin-top: 0px;
+    /* Adjust top margin for spacing */
+}
+.event-button1 {
+    position: relative;
+    display: inline-block;
+    padding: 12px 24px;
+    border-width: 2px;
+    border-color:#2ded50;
+    font-size: 16px;
+    background-color: inherit;
+    border-radius: 100px;
+    font-weight: 600;
+    color: #2ded50;
+    box-shadow: 0 0 0 2px #ffffff20;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.event-button1 span:last-child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-color: #7be98f;
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.event-button1 span:first-child {
+    position: relative;
+    z-index: 1;
+}
+
+.event-button1:hover {
+    box-shadow: 0 0 0 5px #2ded50;
+    color: #2ded50;
+}
+
+.event-button1:active {
+    scale: 0.95;
+}
+
+.event-button1:hover span:last-child {
+    width: 150px;
+    height: 150px;
+    opacity: 0.5;
+}
+.event-button {
+    position: relative;
+    display: inline-block;
+    padding: 12px 24px;
+    border-width: 2px;
+    font-size: 16px;
+    background-color: inherit;
+    border-radius: 100px;
+    border-color:#2d89ed ;
+    font-weight: 600;
+    color: #2d89ed;
+    box-shadow: 0 0 0 2px #ffffff20;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.event-button span:last-child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-color: #2196F3;
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.event-button span:first-child {
+    position: relative;
+    z-index: 1;
+}
+
+.event-button:hover {
+    box-shadow: 0 0 0 5px #2196F3;
+    color: #2196F3;
+}
+
+.event-button:active {
+    scale: 0.95;
+}
+
+.event-button:hover span:last-child {
+    width: 150px;
+    height: 150px;
+    opacity: 0.5;
+}
+
+.event-button2 {
+    position: relative;
+    display: inline-block;
+    padding: 12px 24px;
+    border-width: 2px;
+    border-color:#ed2d2d;
+    font-size: 16px;
+    background-color: inherit;
+    border-radius: 100px;
+    font-weight: 600;
+    color: #ed2d2d;
+    box-shadow: 0 0 0 2px #ffffff20;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.event-button2 span:last-child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-color: #e97b7b;
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+}
+/* Root variables for customization */
+:root {
+    
+    --toggle-width: 69px;
+    --toggle-height: 30px;
+    --toggle-bg-off: #d3d3d3;
+    --toggle-bg-on: #2848d7;
+    --thumb-size: 24px;
+    --transition-speed: 0.3s;
+    --icon-color: #ffffff;
+  }
+  
+  /* Toggle container */
+  .toggle {
+    
+    position: relative;
+    width: var(--toggle-width);
+    height: var(--toggle-height);
+    background: var(--toggle-bg-off);
+    border-radius: var(--toggle-height);
+    cursor: pointer;
+    transition: background var(--transition-speed);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Hidden checkbox */
+  input[type="checkbox"] {
+    display: none;
+    
+  }
+  
+  /* Toggle thumb (circle) */
+  .thumb {
+    
+    position: absolute;
+    top: 50%;
+    left: 3px;
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    background: #ffffff;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    transition: left var(--transition-speed), background var(--transition-speed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--icon-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Background and thumb changes when checked */
+  input[type="checkbox"]:checked + .toggle {
+    background: var(--toggle-bg-on);
+  }
+  
+  input[type="checkbox"]:checked + .toggle .thumb {
+    left: calc(100% - var(--thumb-size) - 3px);
+    
+
+  }
+  
+  /* Adding icons for sound */
+  .thumb::after {
+    content: "🔇"; /* Default to sound off icon */
+    transition: opacity var(--transition-speed), transform var(--transition-speed);
+  }
+  
+  input[type="checkbox"]:checked + .toggle .thumb::after {
+    content: "🔊"; /* Change to sound on icon */
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  /* Container for centering */
+.center-container {
+    display: flex; /* Enable flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full height of the viewport */
+    width: 100vw; /* Full width of the viewport */
+    margin: 0; /* Remove any default margin */
+    padding: 0; /* Remove any default padding */
+    box-sizing: border-box; /* Ensure padding and borders are included in dimensions */
+    background-color: #f0f0f0; /* Optional: Add a background for better visibility */
+  }
+  
+  
+
+.event-button2 span:first-child {
+    position: relative;
+    z-index: 1;
+}
+
+.event-button2:hover {
+    box-shadow: 0 0 0 5px #ed2d2d;
+    color: #ed2d2d;
+}
+
+.event-button2:active {
+    scale: 0.95;
+}
+
+.event-button2:hover span:last-child {
+    width: 150px;
+    height: 150px;
+    opacity: 0.5;
+}
+.event-button3 {
+    position: relative;
+    display: inline-block;
+    padding: 12px 24px;
+    border-width: 2px;
+    border-color:#3d2ded;
+    font-size: 16px;
+    background-color: inherit;
+    border-radius: 100px;
+    font-weight: 600;
+    color: #2d37ed;
+    box-shadow: 0 0 0 2px #ffffff20;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.event-button3 span:last-child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-color: #7b8de9;
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.event-button3 span:first-child {
+    position: relative;
+    z-index: 1;
+}
+
+.event-button3:hover {
+    box-shadow: 0 0 0 5px #2d8aed;
+    color: #2db7ed;
+}
+
+.event-button3:active {
+    scale: 0.95;
+}
+
+.event-button3:hover span:last-child {
+    width: 150px;
+    height: 150px;
+    opacity: 0.5;
+}
+
+
+.no-events {
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #888;
+    text-align: center;
+}
+
+/* Custom Modal (Alert Box) Styles */
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Background color */
+    padding-top: 20px;
+}
+
+.modal-content {
+    background-color: #ff0000;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5% auto;
+    width: 100%;
+    max-width: 700px;
+}
+
+.modal-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    max-height: 80vh; /* Limits the height of the modal body */
+    overflow-y: auto; /* Adds a scrollbar for overflowing content */
+    word-wrap: break-word; /* Ensures long text wraps properly */
+}
+
+.modal-body {
+    margin: 0px 0; max-height: 80vh; /* Limits the height of the modal body */
+    overflow-y: auto; /* Adds a scrollbar for overflowing content */
+    word-wrap: break-word;
+    text-align: center;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal {
+    z-index: 1050;
+    /* Ensure modal appears above other elements */
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Darker backdrop */
+    padding-top: 20px;
+}
+
+.modal-content {
+    background-color: #ff0000;
+    border-radius: 15px;
+    margin: 5% auto;
+    /* Center the modal */
+    width: 200%;
+
+    /* Set a maximum width */
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    /* Add a shadow */
+    text-align: center;
+}
+
+.modal-header {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #007BFF;
+    margin-bottom: 15px;
+}
+
+.modal-body {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 5px;
+    max-height: 80vh; /* Limits the height of the modal body */
+    overflow-y: auto; /* Adds a scrollbar for overflowing content */
+    word-wrap: break-word;
+}
+
+.close {
+    color: #8a8a8a;
+    float: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 10px;
+    border-radius: 10px;
+    width: 150%;
+    max-width: max-content;
+    position: relative;
+    text-align: center;
+}
+
+.modal-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.modal-body {
+    font-size: 1rem;
+    color: #555;
+    width: 700px;
+    
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: #828282;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.btn-cancel {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #6c757d;
+    /* Gray background */
+    color: #ffffff;
+    /* White text */
+    border: none;
+    /* Remove default border */
+    border-radius: 8px;
+    /* Rounded corners */
+    font-size: 1rem;
+    /* Standard font size */
+    font-weight: 500;
+    /* Slightly bold text */
+    text-align: center;
+    cursor: pointer;
+    align-self: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    /* Smooth hover effects */
+    margin: 20px auto;
+    /* Center the button and add spacing */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
+}
+
+.btn-cancel:hover {
+    background-color: #5a6268;
+    /* Darker gray on hover */
+    transform: translateY(-3px);
+    /* Slight lift effect */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    /* Enhanced shadow on hover */
+}
+
+.btn-cancel:active {
+    background-color: #4e555b;
+    /* Even darker gray when clicked */
+    transform: translateY(0);
+    /* Reset lift effect */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    /* Reduce shadow when clicked */
+}
+/* General styling for the filter section */
+.filters-section {
+    border: 1.9px solid #007bff; /* Blue border */
+    border-radius: 10px;
+    padding: 20px;
+    max-width: max-content;
+    margin: 10px auto; /* Center section horizontally */
+    text-align: center;
+    background-color: #eefeff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Title styling */
+.filters-section h2 {
+    margin-bottom: 20px;
+    color: #007bff;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+.event-card:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Styling for the search input field */
+
+#searchInput {
+    width: 200px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 30px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    margin: 10px 10px 20px; /* Margin for spacing */
+}
+
+#searchInput:focus {
+    border-color: #007bff;
+}
+
+/* Styling for dropdown filters */
+#categoryFilter,
+#timeSort {
+    width: 200px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius:30px;
+    margin: 10px 10px 20px; /* Margin for spacing */
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#categoryFilter:focus,
+#timeSort:focus {
+    border-color: #007bff;
+}
+
+/* Placeholder styling for search input */
+#searchInput::placeholder {
+    color: #888;
+    font-style: italic;
+}
+
+/* Container for events */
+.events-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px; /* Add spacing between event cards */
+}
+
+/* Styling event cards */
+.event-card {
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background-color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Event title */
+.event-title {
+    padding: 15px;
+    background-color: #f5f5f5;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+/* Event action buttons */
+.event-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    #searchInput,
+    #categoryFilter,
+    #timeSort {
+        width: calc(100% - 20px);
+        margin: 10px auto;
+    }
+
+    .events-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .event-card {
+        width: 100%;
+    }
+
+    .filters-section {
+        padding: 15px;
+    }
+
+    .filters-section h2 {
+        font-size: 1.5rem;
+    }
+}
+@media (max-width: 768px) {
+    #searchInput, #categoryFilter, #timeSort {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .search-sort-container {
+        text-align: left;
+    }
+}   
+
+.slider-container {
+    width: 100%;
+    margin: 20px 0;
+    text-align: center;
+    padding: 10px;
+}
+
+.slider-label {
+    font-size: 18px;
+    color: #004cff; /* Blue color */
+    font-weight: bold;
+}
+
+/* Slider */
+/* Style for the slider */
+#participantSlider {
+    -webkit-appearance: none;  /* Remove default appearance on webkit browsers */
+    appearance: none;  /* Remove default appearance on all browsers */
+    width: 100%;  /* Full width */
+    height: 8px;  /* Slider height */
+    border-radius: 5px;  /* Round the corners */
+    background: linear-gradient(to right, #6894db, #0e005d); /* Gradient from light blue to dark blue */
+    outline: none;  /* Remove outline */
+    transition: background 0.2s ease-in-out;  /* Smooth transition when the value changes */
+}
+
+/* Add gradient to the slider thumb */
+#participantSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;  /* Thumb size */
+    height: 20px;  /* Thumb size */
+    border-radius: 50%;  /* Round thumb */
+    background: #4d90fe;  /* Thumb color */
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;  /* Smooth transition when hovered */
+}
+
+/* Hover effect for the thumb */
+#participantSlider::-webkit-slider-thumb:hover {
+    background: #1e5fb2;  /* Change thumb color on hover */
+}
+
+/* Firefox */
+#participantSlider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0062ff;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+#participantSlider::-moz-range-thumb:hover {
+    background: #1e5fb2;
+}
+
+
+/* Slider Value */
+.slider-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #004cff;
+    margin-top: 10px;
+}
+select {
+    -webkit-appearance: none;  /* Remove arrow in WebKit browsers like Chrome and Safari */
+    -moz-appearance: none;     /* Remove arrow in Firefox */
+    appearance: none;          /* Remove arrow in other browsers */
+    padding-right: 20px;       /* Add space for custom arrow (optional, if needed) */
+}
+
+/* Add custom styles for the select input if needed */
+select:focus {
+    outline: none;  /* Remove outline on focus */
+}
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination-button {
+    margin: 0 5px;
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: background-color 0.3s;
+}
+
+.pagination-button.active {
+    background-color: #001aff;
+    color: #fff;
+}
+
+.pagination-button:hover {
+    background-color: #000e8d;
+    color: #fff;
+}
+
+.pagination-button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}

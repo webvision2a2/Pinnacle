@@ -1,0 +1,59 @@
+/* Styling for the image (larger size) */
+.card {
+    display: flex;
+    flex-direction: column;
+    min-height: 400px; /* Fixe la hauteur minimale de la carte */
+    justify-content: space-between; /* Espacement uniforme des éléments */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.card-image img {
+    max-width: 60%; /* Augmenter la largeur à 60% */
+    height: auto; /* Ajustement automatique de la hauteur pour maintenir le ratio */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 0 auto; /* Centrer l'image */
+    display: block;
+}
+
+
+
+/* Centering the content */
+.card-body {
+    text-align: center;
+    padding: 20px;
+}
+
+/* Comment section styles */
+.comment {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comment p {
+    margin: 5px 0;
+}
+
+.comment .meta {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+
+
+
+/* Form styling */
+form {
+    margin-top: 30px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
