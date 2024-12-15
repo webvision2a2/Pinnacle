@@ -1,0 +1,7 @@
+{
+    "event": {
+      "token": "await grecaptcha.enterprise.execute('6LdD95QqAAAAAJbCVPjN3sdItQ_1IsJw5JQYfAVI', {action: 'submit'})",
+      "expectedAction": "grecaptcha.enterprise.execute()",
+      "siteKey": "6LdD95QqAAAAAJbCVPjN3sdItQ_1IsJw5JQYfAVI"
+    }
+  }

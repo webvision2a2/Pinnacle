@@ -1,0 +1,70 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    min-height: 400px; /* Fixe la hauteur minimale de la carte */
+    justify-content: space-between; /* Espacement uniforme des éléments */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.card-image img {
+    display: block;
+    margin: 0 auto;
+    width: 350px; /* Full width */
+    height: 200px; /* Fixed height */
+    object-fit: cover; /* Ensures the image covers the space without distortion */
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover .card-image img {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+.card-body {
+    text-align: center;
+    padding: 1.5rem;
+    flex-grow: 1; /* Assure que le contenu prend l'espace restant dans la carte */
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.card p {
+    color: #777;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+
+
+.col-12 {
+    padding: 0 15px;
+    margin-bottom: 30px;
+}
+
+/* Ensures that there are 3 cards per line */
+.col-sm-4 {
+    flex: 0 0 32%; /* 3 cards per row */
+    max-width: 32%;
+}
+
+/* Ensuring proper spacing and alignment for cards */
+.card-deck {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+}
